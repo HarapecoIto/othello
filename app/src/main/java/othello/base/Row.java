@@ -7,7 +7,7 @@ public enum Row {
 
   private final int index;
 
-  Row(int index) {
+  private Row(int index) {
     this.index = index;
   }
 

@@ -7,7 +7,7 @@ public enum Col {
 
   private final int index;
 
-  Col(int index) {
+  private Col(int index) {
     this.index = index;
   }
 
