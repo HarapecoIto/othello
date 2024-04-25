@@ -68,17 +68,17 @@ public class SquareTest {
   @Test
   void set() {
     for (Square sq : Square.values()) {
-      sq.setStone(Optional.of(Stone.BLACK));
+      sq.setStone(Stone.BLACK);
       Optional<Stone> stone1 = sq.getStone();
       assertTrue(stone1.isPresent());
       assertEquals(Stone.BLACK, stone1.get());
 
-      sq.setStone(Optional.of(Stone.WHITE));
+      sq.setStone(Stone.WHITE);
       Optional<Stone> stone2 = sq.getStone();
       assertTrue(stone2.isPresent());
       assertEquals(Stone.WHITE, stone2.get());
 
-      sq.setStone(Optional.empty());
+      sq.setStone(null);
       Optional<Stone> stone3 = sq.getStone();
       assertTrue(stone3.isEmpty());
     }

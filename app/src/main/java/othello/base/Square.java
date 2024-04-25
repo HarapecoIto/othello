@@ -65,8 +65,8 @@ public enum Square {
     return this.stone;
   }
 
-  public void setStone(Optional<Stone> stone) {
-    this.stone = stone;
+  public void setStone(Stone stone) {
+    this.stone = Optional.ofNullable(stone);
   }
 
   public Optional<Square> up() {
