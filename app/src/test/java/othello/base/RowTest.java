@@ -1,13 +1,8 @@
 package othello.base;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
 public class RowTest {
