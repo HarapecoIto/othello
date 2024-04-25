@@ -15,11 +15,11 @@ public enum Row {
     return this.index;
   }
 
-  public final Optional<Row> up() {
+  public final Optional<Row> down() {
     return Optional.ofNullable(!this.equals(ROW_8) ? Row.values()[this.index + 1] : null);
   }
 
-  public final Optional<Row> down() {
+  public final Optional<Row> up() {
     return Optional.ofNullable(!this.equals(ROW_1) ? Row.values()[this.index - 1] : null);
   }
 
