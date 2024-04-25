@@ -7,7 +7,7 @@ public enum Row {
 
   private final int index;
 
-  private Row(int index) {
+  Row(int index) {
     this.index = index;
   }
 
@@ -15,12 +15,12 @@ public enum Row {
     return this.index;
   }
 
-  public Optional<Row> up() {
-    return Optional.ofNullable(this.index > 0 ? Row.values()[this.index - 1] : null);
+  public final Optional<Row> up() {
+    return Optional.ofNullable(!this.equals(ROW_8) ? Row.values()[this.index + 1] : null);
   }
 
-  public Optional<Row> down() {
-    return Optional.ofNullable(this.index < 7 ? Row.values()[this.index - 1] : null);
+  public final Optional<Row> down() {
+    return Optional.ofNullable(!this.equals(ROW_1) ? Row.values()[this.index - 1] : null);
   }
 
 }
