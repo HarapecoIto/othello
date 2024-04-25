@@ -2,9 +2,7 @@ package othello.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 public class SquareTest {
@@ -66,24 +64,11 @@ public class SquareTest {
   }
 
   @Test
-  void set() {
-    for (Square sq : Square.values()) {
-      sq.setStone(Stone.BLACK);
-      Optional<Stone> stone1 = sq.getStone();
-      assertTrue(stone1.isPresent());
-      assertEquals(Stone.BLACK, stone1.get());
-
-      sq.setStone(Stone.WHITE);
-      Optional<Stone> stone2 = sq.getStone();
-      assertTrue(stone2.isPresent());
-      assertEquals(Stone.WHITE, stone2.get());
-
-      sq.setStone(null);
-      Optional<Stone> stone3 = sq.getStone();
-      assertTrue(stone3.isEmpty());
+  void getIndex() {
+    for (int i = 0; i < 64; i++) {
+      assertEquals(i, Square.values()[i].getIndex());
     }
   }
-
 
   @Test
   void up() {

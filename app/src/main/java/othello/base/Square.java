@@ -45,12 +45,10 @@ public enum Square {
 
   private final Row row;
   private final Col col;
-  private Optional<Stone> stone;
 
   private Square(Row row, Col col) {
     this.row = row;
     this.col = col;
-    this.stone = Optional.empty();
   }
 
   public final Row row() {
@@ -61,12 +59,8 @@ public enum Square {
     return this.col;
   }
 
-  public Optional<Stone> getStone() {
-    return this.stone;
-  }
-
-  public void setStone(Stone stone) {
-    this.stone = Optional.ofNullable(stone);
+  public int getIndex() {
+    return row.getIndex() * 8 + col.getIndex();
   }
 
   public Optional<Square> up() {
