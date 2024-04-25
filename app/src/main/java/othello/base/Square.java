@@ -1,5 +1,7 @@
 package othello.base;
 
+import java.util.Optional;
+
 public enum Square {
   SQUARE_1_A(Row.ROW_1, Col.COL_A), SQUARE_1_B(Row.ROW_1, Col.COL_B), SQUARE_1_C(Row.ROW_1,
       Col.COL_C), SQUARE_1_D(Row.ROW_1, Col.COL_D), SQUARE_1_E(Row.ROW_1, Col.COL_E), SQUARE_1_F(
@@ -33,8 +35,8 @@ public enum Square {
       Col.COL_C), SQUARE_8_D(Row.ROW_8, Col.COL_D), SQUARE_8_E(Row.ROW_8, Col.COL_E), SQUARE_8_F(
           Row.ROW_8, Col.COL_F), SQUARE_8_G(Row.ROW_8, Col.COL_G), SQUARE_8_H(Row.ROW_8, Col.COL_H);
 
-  private Row row;
-  private Col col;
+  private final Row row;
+  private final Col col;
 
   private Square(Row row, Col col) {
     this.row = row;
@@ -49,40 +51,28 @@ public enum Square {
     return this.col;
   }
 
-  public Square up() {
-    Row row = this.row.up();
-    Col col = this.col;
-    if (row != null && col != null) {
-      return Square.values()[row.getIndex() * 8 + col.getIndex()];
-    }
-    return null;
+  public Optional<Square> up() {
+    Optional<Row> row = this.row.up();
+    Optional<Col> col = Optional.of(this.col);
+    return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
   }
 
-  public Square down() {
-    Row row = this.row.down();
-    Col col = this.col;
-    if (row != null && col != null) {
-      return Square.values()[row.getIndex() * 8 + col.getIndex()];
-    }
-    return null;
+  public Optional<Square> down() {
+    Optional<Row> row = this.row.down();
+    Optional<Col> col = Optional.of(this.col);
+    return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
   }
 
-  public Square left() {
-    Row row = this.row;
-    Col col = this.col.left();
-    if (row != null && col != null) {
-      return Square.values()[row.getIndex() * 8 + col.getIndex()];
-    }
-    return null;
+  public Optional<Square> left() {
+    Optional<Row> row = Optional.of(this.row);
+    Optional<Col> col = this.col.left();
+    return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
   }
 
-  public Square right() {
-    Row row = this.row;
-    Col col = this.col.right();
-    if (row != null && col != null) {
-      return Square.values()[row.getIndex() * 8 + col.getIndex()];
-    }
-    return null;
+  public Optional<Square> right() {
+    Optional<Row> row = Optional.of(this.row);
+    Optional<Col> col = this.col.right();
+    return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
   }
 
 }
