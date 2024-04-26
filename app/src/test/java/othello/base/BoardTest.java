@@ -50,4 +50,30 @@ public class BoardTest {
     }
   }
 
+  @Test
+  void setStone() {
+    Random rand = new Random(12345);
+    Board board = new Board();
+    for (Square square : Square.values()) {
+      Row row = square.row();
+      Col col = square.col();
+      int idx1 = rand.nextInt(3);
+      int idx2 = rand.nextInt(3);
+      int idx3 = rand.nextInt(3);
+      int idx4 = rand.nextInt(3);
+      Stone stone1 = idx1 < 2 ? Stone.values()[idx1] : null;
+      Stone stone2 = idx2 < 2 ? Stone.values()[idx2] : null;
+      Stone stone3 = idx3 < 2 ? Stone.values()[idx3] : null;
+      Stone stone4 = idx4 < 2 ? Stone.values()[idx4] : null;
+
+      board.setStone(square, stone1);
+      assertEquals(stone1, board.getStone(square).orElse(null));
+      board.setStone(square, stone2);
+      assertEquals(stone2, board.getStone(row, col).orElse(null));
+      board.setStone(row, col, stone3);
+      assertEquals(stone3, board.getStone(square).orElse(null));
+      board.setStone(row, col, stone4);
+      assertEquals(stone4, board.getStone(row, col).orElse(null));
+    }
+  }
 }

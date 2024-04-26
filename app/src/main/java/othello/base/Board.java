@@ -42,4 +42,20 @@ public class Board {
     }
   }
 
+  public void setStone(Row row, Col col, Stone stone) {
+    if (row != null && col != null) {
+      this.setStone(Square.getSquare(row, col).orElse(null), stone);
+    } else {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  public Optional<Stone> getStone(Row row, Col col) {
+    if (row != null && col != null) {
+      return this.getStone(Square.getSquare(row, col).orElse(null));
+    } else {
+      throw new IllegalArgumentException();
+    }
+  }
+
 }
