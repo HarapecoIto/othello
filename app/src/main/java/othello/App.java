@@ -3,12 +3,18 @@
  */
 package othello;
 
+import othello.base.Board;
+import othello.view.CommandlineView;
+
 public class App {
+
   public String getGreeting() {
     return "Hello World!";
   }
 
   public static void main(String[] args) {
-    System.out.println(new App().getGreeting());
+    Board board = new Board();
+    CommandlineView.update(board);
   }
+
 }
