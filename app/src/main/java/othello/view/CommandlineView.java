@@ -11,7 +11,7 @@ public class CommandlineView {
 
   public static void update(Board board) {
     List<Square> squares = Arrays.asList(Square.values());
-    System.out.println("┌─┬─┬─┬─┬─┬─┬─┬─┐");
+    System.out.println("┌──┬──┬──┬──┬──┬──┬──┬──┐");
     for (Row row : Row.values()) {
       System.out.print("│");
       squares.stream().filter(sq -> sq.row().equals(row)).toList().stream()
@@ -21,9 +21,9 @@ public class CommandlineView {
           );
       System.out.println();
       if (!row.equals(Row.ROW_8)) {
-        System.out.println("├─┼─┼─┼─┼─┼─┼─┼─┤");
+        System.out.println("├──┼──┼──┼──┼──┼──┼──┼──┤");
       } else {
-        System.out.println("└─┴─┴─┴─┴─┴─┴─┴─┘");
+        System.out.println("└──┴──┴──┴──┴──┴──┴──┴──┘");
       }
     }
   }
@@ -33,12 +33,12 @@ public class CommandlineView {
       return "　";
     } else {
       if (stone.equals(Stone.BLACK)) {
-        return "●";
+        return "㊚";
       } else if (stone.equals(Stone.WHITE)) {
-        return "○";
+        return "㊛";
       }
     }
-    return "☆";
+    return "";
   }
 
 }
