@@ -1,13 +1,18 @@
 package othello.base;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Board {
 
-  private final Optional<Stone>[] stones;
+  private final List<Optional<Stone>> stones;
 
   public Board() {
-    this.stones = new Optional[64];
+    this.stones = new ArrayList<>();
+    for (int i = 0; i < 64; i++) {
+      this.stones.add(Optional.empty());
+    }
     this.init();
   }
 
@@ -23,7 +28,7 @@ public class Board {
 
   public void setStone(Square square, Stone stone) {
     if (square != null) {
-      this.stones[square.getIndex()] = Optional.ofNullable(stone);
+      this.stones.set(square.getIndex(), Optional.ofNullable(stone));
     } else {
       throw new IllegalArgumentException();
     }
@@ -31,7 +36,7 @@ public class Board {
 
   public Optional<Stone> getStone(Square square) {
     if (square != null) {
-      return this.stones[square.getIndex()];
+      return this.stones.get(square.getIndex());
     } else {
       throw new IllegalArgumentException();
     }
