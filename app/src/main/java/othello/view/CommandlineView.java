@@ -13,13 +13,14 @@ public class CommandlineView {
     List<Square> squares = Arrays.asList(Square.values());
     System.out.println("┌──┬──┬──┬──┬──┬──┬──┬──┐");
     for (Row row : Row.values()) {
-      System.out.print("│");
-      squares.stream().filter(sq -> sq.row().equals(row)).toList().stream()
+      StringBuilder builder = new StringBuilder("|");
+      squares.stream().filter(sq -> sq.row().equals(row))
           .map(square -> stoneString(board.getStone(square).orElse(null)))
-          .forEach(string ->
-              System.out.print(string + "│")
-          );
-      System.out.println();
+          .forEach(string -> {
+            builder.append(string);
+            builder.append("|");
+          });
+      System.out.println(builder);
       if (!row.equals(Row.ROW_8)) {
         System.out.println("├──┼──┼──┼──┼──┼──┼──┼──┤");
       } else {
