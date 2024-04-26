@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Board {
+public class Board implements Cloneable {
 
   private final List<Optional<Stone>> stones;
 
@@ -56,6 +56,17 @@ public class Board {
     } else {
       throw new IllegalArgumentException();
     }
+  }
+
+  @Override
+  public Board clone() {
+    Board board = null;
+    try {
+      board = (Board) super.clone();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return board;
   }
 
 }

@@ -76,4 +76,22 @@ public class BoardTest {
       assertEquals(stone4, board.getStone(row, col).orElse(null));
     }
   }
+
+  @Test
+  void testClone() {
+    Board board = new Board();
+    Random rand = new Random(77777);
+    Stone[] stones = new Stone[64];
+    for (int i = 0; i < 64; i++) {
+      int idx = rand.nextInt(3);
+      stones[i] = idx < 2 ? Stone.values()[idx] : null;
+    }
+    for (Square sq : Square.values()) {
+      board.setStone(sq, stones[sq.getIndex()]);
+    }
+    Board cloned = board.clone();
+    for (Square sq : Square.values()) {
+      assertEquals(stones[sq.getIndex()], cloned.getStone(sq).orElse(null));
+    }
+  }
 }
