@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class SquareTest {
 
   @Test
-  void col() {
+  void testCol() {
     for (Square sq : arrayA) {
       assertEquals(Col.COL_A, sq.col());
     }
@@ -37,7 +37,7 @@ public class SquareTest {
   }
 
   @Test
-  void row() {
+  void testRow() {
     for (Square sq : array1) {
       assertEquals(Row.ROW_1, sq.row());
     }
@@ -65,14 +65,14 @@ public class SquareTest {
   }
 
   @Test
-  void getIndex() {
+  void testGetIndex() {
     for (int i = 0; i < 64; i++) {
       assertEquals(i, Square.values()[i].getIndex());
     }
   }
 
   @Test
-  void up() {
+  void testUp() {
     for (int col = 0; col < 8; col++) {
       assertNull(array1[col].up().orElse(null));
       assertEquals(array1[col], array2[col].up().orElse(null));
@@ -86,7 +86,7 @@ public class SquareTest {
   }
 
   @Test
-  void down() {
+  void testDown() {
     for (int col = 0; col < 8; col++) {
       assertEquals(array2[col], array1[col].down().orElse(null));
       assertEquals(array3[col], array2[col].down().orElse(null));
@@ -100,7 +100,7 @@ public class SquareTest {
   }
 
   @Test
-  void left() {
+  void testLeft() {
     for (int row = 0; row < 8; row++) {
       assertNull(arrayA[row].left().orElse(null));
       assertEquals(arrayA[row], arrayB[row].left().orElse(null));
@@ -114,7 +114,7 @@ public class SquareTest {
   }
 
   @Test
-  void right() {
+  void testRight() {
     for (int row = 0; row < 8; row++) {
       assertEquals(arrayB[row], arrayA[row].right().orElse(null));
       assertEquals(arrayC[row], arrayB[row].right().orElse(null));
@@ -128,7 +128,7 @@ public class SquareTest {
   }
 
   @Test
-  void getSquare() {
+  void testGetSquare() {
 
     assertTrue(Square.getSquare(null, null).isEmpty());
     assertTrue(Square.getSquare(null, Col.COL_A).isEmpty());

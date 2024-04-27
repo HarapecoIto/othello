@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class RowTest {
 
   @Test
-  void getIndex() {
+  void testGetIndex() {
     assertEquals(0, Row.ROW_1.getIndex());
     assertEquals(1, Row.ROW_2.getIndex());
     assertEquals(2, Row.ROW_3.getIndex());
@@ -21,7 +21,7 @@ public class RowTest {
   }
 
   @Test
-  void equals() {
+  void testEquals() {
     assertNotEquals(Row.ROW_1, Row.ROW_2);
     assertNotEquals(Row.ROW_1, Row.ROW_3);
     assertNotEquals(Row.ROW_1, Row.ROW_4);
@@ -88,7 +88,7 @@ public class RowTest {
   }
 
   @Test
-  void down() {
+  void testDown() {
     assertEquals(Row.ROW_2, Row.ROW_1.down().orElse(null));
     assertEquals(Row.ROW_3, Row.ROW_2.down().orElse(null));
     assertEquals(Row.ROW_4, Row.ROW_3.down().orElse(null));
@@ -100,7 +100,7 @@ public class RowTest {
   }
 
   @Test
-  void up() {
+  void testUp() {
     assertNull(Row.ROW_1.up().orElse(null));
     assertEquals(Row.ROW_1, Row.ROW_2.up().orElse(null));
     assertEquals(Row.ROW_2, Row.ROW_3.up().orElse(null));

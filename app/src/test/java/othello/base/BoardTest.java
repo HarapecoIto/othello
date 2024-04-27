@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class BoardTest {
 
   @Test
-  void init() {
+  void testInit() {
     Board board = new Board();
     for (Square sq : Square.values()) {
       if (sq.equals(Square.SQUARE_4_D) || sq.equals(Square.SQUARE_5_E)) {
@@ -51,7 +51,7 @@ public class BoardTest {
   }
 
   @Test
-  void setStone() {
+  void testSetStone() {
     Random rand = new Random(12345);
     Board board = new Board();
     for (Square square : Square.values()) {

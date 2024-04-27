@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class ColTest {
 
-  @Test void getIndex() {
+  @Test
+  void testGetIndex() {
     assertEquals(0, Col.COL_A.getIndex());
     assertEquals(1, Col.COL_B.getIndex());
     assertEquals(2, Col.COL_C.getIndex());
@@ -19,7 +20,8 @@ public class ColTest {
     assertEquals(7, Col.COL_H.getIndex());
   }
 
-  @Test void equals() {
+  @Test
+  void testEquals() {
     assertNotEquals(Col.COL_A, Col.COL_B);
     assertNotEquals(Col.COL_A, Col.COL_C);
     assertNotEquals(Col.COL_A, Col.COL_D);
@@ -86,7 +88,7 @@ public class ColTest {
   }
 
   @Test
-  void right() {
+  void testRight() {
     assertEquals(Col.COL_B, Col.COL_A.right().orElse(null));
     assertEquals(Col.COL_C, Col.COL_B.right().orElse(null));
     assertEquals(Col.COL_D, Col.COL_C.right().orElse(null));
@@ -98,7 +100,7 @@ public class ColTest {
   }
 
   @Test
-  void left() {
+  void testLeft() {
     assertNull(Col.COL_A.left().orElse(null));
     assertEquals(Col.COL_A, Col.COL_B.left().orElse(null));
     assertEquals(Col.COL_B, Col.COL_C.left().orElse(null));
