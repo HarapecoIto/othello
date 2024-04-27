@@ -1,13 +1,32 @@
 package othello.rule;
 
 import java.util.Optional;
+import java.util.function.Function;
 import othello.base.Board;
 import othello.base.Square;
 import othello.base.Stone;
 
 public class Tools {
 
-  static int upReversibleCount(Board board, Square square, Stone mine) {
+  public static int upCountToTake(Board board, Square square, Stone mine) {
+    return countToTake(Square::up, board, square, mine);
+  }
+
+  public static int downCountToTake(Board board, Square square, Stone mine) {
+    return countToTake(Square::down, board, square, mine);
+  }
+
+  public static int leftCountToGet(Board board, Square square, Stone mine) {
+    return countToTake(Square::left, board, square, mine);
+  }
+
+  public static int rightCountToGet(Board board, Square square, Stone mine) {
+    return countToTake(Square::right, board, square, mine);
+  }
+
+  private static int countToTake(
+      Function<Square, Optional<Square>> nextSquare,
+      Board board, Square square, Stone mine) {
     if (board == null || square == null || mine == null) {
       throw new IllegalArgumentException();
     }
@@ -17,7 +36,7 @@ public class Tools {
     }
     final Stone yours = mine.reverse();
     int count = 0;
-    Optional<Square> next = square.up();
+    Optional<Square> next = nextSquare.apply(square);
     do {
       // out of board.
       if (next.isEmpty()) {
@@ -37,7 +56,7 @@ public class Tools {
       if (yours.equals(stone.get())) {
         count++;
       }
-      next = next.get().up();
+      next = nextSquare.apply(next.orElse(null));
     } while (true);
   }
 }
