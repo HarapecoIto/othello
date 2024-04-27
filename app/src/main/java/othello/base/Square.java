@@ -99,7 +99,8 @@ public enum Square {
     return Optional.empty();
   }
 
-  public static Optional<Square> getSquare(Row row, Col col) {
+  public
+  static Optional<Square> getSquare(Row row, Col col) {
     if (row != null && col != null) {
       return Optional.of(Square.values()[row.getIndex() * 8 + col.getIndex()]);
     }

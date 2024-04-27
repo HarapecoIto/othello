@@ -81,17 +81,13 @@ public class BoardTest {
   void testClone() {
     Board board = new Board();
     Random rand = new Random(77777);
-    Stone[] stones = new Stone[64];
-    for (int i = 0; i < 64; i++) {
-      int idx = rand.nextInt(3);
-      stones[i] = idx < 2 ? Stone.values()[idx] : null;
-    }
     for (Square sq : Square.values()) {
-      board.setStone(sq, stones[sq.getIndex()]);
+      int idx = rand.nextInt(3);
+      board.setStone(sq, idx < 2 ? Stone.values()[idx] : null);
     }
     Board cloned = board.clone();
     for (Square sq : Square.values()) {
-      assertEquals(stones[sq.getIndex()], cloned.getStone(sq).orElse(null));
+      assertEquals(board.getStone(sq).orElse(null), cloned.getStone(sq).orElse(null));
     }
   }
 }

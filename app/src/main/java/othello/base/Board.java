@@ -63,7 +63,10 @@ public class Board implements Cloneable {
     Board board = null;
     try {
       board = (Board) super.clone();
-    } catch (Exception e) {
+      for (int i = 0; i < 64; i++) {
+        board.setStone(Square.values()[i], this.stones.get(i).orElse(null));
+      }
+    } catch (CloneNotSupportedException e) {
       e.printStackTrace();
     }
     return board;
