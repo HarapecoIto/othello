@@ -78,6 +78,17 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_6_B, Stone.BLACK);
     board.setStone(Square.SQUARE_7_B, Stone.BLACK);
     assertEquals(6, Tools.upCountToTake(board, Square.SQUARE_8_B, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_1_B, null);
+    board.setStone(Square.SQUARE_2_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_3_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_4_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_5_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_6_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_B, Stone.WHITE);
+    assertEquals(0, Tools.upCountToTake(board, Square.SQUARE_8_B, Stone.BLACK));
+
   }
 
   @Test
@@ -148,6 +159,16 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_3_B, Stone.BLACK);
     board.setStone(Square.SQUARE_2_B, Stone.BLACK);
     assertEquals(6, Tools.downCountToTake(board, Square.SQUARE_1_B, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_8_B, null);
+    board.setStone(Square.SQUARE_7_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_6_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_5_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_4_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_3_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_2_B, Stone.WHITE);
+    assertEquals(0, Tools.downCountToTake(board, Square.SQUARE_1_B, Stone.BLACK));
   }
 
   @Test
@@ -219,6 +240,16 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_7_F, Stone.BLACK);
     board.setStone(Square.SQUARE_7_G, Stone.BLACK);
     assertEquals(6, Tools.leftCountToTake(board, Square.SQUARE_7_H, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_7_A, null);
+    board.setStone(Square.SQUARE_7_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_C, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_D, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_E, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_F, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_G, Stone.WHITE);
+    assertEquals(0, Tools.leftCountToTake(board, Square.SQUARE_7_H, Stone.BLACK));
   }
 
   @Test
@@ -290,6 +321,16 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_7_C, Stone.BLACK);
     board.setStone(Square.SQUARE_7_B, Stone.BLACK);
     assertEquals(6, Tools.rightCountToTake(board, Square.SQUARE_7_A, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_7_H, null);
+    board.setStone(Square.SQUARE_7_G, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_F, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_E, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_D, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_C, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_B, Stone.WHITE);
+    assertEquals(0, Tools.rightCountToTake(board, Square.SQUARE_7_A, Stone.BLACK));
   }
 
   @Test
@@ -365,6 +406,16 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_6_F, Stone.BLACK);
     board.setStone(Square.SQUARE_7_G, Stone.BLACK);
     assertEquals(6, Tools.upLeftCountToTake(board, Square.SQUARE_8_H, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_1_A, null);
+    board.setStone(Square.SQUARE_2_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_3_C, Stone.WHITE);
+    board.setStone(Square.SQUARE_4_D, Stone.WHITE);
+    board.setStone(Square.SQUARE_5_E, Stone.WHITE);
+    board.setStone(Square.SQUARE_6_F, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_G, Stone.WHITE);
+    assertEquals(0, Tools.upLeftCountToTake(board, Square.SQUARE_8_H, Stone.BLACK));
   }
 
   @Test
@@ -440,6 +491,16 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_6_C, Stone.BLACK);
     board.setStone(Square.SQUARE_7_B, Stone.BLACK);
     assertEquals(6, Tools.upRightCountToTake(board, Square.SQUARE_8_A, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_1_H, null);
+    board.setStone(Square.SQUARE_2_G, Stone.WHITE);
+    board.setStone(Square.SQUARE_3_F, Stone.WHITE);
+    board.setStone(Square.SQUARE_4_E, Stone.WHITE);
+    board.setStone(Square.SQUARE_5_D, Stone.WHITE);
+    board.setStone(Square.SQUARE_6_C, Stone.WHITE);
+    board.setStone(Square.SQUARE_7_B, Stone.WHITE);
+    assertEquals(0, Tools.upRightCountToTake(board, Square.SQUARE_8_A, Stone.BLACK));
   }
 
   @Test
@@ -515,6 +576,16 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_3_F, Stone.BLACK);
     board.setStone(Square.SQUARE_2_G, Stone.BLACK);
     assertEquals(6, Tools.downLeftCountToTake(board, Square.SQUARE_1_H, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_8_A, null);
+    board.setStone(Square.SQUARE_7_B, Stone.WHITE);
+    board.setStone(Square.SQUARE_6_C, Stone.WHITE);
+    board.setStone(Square.SQUARE_5_D, Stone.WHITE);
+    board.setStone(Square.SQUARE_4_E, Stone.WHITE);
+    board.setStone(Square.SQUARE_3_F, Stone.WHITE);
+    board.setStone(Square.SQUARE_2_G, Stone.WHITE);
+    assertEquals(0, Tools.downLeftCountToTake(board, Square.SQUARE_1_H, Stone.BLACK));
   }
 
   @Test
@@ -590,5 +661,15 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_3_C, Stone.BLACK);
     board.setStone(Square.SQUARE_2_B, Stone.BLACK);
     assertEquals(6, Tools.downRightCountToTake(board, Square.SQUARE_1_A, Stone.WHITE));
+    // terminated by empty square -> 0
+    board.clean();
+    board.setStone(Square.SQUARE_8_H, null);
+    board.setStone(Square.SQUARE_7_G, Stone.WHITE);
+    board.setStone(Square.SQUARE_6_F, Stone.WHITE);
+    board.setStone(Square.SQUARE_5_E, Stone.WHITE);
+    board.setStone(Square.SQUARE_4_D, Stone.WHITE);
+    board.setStone(Square.SQUARE_3_C, Stone.WHITE);
+    board.setStone(Square.SQUARE_2_B, Stone.WHITE);
+    assertEquals(0, Tools.downRightCountToTake(board, Square.SQUARE_1_A, Stone.BLACK));
   }
 }
