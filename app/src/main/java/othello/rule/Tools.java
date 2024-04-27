@@ -24,8 +24,24 @@ public class Tools {
     return countToTake(Square::right, board, square, mine);
   }
 
+  public static int upLeftCountToTake(Board board, Square square, Stone mine) {
+    return countToTake(Square::upLeft, board, square, mine);
+  }
+
+  public static int upRightCountToTake(Board board, Square square, Stone mine) {
+    return countToTake(Square::upRight, board, square, mine);
+  }
+
+  public static int downLeftCountToTake(Board board, Square square, Stone mine) {
+    return countToTake(Square::downLeft, board, square, mine);
+  }
+
+  public static int downRightCountToTake(Board board, Square square, Stone mine) {
+    return countToTake(Square::downRight, board, square, mine);
+  }
+
   private static int countToTake(
-      Function<Square, Optional<Square>> nextSquare,
+      Function<Square, Optional<Square>> next,
       Board board, Square square, Stone mine) {
     if (board == null || square == null || mine == null) {
       throw new IllegalArgumentException();
@@ -36,14 +52,14 @@ public class Tools {
     }
     final Stone yours = mine.reverse();
     int count = 0;
-    Optional<Square> next = nextSquare.apply(square);
+    Optional<Square> nextSquare = next.apply(square);
     do {
       // out of board.
-      if (next.isEmpty()) {
+      if (nextSquare.isEmpty()) {
         return 0;
       }
       // next stone.
-      Optional<Stone> stone = board.getStone(next.get());
+      Optional<Stone> stone = board.getStone(nextSquare.get());
       // if empty, ng.
       if (stone.isEmpty()) {
         return 0;
@@ -56,7 +72,7 @@ public class Tools {
       if (yours.equals(stone.get())) {
         count++;
       }
-      next = nextSquare.apply(next.orElse(null));
+      nextSquare = next.apply(nextSquare.orElse(null));
     } while (true);
   }
 }

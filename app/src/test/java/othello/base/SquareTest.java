@@ -138,7 +138,7 @@ public class SquareTest {
     assertNull(Square.SQUARE_7_A.upLeft().orElse(null));
     assertNull(Square.SQUARE_8_A.upLeft().orElse(null));
     for (int col = 1; col < 8; col++) {
-      assertNull(array1[col - 1].upLeft().orElse(null));
+      assertNull(array1[col].upLeft().orElse(null));
       assertEquals(array1[col - 1], array2[col].upLeft().orElse(null));
       assertEquals(array2[col - 1], array3[col].upLeft().orElse(null));
       assertEquals(array3[col - 1], array4[col].upLeft().orElse(null));
@@ -160,7 +160,7 @@ public class SquareTest {
     assertNull(Square.SQUARE_7_H.upRight().orElse(null));
     assertNull(Square.SQUARE_8_H.upRight().orElse(null));
     for (int col = 0; col < 7; col++) {
-      assertNull(array1[col + 1].upRight().orElse(null));
+      assertNull(array1[col].upRight().orElse(null));
       assertEquals(array1[col + 1], array2[col].upRight().orElse(null));
       assertEquals(array2[col + 1], array3[col].upRight().orElse(null));
       assertEquals(array3[col + 1], array4[col].upRight().orElse(null));
@@ -189,7 +189,7 @@ public class SquareTest {
       assertEquals(array6[col - 1], array5[col].downLeft().orElse(null));
       assertEquals(array7[col - 1], array6[col].downLeft().orElse(null));
       assertEquals(array8[col - 1], array7[col].downLeft().orElse(null));
-      assertNull(array8[col - 1].downLeft().orElse(null));
+      assertNull(array8[col].downLeft().orElse(null));
     }
   }
 
@@ -211,7 +211,7 @@ public class SquareTest {
       assertEquals(array6[col + 1], array5[col].downRight().orElse(null));
       assertEquals(array7[col + 1], array6[col].downRight().orElse(null));
       assertEquals(array8[col + 1], array7[col].downRight().orElse(null));
-      assertNull(array8[col + 1].downRight().orElse(null));
+      assertNull(array8[col].downRight().orElse(null));
     }
   }
 

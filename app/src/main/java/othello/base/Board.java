@@ -16,10 +16,14 @@ public class Board implements Cloneable {
     this.init();
   }
 
-  public void init() {
+  public void clean() {
     for (int i = 0; i < 64; i++) {
       this.setStone(Square.values()[i], null);
     }
+  }
+  
+  public void init() {
+    this.clean();
     this.setStone(Square.SQUARE_4_D, Stone.WHITE);
     this.setStone(Square.SQUARE_4_E, Stone.BLACK);
     this.setStone(Square.SQUARE_5_D, Stone.BLACK);
