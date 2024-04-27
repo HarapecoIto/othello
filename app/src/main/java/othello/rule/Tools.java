@@ -16,11 +16,11 @@ public class Tools {
     return countToTake(Square::down, board, square, mine);
   }
 
-  public static int leftCountToGet(Board board, Square square, Stone mine) {
+  public static int leftCountToTake(Board board, Square square, Stone mine) {
     return countToTake(Square::left, board, square, mine);
   }
 
-  public static int rightCountToGet(Board board, Square square, Stone mine) {
+  public static int rightCountToTake(Board board, Square square, Stone mine) {
     return countToTake(Square::right, board, square, mine);
   }
 
