@@ -99,6 +99,42 @@ public enum Square {
     return Optional.empty();
   }
 
+  public Optional<Square> upLeft() {
+    Optional<Row> row = this.row.up();
+    Optional<Col> col = this.col.left();
+    if (row.isPresent() && col.isPresent()) {
+      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+    }
+    return Optional.empty();
+  }
+
+  public Optional<Square> upRight() {
+    Optional<Row> row = this.row.up();
+    Optional<Col> col = this.col.right();
+    if (row.isPresent() && col.isPresent()) {
+      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+    }
+    return Optional.empty();
+  }
+
+  public Optional<Square> downLeft() {
+    Optional<Row> row = this.row.down();
+    Optional<Col> col = this.col.left();
+    if (row.isPresent() && col.isPresent()) {
+      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+    }
+    return Optional.empty();
+  }
+
+  public Optional<Square> downRight() {
+    Optional<Row> row = this.row.down();
+    Optional<Col> col = this.col.right();
+    if (row.isPresent() && col.isPresent()) {
+      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+    }
+    return Optional.empty();
+  }
+
   public
   static Optional<Square> getSquare(Row row, Col col) {
     if (row != null && col != null) {

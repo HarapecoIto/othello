@@ -128,6 +128,94 @@ public class SquareTest {
   }
 
   @Test
+  void testUpLeft() {
+    assertNull(Square.SQUARE_1_A.upLeft().orElse(null));
+    assertNull(Square.SQUARE_2_A.upLeft().orElse(null));
+    assertNull(Square.SQUARE_3_A.upLeft().orElse(null));
+    assertNull(Square.SQUARE_4_A.upLeft().orElse(null));
+    assertNull(Square.SQUARE_5_A.upLeft().orElse(null));
+    assertNull(Square.SQUARE_6_A.upLeft().orElse(null));
+    assertNull(Square.SQUARE_7_A.upLeft().orElse(null));
+    assertNull(Square.SQUARE_8_A.upLeft().orElse(null));
+    for (int col = 1; col < 8; col++) {
+      assertNull(array1[col - 1].upLeft().orElse(null));
+      assertEquals(array1[col - 1], array2[col].upLeft().orElse(null));
+      assertEquals(array2[col - 1], array3[col].upLeft().orElse(null));
+      assertEquals(array3[col - 1], array4[col].upLeft().orElse(null));
+      assertEquals(array4[col - 1], array5[col].upLeft().orElse(null));
+      assertEquals(array5[col - 1], array6[col].upLeft().orElse(null));
+      assertEquals(array6[col - 1], array7[col].upLeft().orElse(null));
+      assertEquals(array7[col - 1], array8[col].upLeft().orElse(null));
+    }
+  }
+
+  @Test
+  void testUpRight() {
+    assertNull(Square.SQUARE_1_H.upRight().orElse(null));
+    assertNull(Square.SQUARE_2_H.upRight().orElse(null));
+    assertNull(Square.SQUARE_3_H.upRight().orElse(null));
+    assertNull(Square.SQUARE_4_H.upRight().orElse(null));
+    assertNull(Square.SQUARE_5_H.upRight().orElse(null));
+    assertNull(Square.SQUARE_6_H.upRight().orElse(null));
+    assertNull(Square.SQUARE_7_H.upRight().orElse(null));
+    assertNull(Square.SQUARE_8_H.upRight().orElse(null));
+    for (int col = 0; col < 7; col++) {
+      assertNull(array1[col + 1].upRight().orElse(null));
+      assertEquals(array1[col + 1], array2[col].upRight().orElse(null));
+      assertEquals(array2[col + 1], array3[col].upRight().orElse(null));
+      assertEquals(array3[col + 1], array4[col].upRight().orElse(null));
+      assertEquals(array4[col + 1], array5[col].upRight().orElse(null));
+      assertEquals(array5[col + 1], array6[col].upRight().orElse(null));
+      assertEquals(array6[col + 1], array7[col].upRight().orElse(null));
+      assertEquals(array7[col + 1], array8[col].upRight().orElse(null));
+    }
+  }
+
+  @Test
+  void testDownLeft() {
+    assertNull(Square.SQUARE_1_A.downLeft().orElse(null));
+    assertNull(Square.SQUARE_2_A.downLeft().orElse(null));
+    assertNull(Square.SQUARE_3_A.downLeft().orElse(null));
+    assertNull(Square.SQUARE_4_A.downLeft().orElse(null));
+    assertNull(Square.SQUARE_5_A.downLeft().orElse(null));
+    assertNull(Square.SQUARE_6_A.downLeft().orElse(null));
+    assertNull(Square.SQUARE_7_A.downLeft().orElse(null));
+    assertNull(Square.SQUARE_8_A.downLeft().orElse(null));
+    for (int col = 1; col < 8; col++) {
+      assertEquals(array2[col - 1], array1[col].downLeft().orElse(null));
+      assertEquals(array3[col - 1], array2[col].downLeft().orElse(null));
+      assertEquals(array4[col - 1], array3[col].downLeft().orElse(null));
+      assertEquals(array5[col - 1], array4[col].downLeft().orElse(null));
+      assertEquals(array6[col - 1], array5[col].downLeft().orElse(null));
+      assertEquals(array7[col - 1], array6[col].downLeft().orElse(null));
+      assertEquals(array8[col - 1], array7[col].downLeft().orElse(null));
+      assertNull(array8[col - 1].downLeft().orElse(null));
+    }
+  }
+
+  @Test
+  void testDownRight() {
+    assertNull(Square.SQUARE_1_H.downRight().orElse(null));
+    assertNull(Square.SQUARE_2_H.downRight().orElse(null));
+    assertNull(Square.SQUARE_3_H.downRight().orElse(null));
+    assertNull(Square.SQUARE_4_H.downRight().orElse(null));
+    assertNull(Square.SQUARE_5_H.downRight().orElse(null));
+    assertNull(Square.SQUARE_6_H.downRight().orElse(null));
+    assertNull(Square.SQUARE_7_H.downRight().orElse(null));
+    assertNull(Square.SQUARE_8_H.downRight().orElse(null));
+    for (int col = 0; col < 7; col++) {
+      assertEquals(array2[col + 1], array1[col].downRight().orElse(null));
+      assertEquals(array3[col + 1], array2[col].downRight().orElse(null));
+      assertEquals(array4[col + 1], array3[col].downRight().orElse(null));
+      assertEquals(array5[col + 1], array4[col].downRight().orElse(null));
+      assertEquals(array6[col + 1], array5[col].downRight().orElse(null));
+      assertEquals(array7[col + 1], array6[col].downRight().orElse(null));
+      assertEquals(array8[col + 1], array7[col].downRight().orElse(null));
+      assertNull(array8[col + 1].downRight().orElse(null));
+    }
+  }
+
+  @Test
   void testGetSquare() {
 
     assertTrue(Square.getSquare(null, null).isEmpty());
