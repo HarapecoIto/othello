@@ -4,7 +4,8 @@
 package othello;
 
 import othello.base.Board;
-import othello.view.CommandlineView;
+import othello.view.ConsoleView;
+import othello.view.OthelloView;
 
 public class App {
 
@@ -13,8 +14,9 @@ public class App {
   }
 
   public static void main(String[] args) {
+    OthelloView view = new ConsoleView();
     Board board = new Board();
-    CommandlineView.update(board);
+    view.update(board);
   }
 
 }
