@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import othello.Tools;
 import othello.base.Board;
 import othello.base.Square;
 import othello.base.Stone;
-import othello.rule.Tools;
 
 public class RandomPlayer implements Player {
 
