@@ -1,6 +1,7 @@
 package othello.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -9,43 +10,43 @@ import org.junit.jupiter.api.Test;
 
 public class BoardTest {
 
+  static private Board randomBoard(long seed) {
+    Board board = new Board();
+    Random rand = new Random(seed);
+    for (Square sq : Square.values()) {
+      int idx = rand.nextInt(3);
+      board.setStone(sq, idx < 2 ? Stone.values()[idx] : null);
+    }
+    return board;
+  }
+
+  @Test
+  void testClear() {
+    Board board = new Board();
+    board.clear();
+    for (Square sq : Square.values()) {
+      assertTrue(board.getStone(sq).isEmpty());
+    }
+  }
+
   @Test
   void testInit() {
-    Board board = new Board();
-    for (Square sq : Square.values()) {
-      if (sq.equals(Square.SQUARE_4_D) || sq.equals(Square.SQUARE_5_E)) {
-        Optional<Stone> stone = board.getStone(sq);
-        assertTrue(stone.isPresent());
-        assertEquals(Stone.WHITE, stone.get());
-      } else if (sq.equals(Square.SQUARE_4_E) || sq.equals(Square.SQUARE_5_D)) {
-        Optional<Stone> stone = board.getStone(sq);
-        assertTrue(stone.isPresent());
-        assertEquals(Stone.BLACK, stone.get());
-      } else {
-        Optional<Stone> stone = board.getStone(sq);
-        assertTrue(stone.isEmpty());
-      }
-    }
-
-    Random rand = new Random(12345);
-    Stone[] stones = new Stone[]{Stone.BLACK, Stone.WHITE, null};
-    for (Square sq : Square.values()) {
-      board.setStone(sq, stones[rand.nextInt(3)]);
-    }
-
-    board.init();
-    for (Square sq : Square.values()) {
-      if (sq.equals(Square.SQUARE_4_D) || sq.equals(Square.SQUARE_5_E)) {
-        Optional<Stone> stone = board.getStone(sq);
-        assertTrue(stone.isPresent());
-        assertEquals(Stone.WHITE, stone.get());
-      } else if (sq.equals(Square.SQUARE_4_E) || sq.equals(Square.SQUARE_5_D)) {
-        Optional<Stone> stone = board.getStone(sq);
-        assertTrue(stone.isPresent());
-        assertEquals(Stone.BLACK, stone.get());
-      } else {
-        Optional<Stone> stone = board.getStone(sq);
-        assertTrue(stone.isEmpty());
+    for (long seed = 0L; seed < 5L; seed++) {
+      Board board = randomBoard(seed);
+      board.init();
+      for (Square sq : Square.values()) {
+        if (sq.equals(Square.SQUARE_4_D) || sq.equals(Square.SQUARE_5_E)) {
+          Optional<Stone> stone = board.getStone(sq);
+          assertTrue(stone.isPresent());
+          assertEquals(Stone.WHITE, stone.get());
+        } else if (sq.equals(Square.SQUARE_4_E) || sq.equals(Square.SQUARE_5_D)) {
+          Optional<Stone> stone = board.getStone(sq);
+          assertTrue(stone.isPresent());
+          assertEquals(Stone.BLACK, stone.get());
+        } else {
+          Optional<Stone> stone = board.getStone(sq);
+          assertTrue(stone.isEmpty());
+        }
       }
     }
   }
@@ -79,15 +80,41 @@ public class BoardTest {
 
   @Test
   void testClone() {
-    Board board = new Board();
-    Random rand = new Random(77777);
+    Board original = randomBoard(12345L);
+    original.setStone(Square.SQUARE_1_A, Stone.BLACK);
+    Board clone = original.clone();
     for (Square sq : Square.values()) {
-      int idx = rand.nextInt(3);
-      board.setStone(sq, idx < 2 ? Stone.values()[idx] : null);
+      assertEquals(original.getStone(sq).orElse(null), clone.getStone(sq).orElse(null));
     }
-    Board cloned = board.clone();
-    for (Square sq : Square.values()) {
-      assertEquals(board.getStone(sq).orElse(null), cloned.getStone(sq).orElse(null));
+    // not same object.
+    clone.setStone(Square.SQUARE_1_A, Stone.WHITE);
+    assertEquals(Stone.BLACK, original.getStone(Square.SQUARE_1_A).orElse(null));
+  }
+
+  @Test
+  void testEquals() {
+    Board board = randomBoard(12345L);
+    board.setStone(Square.SQUARE_1_A, null);
+    Board clone = board.clone();
+    assertEquals(board, clone);
+    clone.setStone(Square.SQUARE_1_A, Stone.BLACK);
+    assertNotEquals(board, clone);
+    clone.setStone(Square.SQUARE_1_A, Stone.WHITE);
+    assertNotEquals(board, clone);
+  }
+
+  @Test
+  void testHashCode() {
+    for (int i = 0; i < 5; i++) {
+      Board board = randomBoard(12345L);
+      Board copy = randomBoard(12345L);
+      assertEquals(board.hashCode(), copy.hashCode());
+    }
+    Board original = randomBoard(123L);
+    for (int i = 0; i < 5; i++) {
+      Board other = randomBoard(i);
+      assertNotEquals(original.hashCode(), other.hashCode());
     }
   }
+
 }

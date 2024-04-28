@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Board implements Cloneable {
+public final class Board implements Cloneable {
 
   private final List<Optional<Stone>> stones;
 
@@ -16,14 +16,14 @@ public class Board implements Cloneable {
     this.init();
   }
 
-  public void clean() {
+  public void clear() {
     for (int i = 0; i < 64; i++) {
       this.setStone(Square.values()[i], null);
     }
   }
-  
+
   public void init() {
-    this.clean();
+    this.clear();
     this.setStone(Square.SQUARE_4_D, Stone.WHITE);
     this.setStone(Square.SQUARE_4_E, Stone.BLACK);
     this.setStone(Square.SQUARE_5_D, Stone.BLACK);
@@ -64,16 +64,39 @@ public class Board implements Cloneable {
 
   @Override
   public Board clone() {
-    Board board = null;
-    try {
-      board = (Board) super.clone();
-      for (int i = 0; i < 64; i++) {
-        board.setStone(Square.values()[i], this.stones.get(i).orElse(null));
-      }
-    } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
+    Board clone = new Board();
+    for (int i = 0; i < 64; i++) {
+      clone.setStone(Square.values()[i], this.stones.get(i).orElse(null));
     }
-    return board;
+    return clone;
   }
 
+  private String stonesToString() {
+    StringBuilder builder = new StringBuilder();
+    this.stones.stream().map(
+        stone -> {
+          if (stone.isEmpty()) {
+            return "empty";
+          } else if (stone.get().equals(Stone.BLACK)) {
+            return "black";
+          } else {
+            return "white";
+          }
+        }
+    ).forEach(builder::append);
+    return builder.toString();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Board)) {
+      return false;
+    }
+    return ((Board) obj).stonesToString().equals(this.stonesToString());
+  }
+
+  @Override
+  public int hashCode() {
+    return this.stonesToString().hashCode();
+  }
 }
