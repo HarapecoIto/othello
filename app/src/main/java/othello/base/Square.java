@@ -1,5 +1,6 @@
 package othello.base;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 
 public enum Square {
@@ -136,11 +137,8 @@ public enum Square {
   }
 
   public
-  static Optional<Square> getSquare(Row row, Col col) {
-    if (row != null && col != null) {
-      return Optional.of(Square.values()[row.getIndex() * 8 + col.getIndex()]);
-    }
-    return Optional.empty();
+  static Optional<Square> getSquare(@NotNull Row row, @NotNull Col col) {
+    return Optional.of(Square.values()[row.getIndex() * 8 + col.getIndex()]);
   }
 
 }

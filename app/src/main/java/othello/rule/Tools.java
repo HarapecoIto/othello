@@ -1,5 +1,6 @@
 package othello.rule;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
@@ -15,11 +16,8 @@ public class Tools {
   }
 
   private static int countToTakeEngine(
-      Function<Square, Optional<Square>> next,
-      Board board, Square square, Stone mine) {
-    if (board == null || square == null || mine == null) {
-      throw new IllegalArgumentException();
-    }
+      @NotNull Function<Square, Optional<Square>> next,
+      @NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
     // make sure that the square is empty.
     if (board.getStone(square).isPresent()) {
       return -1;
@@ -50,10 +48,7 @@ public class Tools {
     } while (true);
   }
 
-  public static boolean move(Board board, Square square, Stone mine) {
-    if (board == null || square == null || mine == null) {
-      return false;
-    }
+  public static boolean move(@NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
     int count = countToTake(board, square, mine);
     if (count < 1) {
       return false;
@@ -72,7 +67,7 @@ public class Tools {
       return false;
     }
     work.setStone(square, mine);
-    
+
     // assert
     if (Tools.countStones(work, mine) != Tools.countStones(board, mine) + count + 1) {
       return false;
@@ -84,8 +79,8 @@ public class Tools {
   }
 
   private static int moveEngine(
-      Function<Square, Optional<Square>> next,
-      Board board, Square square, Stone mine) {
+      @NotNull Function<Square, Optional<Square>> next,
+      @NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
     int count = countToTakeEngine(next, board, square, mine);
     if (count < 0) {
       return -1;
@@ -98,7 +93,7 @@ public class Tools {
     return count;
   }
 
-  public static int countToTake(Board board, Square square, Stone mine) {
+  public static int countToTake(@NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
     int[] count = new int[8];
     count[0] = countToTakeEngine(Square::up, board, square, mine);
     count[1] = countToTakeEngine(Square::down, board, square, mine);
@@ -114,35 +109,43 @@ public class Tools {
     return Arrays.stream(count).sum();
   }
 
-  public static int upCountToTake(Board board, Square square, Stone mine) {
+  public static int upCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::up, board, square, mine);
   }
 
-  public static int downCountToTake(Board board, Square square, Stone mine) {
+  public static int downCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::down, board, square, mine);
   }
 
-  public static int leftCountToTake(Board board, Square square, Stone mine) {
+  public static int leftCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::left, board, square, mine);
   }
 
-  public static int rightCountToTake(Board board, Square square, Stone mine) {
+  public static int rightCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::right, board, square, mine);
   }
 
-  public static int upLeftCountToTake(Board board, Square square, Stone mine) {
+  public static int upLeftCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::upLeft, board, square, mine);
   }
 
-  public static int upRightCountToTake(Board board, Square square, Stone mine) {
+  public static int upRightCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::upRight, board, square, mine);
   }
 
-  public static int downLeftCountToTake(Board board, Square square, Stone mine) {
+  public static int downLeftCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::downLeft, board, square, mine);
   }
 
-  public static int downRightCountToTake(Board board, Square square, Stone mine) {
+  public static int downRightCountToTake(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     return countToTakeEngine(Square::downRight, board, square, mine);
   }
 

@@ -736,10 +736,8 @@ public class ToolsTest {
 
     assertFalse(Tools.move(board, Square.SQUARE_1_A, Stone.BLACK));
     assertFalse(Tools.move(board, Square.SQUARE_1_A, Stone.WHITE));
-    assertFalse(Tools.move(board, Square.SQUARE_1_A, null));
     assertFalse(Tools.move(board, Square.SQUARE_8_B, Stone.BLACK));
     assertFalse(Tools.move(board, Square.SQUARE_8_B, Stone.WHITE));
-    assertFalse(Tools.move(board, Square.SQUARE_8_B, null));
 
     // move
     assertTrue(Tools.move(board, Square.SQUARE_3_C, Stone.BLACK));

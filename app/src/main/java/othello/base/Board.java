@@ -1,5 +1,6 @@
 package othello.base;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,36 +31,23 @@ public final class Board implements Cloneable {
     this.setStone(Square.SQUARE_5_E, Stone.WHITE);
   }
 
-  public void setStone(Square square, Stone stone) {
-    if (square != null) {
-      this.stones.set(square.getIndex(), Optional.ofNullable(stone));
-    } else {
-      throw new IllegalArgumentException();
-    }
+  public void setStone(@NotNull Square square, Stone stone) {
+    this.stones.set(square.getIndex(), Optional.ofNullable(stone));
   }
 
-  public Optional<Stone> getStone(Square square) {
-    if (square != null) {
-      return this.stones.get(square.getIndex());
-    } else {
-      throw new IllegalArgumentException();
-    }
+  public Optional<Stone> getStone(@NotNull Square square) {
+    return this.stones.get(square.getIndex());
   }
 
-  public void setStone(Row row, Col col, Stone stone) {
-    if (row != null && col != null) {
-      this.setStone(Square.getSquare(row, col).orElse(null), stone);
-    } else {
-      throw new IllegalArgumentException();
-    }
+  public void setStone(@NotNull Row row, @NotNull Col col, Stone stone) {
+    Optional<Square> square = Square.getSquare(row, col);
+    square.ifPresent(sq -> this.stones.set(sq.getIndex(), Optional.ofNullable(stone)));
   }
 
-  public Optional<Stone> getStone(Row row, Col col) {
-    if (row != null && col != null) {
-      return this.getStone(Square.getSquare(row, col).orElse(null));
-    } else {
-      throw new IllegalArgumentException();
-    }
+
+  public Optional<Stone> getStone(@NotNull Row row, @NotNull Col col) {
+    Optional<Square> square = Square.getSquare(row, col);
+    return square.isPresent() ? this.stones.get(square.get().getIndex()) : Optional.empty();
   }
 
   @Override

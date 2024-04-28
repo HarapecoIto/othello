@@ -2,7 +2,6 @@ package othello.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -217,11 +216,6 @@ public class SquareTest {
 
   @Test
   void testGetSquare() {
-
-    assertTrue(Square.getSquare(null, null).isEmpty());
-    assertTrue(Square.getSquare(null, Col.COL_A).isEmpty());
-    assertTrue(Square.getSquare(Row.ROW_1, null).isEmpty());
-
     assertEquals(Square.SQUARE_1_A, Square.getSquare(Row.ROW_1, Col.COL_A).orElse(null));
     assertEquals(Square.SQUARE_1_B, Square.getSquare(Row.ROW_1, Col.COL_B).orElse(null));
     assertEquals(Square.SQUARE_1_C, Square.getSquare(Row.ROW_1, Col.COL_C).orElse(null));
