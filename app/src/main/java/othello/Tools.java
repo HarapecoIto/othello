@@ -48,11 +48,7 @@ public class Tools {
     } while (true);
   }
 
-  public static boolean move(@NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
-    int count = countToTake(board, square, mine);
-    if (count < 1) {
-      return false;
-    }
+  public static int move(@NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
     Board work = board.clone();
     int[] counts = new int[8];
     counts[0] = moveEngine(Square::up, work, square, mine);
@@ -64,18 +60,23 @@ public class Tools {
     counts[6] = moveEngine(Square::downLeft, work, square, mine);
     counts[7] = moveEngine(Square::downRight, work, square, mine);
     if (Arrays.stream(counts).filter(c -> c < 0).count() > 0) {
-      return false;
+      return -1;
     }
-    work.setStone(square, mine);
-
+    int count = Arrays.stream(counts).sum();
+    if (count == 0) {
+      return 0;
+    }
     // assert
-    if (Tools.countStones(work, mine) != Tools.countStones(board, mine) + count + 1) {
-      return false;
+    if (Tools.countStones(work, mine) != Tools.countStones(board, mine) + count) {
+      return -1;
     }
+    // ok -> place the stone.
+    work.setStone(square, mine);
+    // wright back work -> board.
     for (Square sq : Square.values()) {
       board.setStone(sq, work.getStone(sq).orElse(null));
     }
-    return true;
+    return count;
   }
 
   private static int moveEngine(

@@ -1,8 +1,6 @@
 package othello;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
@@ -712,6 +710,17 @@ public class ToolsTest {
 
   @Test
   void testMove() {
+    Board board = new Board();
+    board.init();
+    Board clone = board.clone();
+    assertEquals(-1, Tools.move(clone, Square.SQUARE_4_D, Stone.BLACK));
+    assertEquals(board, clone);
+    assertEquals(0, Tools.move(clone, Square.SQUARE_6_D, Stone.BLACK));
+    assertEquals(board, clone);
+    assertEquals(1, Tools.move(clone, Square.SQUARE_6_E, Stone.BLACK));
+    board.setStone(Square.SQUARE_5_E, Stone.BLACK);
+    board.setStone(Square.SQUARE_6_E, Stone.BLACK);
+    assertEquals(board, clone);
 
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊛㊛㊛㊛㊚＿＿
@@ -721,7 +730,7 @@ public class ToolsTest {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ＿＿＿＿＿＿＿＿
     // ＿＿＿＿＿＿＿＿
-    Board board = new Board();
+    board.clear();
     for (Row row : new Row[]{Row.ROW_1, Row.ROW_2, Row.ROW_3, Row.ROW_4, Row.ROW_5, Row.ROW_6}) {
       for (Col col : new Col[]{Col.COL_A, Col.COL_B, Col.COL_C, Col.COL_D, Col.COL_E, Col.COL_F}) {
         board.setStone(row, col, Stone.BLACK);
@@ -734,13 +743,8 @@ public class ToolsTest {
     }
     board.setStone(Square.SQUARE_3_C, null);
 
-    assertFalse(Tools.move(board, Square.SQUARE_1_A, Stone.BLACK));
-    assertFalse(Tools.move(board, Square.SQUARE_1_A, Stone.WHITE));
-    assertFalse(Tools.move(board, Square.SQUARE_8_B, Stone.BLACK));
-    assertFalse(Tools.move(board, Square.SQUARE_8_B, Stone.WHITE));
-
     // move
-    assertTrue(Tools.move(board, Square.SQUARE_3_C, Stone.BLACK));
+    assertEquals(11, Tools.move(board, Square.SQUARE_3_C, Stone.BLACK));
 
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊛㊚＿＿
