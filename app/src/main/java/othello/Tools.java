@@ -17,39 +17,6 @@ public class Tools {
         .filter(sq -> disk.equals(board.getDisk(sq).orElse(null))).count();
   }
 
-  private static int countReversibleDisksEngine(
-      @NotNull Function<Square, Optional<Square>> next,
-      @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
-    // make sure that the square is empty.
-    if (board.getDisk(square).isPresent()) {
-      return -1;
-    }
-    final Disk yours = mine.reverse();
-    int count = 0;
-    Optional<Square> nextSquare = next.apply(square);
-    do {
-      // out of board.
-      if (nextSquare.isEmpty()) {
-        return 0;
-      }
-      // next disk.
-      Optional<Disk> disk = board.getDisk(nextSquare.get());
-      // if empty, ng.
-      if (disk.isEmpty()) {
-        return 0;
-      }
-      // if mine, ok.
-      if (mine.equals(disk.get())) {
-        return count;
-      }
-      // count yours.
-      if (yours.equals(disk.get())) {
-        count++;
-      }
-      nextSquare = next.apply(nextSquare.orElse(null));
-    } while (true);
-  }
-
   public static Optional<List<Square>> move(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
     Board work = board.clone();
@@ -117,44 +84,37 @@ public class Tools {
     return Arrays.stream(count).sum();
   }
 
-  public static int countUpReversibleDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::up, board, square, mine);
+  static int countReversibleDisksEngine(
+      @NotNull Function<Square, Optional<Square>> next,
+      @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    // make sure that the square is empty.
+    if (board.getDisk(square).isPresent()) {
+      return -1;
+    }
+    final Disk yours = mine.reverse();
+    int count = 0;
+    Optional<Square> nextSquare = next.apply(square);
+    do {
+      // out of board.
+      if (nextSquare.isEmpty()) {
+        return 0;
+      }
+      // next disk.
+      Optional<Disk> disk = board.getDisk(nextSquare.get());
+      // if empty, ng.
+      if (disk.isEmpty()) {
+        return 0;
+      }
+      // if mine, ok.
+      if (mine.equals(disk.get())) {
+        return count;
+      }
+      // count yours.
+      if (yours.equals(disk.get())) {
+        count++;
+      }
+      nextSquare = next.apply(nextSquare.orElse(null));
+    } while (true);
   }
-
-  public static int countDownReversibleDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::down, board, square, mine);
-  }
-
-  public static int countLeftReversibleDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::left, board, square, mine);
-  }
-
-  public static int countRightReversibleDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::right, board, square, mine);
-  }
-
-  public static int countUpLeftReversibleDisk(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::upLeft, board, square, mine);
-  }
-
-  public static int countUpRightReversibleDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::upRight, board, square, mine);
-  }
-
-  public static int countDownLeftReversibleDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::downLeft, board, square, mine);
-  }
-
-  public static int countDownRightReversibleDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return countReversibleDisksEngine(Square::downRight, board, square, mine);
-  }
-
+  
 }
