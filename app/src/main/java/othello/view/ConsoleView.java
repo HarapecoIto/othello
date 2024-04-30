@@ -3,9 +3,9 @@ package othello.view;
 import java.util.Arrays;
 import java.util.List;
 import othello.base.Board;
+import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
-import othello.base.Stone;
 
 public class ConsoleView implements OthelloView {
 
@@ -20,7 +20,7 @@ public class ConsoleView implements OthelloView {
     for (Row row : Row.values()) {
       StringBuilder builder = new StringBuilder(String.format("%d |", row.getIndex() + 1));
       squares.stream().filter(sq -> sq.row().equals(row))
-          .map(square -> stoneString(board.getStone(square).orElse(null)))
+          .map(square -> stoneString(board.getDisk(square).orElse(null)))
           .forEach(string -> {
             builder.append(string);
             builder.append("|");
@@ -34,13 +34,13 @@ public class ConsoleView implements OthelloView {
     }
   }
 
-  private String stoneString(Stone stone) {
-    if (stone == null) {
+  private String stoneString(Disk disk) {
+    if (disk == null) {
       return "　";
     } else {
-      if (stone.equals(Stone.BLACK)) {
+      if (disk.equals(Disk.BLACK)) {
         return "㊚";
-      } else if (stone.equals(Stone.WHITE)) {
+      } else if (disk.equals(Disk.WHITE)) {
         return "㊛";
       }
     }

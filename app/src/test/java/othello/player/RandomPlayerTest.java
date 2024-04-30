@@ -8,14 +8,14 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
 import othello.base.Col;
+import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
-import othello.base.Stone;
 
 public class RandomPlayerTest {
 
   @Test
-  void testMoveStone() {
+  void testMoveDisk() {
     {
       Board board = new Board();
       board.init();
@@ -24,8 +24,8 @@ public class RandomPlayerTest {
       );
       for (long seed = 0; seed < 10; seed++) {
         Player player = new RandomPlayer(seed);
-        player.init(Stone.WHITE);
-        Optional<Square> square = player.moveStone(board.clone());
+        player.init(Disk.WHITE);
+        Optional<Square> square = player.moveDisk(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
       }
@@ -38,8 +38,8 @@ public class RandomPlayerTest {
       );
       for (long seed = 0; seed < 10; seed++) {
         Player player = new RandomPlayer(seed);
-        player.init(Stone.BLACK);
-        Optional<Square> square = player.moveStone(board.clone());
+        player.init(Disk.BLACK);
+        Optional<Square> square = player.moveDisk(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
       }
@@ -58,12 +58,12 @@ public class RandomPlayerTest {
       for (Row row : new Row[]{Row.ROW_1, Row.ROW_2, Row.ROW_3, Row.ROW_4, Row.ROW_5, Row.ROW_6}) {
         for (Col col : new Col[]{Col.COL_A, Col.COL_B, Col.COL_C, Col.COL_D, Col.COL_E,
             Col.COL_F}) {
-          board.setStone(row, col, Stone.BLACK);
+          board.setDisk(row, col, Disk.BLACK);
         }
       }
       Player player = new RandomPlayer(123);
-      player.init(Stone.WHITE);
-      Optional<Square> square = player.moveStone(board.clone());
+      player.init(Disk.WHITE);
+      Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isEmpty());
     }
     {
@@ -80,10 +80,10 @@ public class RandomPlayerTest {
       for (Row row : new Row[]{Row.ROW_1, Row.ROW_2, Row.ROW_3, Row.ROW_4, Row.ROW_5, Row.ROW_6}) {
         for (Col col : new Col[]{Col.COL_A, Col.COL_B, Col.COL_C, Col.COL_D, Col.COL_E,
             Col.COL_F}) {
-          board.setStone(row, col, Stone.BLACK);
+          board.setDisk(row, col, Disk.BLACK);
         }
       }
-      board.setStone(Square.SQUARE_5_D, Stone.WHITE);
+      board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
 
       List<Square> expects = Arrays.asList(
           Square.SQUARE_7_B, Square.SQUARE_7_D, Square.SQUARE_7_F,
@@ -91,8 +91,8 @@ public class RandomPlayerTest {
       );
       for (long seed = 0; seed < 10; seed++) {
         Player player = new RandomPlayer(seed);
-        player.init(Stone.WHITE);
-        Optional<Square> square = player.moveStone(board.clone());
+        player.init(Disk.WHITE);
+        Optional<Square> square = player.moveDisk(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
       }

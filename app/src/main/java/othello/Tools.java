@@ -7,24 +7,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import othello.base.Board;
+import othello.base.Disk;
 import othello.base.Square;
-import othello.base.Stone;
 
 public class Tools {
 
-  public static int countStones(Board board, Stone stone) {
+  public static int countDisks(Board board, Disk disk) {
     return (int) Arrays.stream(Square.values())
-        .filter(sq -> stone.equals(board.getStone(sq).orElse(null))).count();
+        .filter(sq -> disk.equals(board.getDisk(sq).orElse(null))).count();
   }
 
   private static int countToTakeEngine(
       @NotNull Function<Square, Optional<Square>> next,
-      @NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
+      @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     // make sure that the square is empty.
-    if (board.getStone(square).isPresent()) {
+    if (board.getDisk(square).isPresent()) {
       return -1;
     }
-    final Stone yours = mine.reverse();
+    final Disk yours = mine.reverse();
     int count = 0;
     Optional<Square> nextSquare = next.apply(square);
     do {
@@ -33,7 +33,7 @@ public class Tools {
         return 0;
       }
       // next stone.
-      Optional<Stone> stone = board.getStone(nextSquare.get());
+      Optional<Disk> stone = board.getDisk(nextSquare.get());
       // if empty, ng.
       if (stone.isEmpty()) {
         return 0;
@@ -51,7 +51,7 @@ public class Tools {
   }
 
   public static Optional<List<Square>> move(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     Board work = board.clone();
     List<Optional<List<Square>>> listOfList = new ArrayList<>();
     listOfList.add(moveEngine(Square::up, work, square, mine));
@@ -73,21 +73,21 @@ public class Tools {
       return Optional.of(list);
     }
     // assert
-    if (Tools.countStones(work, mine) != Tools.countStones(board, mine) + list.size()) {
+    if (Tools.countDisks(work, mine) != Tools.countDisks(board, mine) + list.size()) {
       return Optional.empty();
     }
     // ok -> place the stone.
-    work.setStone(square, mine);
+    work.setDisk(square, mine);
     // wright back work -> board.
     for (Square sq : Square.values()) {
-      board.setStone(sq, work.getStone(sq).orElse(null));
+      board.setDisk(sq, work.getDisk(sq).orElse(null));
     }
     return Optional.of(list);
   }
 
   private static Optional<List<Square>> moveEngine(
       @NotNull Function<Square, Optional<Square>> next,
-      @NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
+      @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     int count = countToTakeEngine(next, board, square, mine);
     if (count < 0) {
       return Optional.empty();
@@ -96,13 +96,13 @@ public class Tools {
     Square nextSquare = square;
     for (int i = 0; i < count; i++) {
       nextSquare = next.apply(nextSquare).orElse(null);
-      board.setStone(nextSquare, mine);
+      board.setDisk(nextSquare, mine);
       list.add(nextSquare);
     }
     return Optional.of(list);
   }
 
-  public static int countToTake(@NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
+  public static int countToTake(@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     int[] count = new int[8];
     count[0] = countToTakeEngine(Square::up, board, square, mine);
     count[1] = countToTakeEngine(Square::down, board, square, mine);
@@ -119,42 +119,42 @@ public class Tools {
   }
 
   public static int upCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::up, board, square, mine);
   }
 
   public static int downCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::down, board, square, mine);
   }
 
   public static int leftCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::left, board, square, mine);
   }
 
   public static int rightCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::right, board, square, mine);
   }
 
   public static int upLeftCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::upLeft, board, square, mine);
   }
 
   public static int upRightCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::upRight, board, square, mine);
   }
 
   public static int downLeftCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::downLeft, board, square, mine);
   }
 
   public static int downRightCountToTake(@NotNull Board board, @NotNull Square square,
-      @NotNull Stone mine) {
+      @NotNull Disk mine) {
     return countToTakeEngine(Square::downRight, board, square, mine);
   }
 

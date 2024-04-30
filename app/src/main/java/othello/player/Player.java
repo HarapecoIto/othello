@@ -3,15 +3,15 @@ package othello.player;
 import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 import othello.base.Board;
+import othello.base.Disk;
 import othello.base.Square;
-import othello.base.Stone;
 
 public interface Player {
 
   String getPlayerName();
 
-  void init(Stone stone);
+  void init(Disk disk);
 
-  Optional<Square> moveStone(@NotNull Board board);
+  Optional<Square> moveDisk(@NotNull Board board);
 
 }

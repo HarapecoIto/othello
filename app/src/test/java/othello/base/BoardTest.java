@@ -15,7 +15,7 @@ public class BoardTest {
     Random rand = new Random(seed);
     for (Square sq : Square.values()) {
       int idx = rand.nextInt(3);
-      board.setStone(sq, idx < 2 ? Stone.values()[idx] : null);
+      board.setDisk(sq, idx < 2 ? Disk.values()[idx] : null);
     }
     return board;
   }
@@ -25,7 +25,7 @@ public class BoardTest {
     Board board = new Board();
     board.clear();
     for (Square sq : Square.values()) {
-      assertTrue(board.getStone(sq).isEmpty());
+      assertTrue(board.getDisk(sq).isEmpty());
     }
   }
 
@@ -36,15 +36,15 @@ public class BoardTest {
       board.init();
       for (Square sq : Square.values()) {
         if (sq.equals(Square.SQUARE_4_D) || sq.equals(Square.SQUARE_5_E)) {
-          Optional<Stone> stone = board.getStone(sq);
+          Optional<Disk> stone = board.getDisk(sq);
           assertTrue(stone.isPresent());
-          assertEquals(Stone.WHITE, stone.get());
+          assertEquals(Disk.WHITE, stone.get());
         } else if (sq.equals(Square.SQUARE_4_E) || sq.equals(Square.SQUARE_5_D)) {
-          Optional<Stone> stone = board.getStone(sq);
+          Optional<Disk> stone = board.getDisk(sq);
           assertTrue(stone.isPresent());
-          assertEquals(Stone.BLACK, stone.get());
+          assertEquals(Disk.BLACK, stone.get());
         } else {
-          Optional<Stone> stone = board.getStone(sq);
+          Optional<Disk> stone = board.getDisk(sq);
           assertTrue(stone.isEmpty());
         }
       }
@@ -52,7 +52,7 @@ public class BoardTest {
   }
 
   @Test
-  void testSetStone() {
+  void testSetDisk() {
     Random rand = new Random(12345);
     Board board = new Board();
     for (Square square : Square.values()) {
@@ -62,44 +62,44 @@ public class BoardTest {
       int idx2 = rand.nextInt(3);
       int idx3 = rand.nextInt(3);
       int idx4 = rand.nextInt(3);
-      Stone stone1 = idx1 < 2 ? Stone.values()[idx1] : null;
-      Stone stone2 = idx2 < 2 ? Stone.values()[idx2] : null;
-      Stone stone3 = idx3 < 2 ? Stone.values()[idx3] : null;
-      Stone stone4 = idx4 < 2 ? Stone.values()[idx4] : null;
+      Disk disk1 = idx1 < 2 ? Disk.values()[idx1] : null;
+      Disk disk2 = idx2 < 2 ? Disk.values()[idx2] : null;
+      Disk disk3 = idx3 < 2 ? Disk.values()[idx3] : null;
+      Disk disk4 = idx4 < 2 ? Disk.values()[idx4] : null;
 
-      board.setStone(square, stone1);
-      assertEquals(stone1, board.getStone(square).orElse(null));
-      board.setStone(square, stone2);
-      assertEquals(stone2, board.getStone(row, col).orElse(null));
-      board.setStone(row, col, stone3);
-      assertEquals(stone3, board.getStone(square).orElse(null));
-      board.setStone(row, col, stone4);
-      assertEquals(stone4, board.getStone(row, col).orElse(null));
+      board.setDisk(square, disk1);
+      assertEquals(disk1, board.getDisk(square).orElse(null));
+      board.setDisk(square, disk2);
+      assertEquals(disk2, board.getDisk(row, col).orElse(null));
+      board.setDisk(row, col, disk3);
+      assertEquals(disk3, board.getDisk(square).orElse(null));
+      board.setDisk(row, col, disk4);
+      assertEquals(disk4, board.getDisk(row, col).orElse(null));
     }
   }
 
   @Test
   void testClone() {
     Board original = randomBoard(12345L);
-    original.setStone(Square.SQUARE_1_A, Stone.BLACK);
+    original.setDisk(Square.SQUARE_1_A, Disk.BLACK);
     Board clone = original.clone();
     for (Square sq : Square.values()) {
-      assertEquals(original.getStone(sq).orElse(null), clone.getStone(sq).orElse(null));
+      assertEquals(original.getDisk(sq).orElse(null), clone.getDisk(sq).orElse(null));
     }
     // not same object.
-    clone.setStone(Square.SQUARE_1_A, Stone.WHITE);
-    assertEquals(Stone.BLACK, original.getStone(Square.SQUARE_1_A).orElse(null));
+    clone.setDisk(Square.SQUARE_1_A, Disk.WHITE);
+    assertEquals(Disk.BLACK, original.getDisk(Square.SQUARE_1_A).orElse(null));
   }
 
   @Test
   void testEquals() {
     Board board = randomBoard(12345L);
-    board.setStone(Square.SQUARE_1_A, null);
+    board.setDisk(Square.SQUARE_1_A, null);
     Board clone = board.clone();
     assertEquals(board, clone);
-    clone.setStone(Square.SQUARE_1_A, Stone.BLACK);
+    clone.setDisk(Square.SQUARE_1_A, Disk.BLACK);
     assertNotEquals(board, clone);
-    clone.setStone(Square.SQUARE_1_A, Stone.WHITE);
+    clone.setDisk(Square.SQUARE_1_A, Disk.WHITE);
     assertNotEquals(board, clone);
   }
 
