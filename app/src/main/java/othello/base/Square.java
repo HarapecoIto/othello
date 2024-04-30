@@ -67,37 +67,25 @@ public enum Square {
   public Optional<Square> up() {
     Optional<Row> row = this.row.up();
     Optional<Col> col = Optional.of(this.col);
-    if (row.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
-    }
-    return Optional.empty();
+    return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
   }
 
   public Optional<Square> down() {
     Optional<Row> row = this.row.down();
     Optional<Col> col = Optional.of(this.col);
-    if (row.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
-    }
-    return Optional.empty();
+    return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
   }
 
   public Optional<Square> left() {
     Optional<Row> row = Optional.of(this.row);
     Optional<Col> col = this.col.left();
-    if (col.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
-    }
-    return Optional.empty();
+    return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
   }
 
   public Optional<Square> right() {
     Optional<Row> row = Optional.of(this.row);
     Optional<Col> col = this.col.right();
-    if (col.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
-    }
-    return Optional.empty();
+    return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
   }
 
   public Optional<Square> upLeft() {

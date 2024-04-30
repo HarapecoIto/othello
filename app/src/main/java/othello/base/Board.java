@@ -59,13 +59,13 @@ public final class Board implements Cloneable {
     return clone;
   }
 
-  private String stonesToString() {
+  private String diskToString() {
     StringBuilder builder = new StringBuilder();
     this.disks.stream().map(
-        stone -> {
-          if (stone.isEmpty()) {
+        disk -> {
+          if (disk.isEmpty()) {
             return "empty";
-          } else if (stone.get().equals(Disk.BLACK)) {
+          } else if (disk.get().equals(Disk.BLACK)) {
             return "black";
           } else {
             return "white";
@@ -80,11 +80,11 @@ public final class Board implements Cloneable {
     if (!(obj instanceof Board)) {
       return false;
     }
-    return ((Board) obj).stonesToString().equals(this.stonesToString());
+    return ((Board) obj).diskToString().equals(this.diskToString());
   }
 
   @Override
   public int hashCode() {
-    return this.stonesToString().hashCode();
+    return this.diskToString().hashCode();
   }
 }

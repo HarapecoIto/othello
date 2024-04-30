@@ -12,12 +12,12 @@ import othello.base.Square;
 
 public class Tools {
 
-  public static int countDisks(Board board, Disk disk) {
+  public static int countDisks(@NotNull Board board, @NotNull Disk disk) {
     return (int) Arrays.stream(Square.values())
         .filter(sq -> disk.equals(board.getDisk(sq).orElse(null))).count();
   }
 
-  private static int countToTakeEngine(
+  private static int countReversibleDisksEngine(
       @NotNull Function<Square, Optional<Square>> next,
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     // make sure that the square is empty.
@@ -32,18 +32,18 @@ public class Tools {
       if (nextSquare.isEmpty()) {
         return 0;
       }
-      // next stone.
-      Optional<Disk> stone = board.getDisk(nextSquare.get());
+      // next disk.
+      Optional<Disk> disk = board.getDisk(nextSquare.get());
       // if empty, ng.
-      if (stone.isEmpty()) {
+      if (disk.isEmpty()) {
         return 0;
       }
       // if mine, ok.
-      if (mine.equals(stone.get())) {
+      if (mine.equals(disk.get())) {
         return count;
       }
       // count yours.
-      if (yours.equals(stone.get())) {
+      if (yours.equals(disk.get())) {
         count++;
       }
       nextSquare = next.apply(nextSquare.orElse(null));
@@ -76,19 +76,17 @@ public class Tools {
     if (Tools.countDisks(work, mine) != Tools.countDisks(board, mine) + list.size()) {
       return Optional.empty();
     }
-    // ok -> place the stone.
+    // ok -> place the disk.
     work.setDisk(square, mine);
-    // wright back work -> board.
-    for (Square sq : Square.values()) {
-      board.setDisk(sq, work.getDisk(sq).orElse(null));
-    }
+    // write back work -> board.
+    Arrays.stream(Square.values()).forEach(sq -> board.setDisk(sq, work.getDisk(sq).orElse(null)));
     return Optional.of(list);
   }
 
   private static Optional<List<Square>> moveEngine(
       @NotNull Function<Square, Optional<Square>> next,
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
-    int count = countToTakeEngine(next, board, square, mine);
+    int count = countReversibleDisksEngine(next, board, square, mine);
     if (count < 0) {
       return Optional.empty();
     }
@@ -102,60 +100,61 @@ public class Tools {
     return Optional.of(list);
   }
 
-  public static int countToTake(@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+  public static int countReversibleDisks(
+      @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     int[] count = new int[8];
-    count[0] = countToTakeEngine(Square::up, board, square, mine);
-    count[1] = countToTakeEngine(Square::down, board, square, mine);
-    count[2] = countToTakeEngine(Square::left, board, square, mine);
-    count[3] = countToTakeEngine(Square::right, board, square, mine);
-    count[4] = countToTakeEngine(Square::upLeft, board, square, mine);
-    count[5] = countToTakeEngine(Square::upRight, board, square, mine);
-    count[6] = countToTakeEngine(Square::downLeft, board, square, mine);
-    count[7] = countToTakeEngine(Square::downRight, board, square, mine);
+    count[0] = countReversibleDisksEngine(Square::up, board, square, mine);
+    count[1] = countReversibleDisksEngine(Square::down, board, square, mine);
+    count[2] = countReversibleDisksEngine(Square::left, board, square, mine);
+    count[3] = countReversibleDisksEngine(Square::right, board, square, mine);
+    count[4] = countReversibleDisksEngine(Square::upLeft, board, square, mine);
+    count[5] = countReversibleDisksEngine(Square::upRight, board, square, mine);
+    count[6] = countReversibleDisksEngine(Square::downLeft, board, square, mine);
+    count[7] = countReversibleDisksEngine(Square::downRight, board, square, mine);
     if (Arrays.stream(count).filter(c -> c < 0).count() != 0L) {
       return -1;
     }
     return Arrays.stream(count).sum();
   }
 
-  public static int upCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countUpReversibleDisks(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::up, board, square, mine);
+    return countReversibleDisksEngine(Square::up, board, square, mine);
   }
 
-  public static int downCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countDownReversibleDisks(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::down, board, square, mine);
+    return countReversibleDisksEngine(Square::down, board, square, mine);
   }
 
-  public static int leftCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countLeftReversibleDisks(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::left, board, square, mine);
+    return countReversibleDisksEngine(Square::left, board, square, mine);
   }
 
-  public static int rightCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countRightReversibleDisks(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::right, board, square, mine);
+    return countReversibleDisksEngine(Square::right, board, square, mine);
   }
 
-  public static int upLeftCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countUpLeftReversibleDisk(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::upLeft, board, square, mine);
+    return countReversibleDisksEngine(Square::upLeft, board, square, mine);
   }
 
-  public static int upRightCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countUpRightReversibleDisks(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::upRight, board, square, mine);
+    return countReversibleDisksEngine(Square::upRight, board, square, mine);
   }
 
-  public static int downLeftCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countDownLeftReversibleDisks(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::downLeft, board, square, mine);
+    return countReversibleDisksEngine(Square::downLeft, board, square, mine);
   }
 
-  public static int downRightCountToTake(@NotNull Board board, @NotNull Square square,
+  public static int countDownRightReversibleDisks(@NotNull Board board, @NotNull Square square,
       @NotNull Disk mine) {
-    return countToTakeEngine(Square::downRight, board, square, mine);
+    return countReversibleDisksEngine(Square::downRight, board, square, mine);
   }
 
 }

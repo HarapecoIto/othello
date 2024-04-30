@@ -34,52 +34,52 @@ public class ToolsTest {
   }
 
   @Test
-  void testCountToTake() {
+  void testCountReversibleDisks() {
     Board board = new Board();
     board.init();
-    assertEquals(1, Tools.countToTake(board, Square.SQUARE_6_E, Disk.BLACK));
+    assertEquals(1, Tools.countReversibleDisks(board, Square.SQUARE_6_E, Disk.BLACK));
     board.setDisk(Square.SQUARE_6_E, Disk.BLACK);
     board.setDisk(Square.SQUARE_5_E, Disk.BLACK);
-    assertEquals(1, Tools.countToTake(board, Square.SQUARE_6_F, Disk.WHITE));
+    assertEquals(1, Tools.countReversibleDisks(board, Square.SQUARE_6_F, Disk.WHITE));
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
-    assertEquals(1, Tools.countToTake(board, Square.SQUARE_5_F, Disk.BLACK));
+    assertEquals(1, Tools.countReversibleDisks(board, Square.SQUARE_5_F, Disk.BLACK));
     board.setDisk(Square.SQUARE_5_E, Disk.BLACK);
     board.setDisk(Square.SQUARE_5_E, Disk.BLACK);
   }
 
   @Test
-  void testUpCountToTake() {
+  void testUpCountReversibleDisks() {
     Board board = new Board();
     board.init();
     // on the another stone -> error.
-    assertEquals(-1, Tools.upCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
-    assertEquals(-1, Tools.upCountToTake(board, Square.SQUARE_4_D, Disk.WHITE));
+    assertEquals(-1, Tools.countUpReversibleDisks(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(-1, Tools.countUpReversibleDisks(board, Square.SQUARE_4_D, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.upCountToTake(board, Square.SQUARE_1_D, Disk.BLACK));
-    assertEquals(0, Tools.upCountToTake(board, Square.SQUARE_1_D, Disk.WHITE));
+    assertEquals(0, Tools.countUpReversibleDisks(board, Square.SQUARE_1_D, Disk.BLACK));
+    assertEquals(0, Tools.countUpReversibleDisks(board, Square.SQUARE_1_D, Disk.WHITE));
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.BLACK);
-    assertEquals(0, Tools.upCountToTake(board, Square.SQUARE_2_B, Disk.BLACK));
+    assertEquals(0, Tools.countUpReversibleDisks(board, Square.SQUARE_2_B, Disk.BLACK));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
-    assertEquals(1, Tools.upCountToTake(board, Square.SQUARE_3_B, Disk.BLACK));
+    assertEquals(1, Tools.countUpReversibleDisks(board, Square.SQUARE_3_B, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_B, Disk.WHITE);
-    assertEquals(2, Tools.upCountToTake(board, Square.SQUARE_4_B, Disk.BLACK));
+    assertEquals(2, Tools.countUpReversibleDisks(board, Square.SQUARE_4_B, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_B, Disk.WHITE);
-    assertEquals(3, Tools.upCountToTake(board, Square.SQUARE_5_B, Disk.BLACK));
+    assertEquals(3, Tools.countUpReversibleDisks(board, Square.SQUARE_5_B, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.BLACK);
@@ -87,7 +87,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_3_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_B, Disk.WHITE);
-    assertEquals(4, Tools.upCountToTake(board, Square.SQUARE_6_B, Disk.BLACK));
+    assertEquals(4, Tools.countUpReversibleDisks(board, Square.SQUARE_6_B, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.BLACK);
@@ -96,7 +96,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_B, Disk.WHITE);
-    assertEquals(5, Tools.upCountToTake(board, Square.SQUARE_7_B, Disk.BLACK));
+    assertEquals(5, Tools.countUpReversibleDisks(board, Square.SQUARE_7_B, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.BLACK);
@@ -106,7 +106,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(6, Tools.upCountToTake(board, Square.SQUARE_8_B, Disk.BLACK));
+    assertEquals(6, Tools.countUpReversibleDisks(board, Square.SQUARE_8_B, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_1_B, Disk.WHITE);
@@ -116,7 +116,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_6_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.BLACK);
-    assertEquals(6, Tools.upCountToTake(board, Square.SQUARE_8_B, Disk.WHITE));
+    assertEquals(6, Tools.countUpReversibleDisks(board, Square.SQUARE_8_B, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_1_B, null);
@@ -126,41 +126,41 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(0, Tools.upCountToTake(board, Square.SQUARE_8_B, Disk.BLACK));
+    assertEquals(0, Tools.countUpReversibleDisks(board, Square.SQUARE_8_B, Disk.BLACK));
 
   }
 
   @Test
-  void testDownCountToTake() {
+  void testDownCountReversibleDisks() {
     Board board = new Board();
     board.init();
     // on the another stone -> error.
-    assertEquals(-1, Tools.downCountToTake(board, Square.SQUARE_5_D, Disk.BLACK));
-    assertEquals(-1, Tools.downCountToTake(board, Square.SQUARE_5_D, Disk.WHITE));
+    assertEquals(-1, Tools.countDownReversibleDisks(board, Square.SQUARE_5_D, Disk.BLACK));
+    assertEquals(-1, Tools.countDownReversibleDisks(board, Square.SQUARE_5_D, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.downCountToTake(board, Square.SQUARE_8_D, Disk.BLACK));
-    assertEquals(0, Tools.downCountToTake(board, Square.SQUARE_8_D, Disk.WHITE));
+    assertEquals(0, Tools.countDownReversibleDisks(board, Square.SQUARE_8_D, Disk.BLACK));
+    assertEquals(0, Tools.countDownReversibleDisks(board, Square.SQUARE_8_D, Disk.WHITE));
     // next stone is mine -> 0
-    assertEquals(0, Tools.downCountToTake(board, Square.SQUARE_3_E, Disk.BLACK));
-    assertEquals(0, Tools.downCountToTake(board, Square.SQUARE_3_D, Disk.WHITE));
+    assertEquals(0, Tools.countDownReversibleDisks(board, Square.SQUARE_3_E, Disk.BLACK));
+    assertEquals(0, Tools.countDownReversibleDisks(board, Square.SQUARE_3_D, Disk.WHITE));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_8_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(1, Tools.downCountToTake(board, Square.SQUARE_6_B, Disk.BLACK));
+    assertEquals(1, Tools.countDownReversibleDisks(board, Square.SQUARE_6_B, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_8_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_B, Disk.WHITE);
-    assertEquals(2, Tools.downCountToTake(board, Square.SQUARE_5_B, Disk.BLACK));
+    assertEquals(2, Tools.countDownReversibleDisks(board, Square.SQUARE_5_B, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_8_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_B, Disk.WHITE);
-    assertEquals(3, Tools.downCountToTake(board, Square.SQUARE_4_B, Disk.BLACK));
+    assertEquals(3, Tools.countDownReversibleDisks(board, Square.SQUARE_4_B, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_8_B, Disk.BLACK);
@@ -168,7 +168,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_6_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_B, Disk.WHITE);
-    assertEquals(4, Tools.downCountToTake(board, Square.SQUARE_3_B, Disk.BLACK));
+    assertEquals(4, Tools.countDownReversibleDisks(board, Square.SQUARE_3_B, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_8_B, Disk.BLACK);
@@ -177,7 +177,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_B, Disk.WHITE);
-    assertEquals(5, Tools.downCountToTake(board, Square.SQUARE_2_B, Disk.BLACK));
+    assertEquals(5, Tools.countDownReversibleDisks(board, Square.SQUARE_2_B, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_8_B, Disk.BLACK);
@@ -187,7 +187,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
-    assertEquals(6, Tools.downCountToTake(board, Square.SQUARE_1_B, Disk.BLACK));
+    assertEquals(6, Tools.countDownReversibleDisks(board, Square.SQUARE_1_B, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_8_B, Disk.WHITE);
@@ -197,7 +197,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_3_B, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.BLACK);
-    assertEquals(6, Tools.downCountToTake(board, Square.SQUARE_1_B, Disk.WHITE));
+    assertEquals(6, Tools.countDownReversibleDisks(board, Square.SQUARE_1_B, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_8_B, null);
@@ -207,41 +207,41 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
-    assertEquals(0, Tools.downCountToTake(board, Square.SQUARE_1_B, Disk.BLACK));
+    assertEquals(0, Tools.countDownReversibleDisks(board, Square.SQUARE_1_B, Disk.BLACK));
   }
 
   @Test
-  void testLeftCountToTake() {
+  void testLeftCountReversibleDisks() {
     Board board = new Board();
     board.init();
     // on the another stone -> error.
-    assertEquals(-1, Tools.leftCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
-    assertEquals(-1, Tools.leftCountToTake(board, Square.SQUARE_4_D, Disk.WHITE));
+    assertEquals(-1, Tools.countLeftReversibleDisks(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(-1, Tools.countLeftReversibleDisks(board, Square.SQUARE_4_D, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.leftCountToTake(board, Square.SQUARE_1_A, Disk.BLACK));
-    assertEquals(0, Tools.leftCountToTake(board, Square.SQUARE_1_A, Disk.WHITE));
+    assertEquals(0, Tools.countLeftReversibleDisks(board, Square.SQUARE_1_A, Disk.BLACK));
+    assertEquals(0, Tools.countLeftReversibleDisks(board, Square.SQUARE_1_A, Disk.WHITE));
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.BLACK);
-    assertEquals(0, Tools.leftCountToTake(board, Square.SQUARE_7_B, Disk.BLACK));
+    assertEquals(0, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_B, Disk.BLACK));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(1, Tools.leftCountToTake(board, Square.SQUARE_7_C, Disk.BLACK));
+    assertEquals(1, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_C, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_C, Disk.WHITE);
-    assertEquals(2, Tools.leftCountToTake(board, Square.SQUARE_7_D, Disk.BLACK));
+    assertEquals(2, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_D, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_D, Disk.WHITE);
-    assertEquals(3, Tools.leftCountToTake(board, Square.SQUARE_7_E, Disk.BLACK));
+    assertEquals(3, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_E, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.BLACK);
@@ -249,7 +249,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_E, Disk.WHITE);
-    assertEquals(4, Tools.leftCountToTake(board, Square.SQUARE_7_F, Disk.BLACK));
+    assertEquals(4, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_F, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.BLACK);
@@ -258,7 +258,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_F, Disk.WHITE);
-    assertEquals(5, Tools.leftCountToTake(board, Square.SQUARE_7_G, Disk.BLACK));
+    assertEquals(5, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_G, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.BLACK);
@@ -268,7 +268,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertEquals(6, Tools.leftCountToTake(board, Square.SQUARE_7_H, Disk.BLACK));
+    assertEquals(6, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_H, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_7_A, Disk.WHITE);
@@ -278,7 +278,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_E, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_F, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.BLACK);
-    assertEquals(6, Tools.leftCountToTake(board, Square.SQUARE_7_H, Disk.WHITE));
+    assertEquals(6, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_H, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_7_A, null);
@@ -288,41 +288,41 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertEquals(0, Tools.leftCountToTake(board, Square.SQUARE_7_H, Disk.BLACK));
+    assertEquals(0, Tools.countLeftReversibleDisks(board, Square.SQUARE_7_H, Disk.BLACK));
   }
 
   @Test
-  void testRightCountToTake() {
+  void testRightCountReversibleDisks() {
     Board board = new Board();
     board.init();
     // on the another stone -> error.
-    assertEquals(-1, Tools.rightCountToTake(board, Square.SQUARE_4_E, Disk.BLACK));
-    assertEquals(-1, Tools.rightCountToTake(board, Square.SQUARE_4_E, Disk.WHITE));
+    assertEquals(-1, Tools.countRightReversibleDisks(board, Square.SQUARE_4_E, Disk.BLACK));
+    assertEquals(-1, Tools.countRightReversibleDisks(board, Square.SQUARE_4_E, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.rightCountToTake(board, Square.SQUARE_1_H, Disk.BLACK));
-    assertEquals(0, Tools.rightCountToTake(board, Square.SQUARE_1_H, Disk.WHITE));
+    assertEquals(0, Tools.countRightReversibleDisks(board, Square.SQUARE_1_H, Disk.BLACK));
+    assertEquals(0, Tools.countRightReversibleDisks(board, Square.SQUARE_1_H, Disk.WHITE));
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.BLACK);
-    assertEquals(0, Tools.rightCountToTake(board, Square.SQUARE_7_G, Disk.BLACK));
+    assertEquals(0, Tools.countRightReversibleDisks(board, Square.SQUARE_7_G, Disk.BLACK));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertEquals(1, Tools.rightCountToTake(board, Square.SQUARE_7_F, Disk.BLACK));
+    assertEquals(1, Tools.countRightReversibleDisks(board, Square.SQUARE_7_F, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_F, Disk.WHITE);
-    assertEquals(2, Tools.rightCountToTake(board, Square.SQUARE_7_E, Disk.BLACK));
+    assertEquals(2, Tools.countRightReversibleDisks(board, Square.SQUARE_7_E, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_E, Disk.WHITE);
-    assertEquals(3, Tools.rightCountToTake(board, Square.SQUARE_7_D, Disk.BLACK));
+    assertEquals(3, Tools.countRightReversibleDisks(board, Square.SQUARE_7_D, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.BLACK);
@@ -330,7 +330,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_D, Disk.WHITE);
-    assertEquals(4, Tools.rightCountToTake(board, Square.SQUARE_7_C, Disk.BLACK));
+    assertEquals(4, Tools.countRightReversibleDisks(board, Square.SQUARE_7_C, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.BLACK);
@@ -339,7 +339,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_C, Disk.WHITE);
-    assertEquals(5, Tools.rightCountToTake(board, Square.SQUARE_7_B, Disk.BLACK));
+    assertEquals(5, Tools.countRightReversibleDisks(board, Square.SQUARE_7_B, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.BLACK);
@@ -349,7 +349,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(6, Tools.rightCountToTake(board, Square.SQUARE_7_A, Disk.BLACK));
+    assertEquals(6, Tools.countRightReversibleDisks(board, Square.SQUARE_7_A, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_7_H, Disk.WHITE);
@@ -359,7 +359,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_D, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_C, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.BLACK);
-    assertEquals(6, Tools.rightCountToTake(board, Square.SQUARE_7_A, Disk.WHITE));
+    assertEquals(6, Tools.countRightReversibleDisks(board, Square.SQUARE_7_A, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_7_H, null);
@@ -369,11 +369,11 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_7_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(0, Tools.rightCountToTake(board, Square.SQUARE_7_A, Disk.BLACK));
+    assertEquals(0, Tools.countRightReversibleDisks(board, Square.SQUARE_7_A, Disk.BLACK));
   }
 
   @Test
-  void testUpLeftCountToTake() {
+  void testUpLeftCountReversibleDisks() {
     Board board = new Board();
     board.init();
     board.setDisk(Square.SQUARE_3_C, null);
@@ -381,33 +381,33 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_C, null);
     board.setDisk(Square.SQUARE_5_D, null);
     // on the another stone -> error.
-    assertEquals(-1, Tools.upLeftCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
-    assertEquals(-1, Tools.upLeftCountToTake(board, Square.SQUARE_4_D, Disk.WHITE));
+    assertEquals(-1, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(-1, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_4_D, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.upLeftCountToTake(board, Square.SQUARE_1_A, Disk.BLACK));
-    assertEquals(0, Tools.upLeftCountToTake(board, Square.SQUARE_1_A, Disk.WHITE));
+    assertEquals(0, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_1_A, Disk.BLACK));
+    assertEquals(0, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_1_A, Disk.WHITE));
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
-    assertEquals(0, Tools.upLeftCountToTake(board, Square.SQUARE_2_B, Disk.BLACK));
+    assertEquals(0, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_2_B, Disk.BLACK));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
-    assertEquals(1, Tools.upLeftCountToTake(board, Square.SQUARE_3_C, Disk.BLACK));
+    assertEquals(1, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_3_C, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
-    assertEquals(2, Tools.upLeftCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(2, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_4_D, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
-    assertEquals(3, Tools.upLeftCountToTake(board, Square.SQUARE_5_E, Disk.BLACK));
+    assertEquals(3, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_5_E, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
@@ -415,7 +415,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
-    assertEquals(4, Tools.upLeftCountToTake(board, Square.SQUARE_6_F, Disk.BLACK));
+    assertEquals(4, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_6_F, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
@@ -424,7 +424,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
-    assertEquals(5, Tools.upLeftCountToTake(board, Square.SQUARE_7_G, Disk.BLACK));
+    assertEquals(5, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_7_G, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
@@ -434,7 +434,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertEquals(6, Tools.upLeftCountToTake(board, Square.SQUARE_8_H, Disk.BLACK));
+    assertEquals(6, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_8_H, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.WHITE);
@@ -444,7 +444,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.BLACK);
     board.setDisk(Square.SQUARE_6_F, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.BLACK);
-    assertEquals(6, Tools.upLeftCountToTake(board, Square.SQUARE_8_H, Disk.WHITE));
+    assertEquals(6, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_8_H, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_1_A, null);
@@ -454,11 +454,11 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertEquals(0, Tools.upLeftCountToTake(board, Square.SQUARE_8_H, Disk.BLACK));
+    assertEquals(0, Tools.countUpLeftReversibleDisk(board, Square.SQUARE_8_H, Disk.BLACK));
   }
 
   @Test
-  void testUpRightCountToTake() {
+  void testUpRightCountReversibleDisks() {
     Board board = new Board();
     board.init();
     board.setDisk(Square.SQUARE_3_C, null);
@@ -466,33 +466,33 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_C, null);
     board.setDisk(Square.SQUARE_5_D, null);
     // on the another stone -> error.
-    assertEquals(-1, Tools.upRightCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
-    assertEquals(-1, Tools.upRightCountToTake(board, Square.SQUARE_4_D, Disk.WHITE));
+    assertEquals(-1, Tools.countUpRightReversibleDisks(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(-1, Tools.countUpRightReversibleDisks(board, Square.SQUARE_4_D, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.upRightCountToTake(board, Square.SQUARE_1_A, Disk.BLACK));
-    assertEquals(0, Tools.upRightCountToTake(board, Square.SQUARE_1_A, Disk.WHITE));
+    assertEquals(0, Tools.countUpRightReversibleDisks(board, Square.SQUARE_1_A, Disk.BLACK));
+    assertEquals(0, Tools.countUpRightReversibleDisks(board, Square.SQUARE_1_A, Disk.WHITE));
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.BLACK);
-    assertEquals(0, Tools.upRightCountToTake(board, Square.SQUARE_2_G, Disk.BLACK));
+    assertEquals(0, Tools.countUpRightReversibleDisks(board, Square.SQUARE_2_G, Disk.BLACK));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_G, Disk.WHITE);
-    assertEquals(1, Tools.upRightCountToTake(board, Square.SQUARE_3_F, Disk.BLACK));
+    assertEquals(1, Tools.countUpRightReversibleDisks(board, Square.SQUARE_3_F, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_G, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_F, Disk.WHITE);
-    assertEquals(2, Tools.upRightCountToTake(board, Square.SQUARE_4_E, Disk.BLACK));
+    assertEquals(2, Tools.countUpRightReversibleDisks(board, Square.SQUARE_4_E, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_G, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_E, Disk.WHITE);
-    assertEquals(3, Tools.upRightCountToTake(board, Square.SQUARE_5_D, Disk.BLACK));
+    assertEquals(3, Tools.countUpRightReversibleDisks(board, Square.SQUARE_5_D, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.BLACK);
@@ -500,7 +500,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_3_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
-    assertEquals(4, Tools.upRightCountToTake(board, Square.SQUARE_6_C, Disk.BLACK));
+    assertEquals(4, Tools.countUpRightReversibleDisks(board, Square.SQUARE_6_C, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.BLACK);
@@ -509,7 +509,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_C, Disk.WHITE);
-    assertEquals(5, Tools.upRightCountToTake(board, Square.SQUARE_7_B, Disk.BLACK));
+    assertEquals(5, Tools.countUpRightReversibleDisks(board, Square.SQUARE_7_B, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.BLACK);
@@ -519,7 +519,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(6, Tools.upRightCountToTake(board, Square.SQUARE_8_A, Disk.BLACK));
+    assertEquals(6, Tools.countUpRightReversibleDisks(board, Square.SQUARE_8_A, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_1_H, Disk.WHITE);
@@ -529,7 +529,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_D, Disk.BLACK);
     board.setDisk(Square.SQUARE_6_C, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.BLACK);
-    assertEquals(6, Tools.upRightCountToTake(board, Square.SQUARE_8_A, Disk.WHITE));
+    assertEquals(6, Tools.countUpRightReversibleDisks(board, Square.SQUARE_8_A, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_1_H, null);
@@ -539,11 +539,11 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(0, Tools.upRightCountToTake(board, Square.SQUARE_8_A, Disk.BLACK));
+    assertEquals(0, Tools.countUpRightReversibleDisks(board, Square.SQUARE_8_A, Disk.BLACK));
   }
 
   @Test
-  void testDownLeftCountToTake() {
+  void testDownLeftCountReversibleDisks() {
     Board board = new Board();
     board.init();
     board.setDisk(Square.SQUARE_3_C, null);
@@ -551,33 +551,33 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_C, null);
     board.setDisk(Square.SQUARE_5_D, null);
     // on the another stone -> error.
-    assertEquals(-1, Tools.downLeftCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
-    assertEquals(-1, Tools.downLeftCountToTake(board, Square.SQUARE_4_D, Disk.WHITE));
+    assertEquals(-1, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(-1, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_4_D, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.downLeftCountToTake(board, Square.SQUARE_1_A, Disk.BLACK));
-    assertEquals(0, Tools.downLeftCountToTake(board, Square.SQUARE_1_A, Disk.WHITE));
+    assertEquals(0, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_1_A, Disk.BLACK));
+    assertEquals(0, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_1_A, Disk.WHITE));
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.BLACK);
-    assertEquals(0, Tools.downLeftCountToTake(board, Square.SQUARE_7_B, Disk.BLACK));
+    assertEquals(0, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_7_B, Disk.BLACK));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
-    assertEquals(1, Tools.downLeftCountToTake(board, Square.SQUARE_6_C, Disk.BLACK));
+    assertEquals(1, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_6_C, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_C, Disk.WHITE);
-    assertEquals(2, Tools.downLeftCountToTake(board, Square.SQUARE_5_D, Disk.BLACK));
+    assertEquals(2, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_5_D, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
-    assertEquals(3, Tools.downLeftCountToTake(board, Square.SQUARE_4_E, Disk.BLACK));
+    assertEquals(3, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_4_E, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.BLACK);
@@ -585,7 +585,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_6_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_E, Disk.WHITE);
-    assertEquals(4, Tools.downLeftCountToTake(board, Square.SQUARE_3_F, Disk.BLACK));
+    assertEquals(4, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_3_F, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.BLACK);
@@ -594,7 +594,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_F, Disk.WHITE);
-    assertEquals(5, Tools.downLeftCountToTake(board, Square.SQUARE_2_G, Disk.BLACK));
+    assertEquals(5, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_2_G, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.BLACK);
@@ -604,7 +604,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_2_G, Disk.WHITE);
-    assertEquals(6, Tools.downLeftCountToTake(board, Square.SQUARE_1_H, Disk.BLACK));
+    assertEquals(6, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_1_H, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_8_A, Disk.WHITE);
@@ -614,7 +614,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_E, Disk.BLACK);
     board.setDisk(Square.SQUARE_3_F, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_G, Disk.BLACK);
-    assertEquals(6, Tools.downLeftCountToTake(board, Square.SQUARE_1_H, Disk.WHITE));
+    assertEquals(6, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_1_H, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_8_A, null);
@@ -624,11 +624,11 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_2_G, Disk.WHITE);
-    assertEquals(0, Tools.downLeftCountToTake(board, Square.SQUARE_1_H, Disk.BLACK));
+    assertEquals(0, Tools.countDownLeftReversibleDisks(board, Square.SQUARE_1_H, Disk.BLACK));
   }
 
   @Test
-  void testDownRightCountToTake() {
+  void testDownRightCountReversibleDisks() {
     Board board = new Board();
     board.init();
     board.setDisk(Square.SQUARE_3_C, null);
@@ -636,33 +636,33 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_C, null);
     board.setDisk(Square.SQUARE_5_D, null);
     // on the another stone -> error.
-    assertEquals(-1, Tools.downRightCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
-    assertEquals(-1, Tools.downRightCountToTake(board, Square.SQUARE_4_D, Disk.WHITE));
+    assertEquals(-1, Tools.countDownRightReversibleDisks(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(-1, Tools.countDownRightReversibleDisks(board, Square.SQUARE_4_D, Disk.WHITE));
     // next square is out of board -> 0.
-    assertEquals(0, Tools.downRightCountToTake(board, Square.SQUARE_1_A, Disk.BLACK));
-    assertEquals(0, Tools.downRightCountToTake(board, Square.SQUARE_1_A, Disk.WHITE));
+    assertEquals(0, Tools.countDownRightReversibleDisks(board, Square.SQUARE_1_A, Disk.BLACK));
+    assertEquals(0, Tools.countDownRightReversibleDisks(board, Square.SQUARE_1_A, Disk.WHITE));
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.BLACK);
-    assertEquals(0, Tools.downRightCountToTake(board, Square.SQUARE_7_G, Disk.BLACK));
+    assertEquals(0, Tools.countDownRightReversibleDisks(board, Square.SQUARE_7_G, Disk.BLACK));
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertEquals(1, Tools.downRightCountToTake(board, Square.SQUARE_6_F, Disk.BLACK));
+    assertEquals(1, Tools.countDownRightReversibleDisks(board, Square.SQUARE_6_F, Disk.BLACK));
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
-    assertEquals(2, Tools.downRightCountToTake(board, Square.SQUARE_5_E, Disk.BLACK));
+    assertEquals(2, Tools.countDownRightReversibleDisks(board, Square.SQUARE_5_E, Disk.BLACK));
     // take three
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
-    assertEquals(3, Tools.downRightCountToTake(board, Square.SQUARE_4_D, Disk.BLACK));
+    assertEquals(3, Tools.countDownRightReversibleDisks(board, Square.SQUARE_4_D, Disk.BLACK));
     // take four
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.BLACK);
@@ -670,7 +670,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
-    assertEquals(4, Tools.downRightCountToTake(board, Square.SQUARE_3_C, Disk.BLACK));
+    assertEquals(4, Tools.countDownRightReversibleDisks(board, Square.SQUARE_3_C, Disk.BLACK));
     // take five
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.BLACK);
@@ -679,7 +679,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
-    assertEquals(5, Tools.downRightCountToTake(board, Square.SQUARE_2_B, Disk.BLACK));
+    assertEquals(5, Tools.countDownRightReversibleDisks(board, Square.SQUARE_2_B, Disk.BLACK));
     // take six
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.BLACK);
@@ -689,7 +689,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
-    assertEquals(6, Tools.downRightCountToTake(board, Square.SQUARE_1_A, Disk.BLACK));
+    assertEquals(6, Tools.countDownRightReversibleDisks(board, Square.SQUARE_1_A, Disk.BLACK));
     // change black <-> white
     board.clear();
     board.setDisk(Square.SQUARE_8_H, Disk.WHITE);
@@ -699,7 +699,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_D, Disk.BLACK);
     board.setDisk(Square.SQUARE_3_C, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.BLACK);
-    assertEquals(6, Tools.downRightCountToTake(board, Square.SQUARE_1_A, Disk.WHITE));
+    assertEquals(6, Tools.countDownRightReversibleDisks(board, Square.SQUARE_1_A, Disk.WHITE));
     // terminated by empty square -> 0
     board.clear();
     board.setDisk(Square.SQUARE_8_H, null);
@@ -709,7 +709,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
-    assertEquals(0, Tools.downRightCountToTake(board, Square.SQUARE_1_A, Disk.BLACK));
+    assertEquals(0, Tools.countDownRightReversibleDisks(board, Square.SQUARE_1_A, Disk.BLACK));
   }
 
   @Test

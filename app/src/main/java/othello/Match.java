@@ -2,7 +2,6 @@ package othello;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import othello.base.Board;
@@ -43,7 +42,7 @@ public class Match {
   private List<Square> getMoveableSquares() {
     List<Square> list = new ArrayList<>();
     for (Square sq : Square.values()) {
-      if (Tools.countToTake(this.board.clone(), sq, this.turn) > 0) {
+      if (Tools.countReversibleDisks(this.board.clone(), sq, this.turn) > 0) {
         list.add(sq);
       }
     }
@@ -52,19 +51,6 @@ public class Match {
 
   private Player getPlayer(@NotNull Disk playerDisk) {
     return playerDisk.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-  }
-
-  private int countStones(Disk disk) {
-    if (disk != null) {
-      return (int) Arrays.stream(Square.values()).filter(sq -> {
-        Optional<Disk> opt = this.board.getDisk(sq);
-        return opt.isPresent() && opt.get().equals(disk);
-      }).count();
-    } else {
-      return (int) Arrays.stream(Square.values()).filter(sq ->
-          this.board.getDisk(sq).isEmpty()
-      ).count();
-    }
   }
 
   public void turn() {
@@ -79,14 +65,14 @@ public class Match {
       return;
     }
     this.passFlag = false;
-    Optional<Square> toMove = getPlayer(this.turn).moveDisk(board.clone());
+    Optional<Square> toMove = getPlayer(this.turn).moveDisk(this.board.clone());
     if (toMove.isEmpty() || !list.contains(toMove.get())) {
       // TODO foul
       return;
     } else {
-      Optional<List<Square>> taken = Tools.move(board, toMove.get(), this.turn);
-      int blackCount = this.countStones(Disk.BLACK);
-      int whiteCount = this.countStones(Disk.WHITE);
+      Optional<List<Square>> taken = Tools.move(this.board, toMove.get(), this.turn);
+      int blackCount = Tools.countDisks(this.board, Disk.BLACK);
+      int whiteCount = Tools.countDisks(this.board, Disk.WHITE);
       if (blackCount + whiteCount == 64) {
         // TODO game over.
         return;
