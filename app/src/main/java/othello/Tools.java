@@ -1,7 +1,9 @@
 package othello;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import othello.base.Board;
@@ -48,27 +50,31 @@ public class Tools {
     } while (true);
   }
 
-  public static int move(@NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
+  public static Optional<List<Square>> move(@NotNull Board board, @NotNull Square square,
+      @NotNull Stone mine) {
     Board work = board.clone();
-    int[] counts = new int[8];
-    counts[0] = moveEngine(Square::up, work, square, mine);
-    counts[1] = moveEngine(Square::down, work, square, mine);
-    counts[2] = moveEngine(Square::left, work, square, mine);
-    counts[3] = moveEngine(Square::right, work, square, mine);
-    counts[4] = moveEngine(Square::upLeft, work, square, mine);
-    counts[5] = moveEngine(Square::upRight, work, square, mine);
-    counts[6] = moveEngine(Square::downLeft, work, square, mine);
-    counts[7] = moveEngine(Square::downRight, work, square, mine);
-    if (Arrays.stream(counts).filter(c -> c < 0).count() > 0) {
-      return -1;
+    List<Optional<List<Square>>> listOfList = new ArrayList<>();
+    listOfList.add(moveEngine(Square::up, work, square, mine));
+    listOfList.add(moveEngine(Square::down, work, square, mine));
+    listOfList.add(moveEngine(Square::left, work, square, mine));
+    listOfList.add(moveEngine(Square::right, work, square, mine));
+    listOfList.add(moveEngine(Square::upLeft, work, square, mine));
+    listOfList.add(moveEngine(Square::upRight, work, square, mine));
+    listOfList.add(moveEngine(Square::downLeft, work, square, mine));
+    listOfList.add(moveEngine(Square::downRight, work, square, mine));
+    if (listOfList.stream().anyMatch(Optional::isEmpty)) {
+      return Optional.empty();
     }
-    int count = Arrays.stream(counts).sum();
-    if (count == 0) {
-      return 0;
+    List<Square> list = new ArrayList<>();
+    listOfList.forEach(
+        l -> list.addAll(l.orElse(new ArrayList<>()))
+    );
+    if (list.isEmpty()) {
+      return Optional.of(list);
     }
     // assert
-    if (Tools.countStones(work, mine) != Tools.countStones(board, mine) + count) {
-      return -1;
+    if (Tools.countStones(work, mine) != Tools.countStones(board, mine) + list.size()) {
+      return Optional.empty();
     }
     // ok -> place the stone.
     work.setStone(square, mine);
@@ -76,22 +82,24 @@ public class Tools {
     for (Square sq : Square.values()) {
       board.setStone(sq, work.getStone(sq).orElse(null));
     }
-    return count;
+    return Optional.of(list);
   }
 
-  private static int moveEngine(
+  private static Optional<List<Square>> moveEngine(
       @NotNull Function<Square, Optional<Square>> next,
       @NotNull Board board, @NotNull Square square, @NotNull Stone mine) {
     int count = countToTakeEngine(next, board, square, mine);
     if (count < 0) {
-      return -1;
+      return Optional.empty();
     }
+    List<Square> list = new ArrayList<>();
     Square nextSquare = square;
     for (int i = 0; i < count; i++) {
       nextSquare = next.apply(nextSquare).orElse(null);
       board.setStone(nextSquare, mine);
+      list.add(nextSquare);
     }
-    return count;
+    return Optional.of(list);
   }
 
   public static int countToTake(@NotNull Board board, @NotNull Square square, @NotNull Stone mine) {

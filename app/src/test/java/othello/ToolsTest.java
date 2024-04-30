@@ -1,7 +1,11 @@
 package othello;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
 import othello.base.Col;
@@ -713,11 +717,23 @@ public class ToolsTest {
     Board board = new Board();
     board.init();
     Board clone = board.clone();
-    assertEquals(-1, Tools.move(clone, Square.SQUARE_4_D, Stone.BLACK));
+    Optional<List<Square>> opt = Tools.move(clone, Square.SQUARE_4_D, Stone.BLACK);
+    assertTrue(opt.isEmpty());
     assertEquals(board, clone);
-    assertEquals(0, Tools.move(clone, Square.SQUARE_6_D, Stone.BLACK));
+
+    board.init();
+    clone = board.clone();
+    opt = Tools.move(clone, Square.SQUARE_6_D, Stone.BLACK);
+    assertTrue(opt.isPresent());
+    assertEquals(0, opt.get().size());
     assertEquals(board, clone);
-    assertEquals(1, Tools.move(clone, Square.SQUARE_6_E, Stone.BLACK));
+
+    board.init();
+    clone = board.clone();
+    opt = Tools.move(clone, Square.SQUARE_6_E, Stone.BLACK);
+    assertTrue(opt.isPresent());
+    assertEquals(1, opt.get().size());
+    assertEquals(Square.SQUARE_5_E, opt.get().get(0));
     board.setStone(Square.SQUARE_5_E, Stone.BLACK);
     board.setStone(Square.SQUARE_6_E, Stone.BLACK);
     assertEquals(board, clone);
@@ -744,7 +760,15 @@ public class ToolsTest {
     board.setStone(Square.SQUARE_3_C, null);
 
     // move
-    assertEquals(11, Tools.move(board, Square.SQUARE_3_C, Stone.BLACK));
+    Optional<List<Square>> result = Tools.move(board, Square.SQUARE_3_C, Stone.BLACK);
+    assertTrue(result.isPresent());
+    assertEquals(11, result.get().size());
+    Square[] taken = new Square[]{
+        Square.SQUARE_2_B, Square.SQUARE_2_C, Square.SQUARE_2_D, Square.SQUARE_3_B,
+        Square.SQUARE_3_D, Square.SQUARE_3_E, Square.SQUARE_4_B, Square.SQUARE_4_C,
+        Square.SQUARE_4_D, Square.SQUARE_5_C, Square.SQUARE_5_E
+    };
+    assertEquals(0, Arrays.stream(taken).filter(sq -> !result.get().contains(sq)).count());
 
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊛㊚＿＿

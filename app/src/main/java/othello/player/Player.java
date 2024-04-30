@@ -10,6 +10,8 @@ public interface Player {
 
   String getPlayerName();
 
-  Optional<Square> moveStone(@NotNull Board board, @NotNull Stone player);
+  void init(Stone stone);
+
+  Optional<Square> moveStone(@NotNull Board board);
 
 }

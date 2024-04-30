@@ -24,7 +24,8 @@ public class RandomPlayerTest {
       );
       for (long seed = 0; seed < 10; seed++) {
         Player player = new RandomPlayer(seed);
-        Optional<Square> square = player.moveStone(board.clone(), Stone.WHITE);
+        player.init(Stone.WHITE);
+        Optional<Square> square = player.moveStone(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
       }
@@ -37,7 +38,8 @@ public class RandomPlayerTest {
       );
       for (long seed = 0; seed < 10; seed++) {
         Player player = new RandomPlayer(seed);
-        Optional<Square> square = player.moveStone(board.clone(), Stone.BLACK);
+        player.init(Stone.BLACK);
+        Optional<Square> square = player.moveStone(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
       }
@@ -60,7 +62,8 @@ public class RandomPlayerTest {
         }
       }
       Player player = new RandomPlayer(123);
-      Optional<Square> square = player.moveStone(board.clone(), Stone.WHITE);
+      player.init(Stone.WHITE);
+      Optional<Square> square = player.moveStone(board.clone());
       assertTrue(square.isEmpty());
     }
     {
@@ -88,7 +91,8 @@ public class RandomPlayerTest {
       );
       for (long seed = 0; seed < 10; seed++) {
         Player player = new RandomPlayer(seed);
-        Optional<Square> square = player.moveStone(board.clone(), Stone.WHITE);
+        player.init(Stone.WHITE);
+        Optional<Square> square = player.moveStone(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
       }

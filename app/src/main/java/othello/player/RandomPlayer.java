@@ -14,6 +14,7 @@ public class RandomPlayer implements Player {
 
   private static final String PLAYER_NAME = "Random Player";
 
+  private Stone myStone;
   private Random rand;
 
   public RandomPlayer(long seed) {
@@ -26,10 +27,15 @@ public class RandomPlayer implements Player {
   }
 
   @Override
-  public Optional<Square> moveStone(@NotNull Board board, @NotNull Stone player) {
+  public void init(@NotNull Stone myStone) {
+    this.myStone = myStone;
+  }
+
+  @Override
+  public Optional<Square> moveStone(@NotNull Board board) {
     List<Square> list = new ArrayList<>();
     for (Square sq : Square.values()) {
-      if (Tools.countToTake(board, sq, player) > 0) {
+      if (Tools.countToTake(board, sq, this.myStone) > 0) {
         list.add(sq);
       }
     }
