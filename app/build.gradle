@@ -7,6 +7,7 @@
  */
 
 plugins {
+    id 'java'
     id 'application'
 }
 
@@ -21,6 +22,10 @@ dependencies {
 
 application {
     mainClass = 'othello.App'
+}
+
+run {
+    standardInput = System.in
 }
 
 tasks.named('test') {
