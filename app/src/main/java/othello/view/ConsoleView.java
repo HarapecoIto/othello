@@ -1,6 +1,7 @@
 package othello.view;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class ConsoleView implements OthelloView {
   public void startTurn(@NotNull Board board, @NotNull Disk turn) {
     if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
       Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-      System.out.printf("%s: %s turn.%n", this.diskCharacter(turn), player.get().getName());
+      System.out.printf("%s(%s) turn.%n", this.diskCharacter(turn), player.get().getName());
     }
   }
 
@@ -45,32 +46,40 @@ public class ConsoleView implements OthelloView {
   public void endGameByFoul(Board board, Disk turn) {
     if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
       Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-      System.out.printf("Foul! %s: %s lose.%n", this.diskCharacter(turn), player.get().getName());
-      this.updateBoardEngine(board, turn);
+      System.out.printf("Foul! %s(%s) lose.%n", this.diskCharacter(turn), player.get().getName());
+      this.updateBoardEngine(board, turn, new ArrayList<>());
     }
   }
 
   @Override
-  public void endGame(Board board, Disk turn) {
+  public void endGame(Board board, Disk turn, @NotNull List<Square> taken) {
     if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
       Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-      System.out.printf("%s: %s win.%n", this.diskCharacter(turn), player.get().getName());
-      this.updateBoardEngine(board, turn);
+      System.out.printf("%s(%s) win.%n", this.diskCharacter(turn), player.get().getName());
+      this.updateBoardEngine(board, turn, taken);
     }
   }
 
   @Override
-  public void updateBoard(@NotNull Board board, @NotNull Disk turn) {
-    this.updateBoardEngine(board, turn);
+  public void updateBoard(@NotNull Board board, @NotNull Disk turn, @NotNull List<Square> taken) {
+    if (taken.isEmpty()) {
+      System.out.println("pass");
+    } else {
+      this.updateBoardEngine(board, turn, taken);
+    }
   }
 
-  private void updateBoardEngine(@NotNull Board board, @NotNull Disk turn) {
-    List<Square> squares = Arrays.asList(Square.values());
+  private void updateBoardEngine(@NotNull Board board, @NotNull Disk turn,
+      @NotNull List<Square> taken) {
+    int blackDisks = this.countDisk(board, Disk.BLACK);
+    int whiteDisks = this.countDisk(board, Disk.WHITE);
+    System.out.printf("%s: %d%n", this.diskCharacter(Disk.BLACK), blackDisks);
+    System.out.printf("%s: %d%n", this.diskCharacter(Disk.WHITE), whiteDisks);
     System.out.println("    A  B  C  D  E  F  G  H");
     System.out.println("  ┌──┬──┬──┬──┬──┬──┬──┬──┐");
     for (Row row : Row.values()) {
       StringBuilder builder = new StringBuilder(String.format("%d |", row.getIndex() + 1));
-      squares.stream().filter(sq -> sq.row().equals(row))
+      Arrays.stream(Square.values()).filter(sq -> sq.row().equals(row))
           .map(square -> diskCharacter(board.getDisk(square).orElse(null)))
           .forEach(string -> {
             builder.append(string);
@@ -83,6 +92,14 @@ public class ConsoleView implements OthelloView {
         System.out.println("  └──┴──┴──┴──┴──┴──┴──┴──┘");
       }
     }
+  }
+
+  private int countDisk(@NotNull Board board, @NotNull Disk disk) {
+    return (int) Arrays.stream(Square.values()).filter(
+        sq -> {
+          Optional<Disk> opt = board.getDisk(sq);
+          return opt.isPresent() && opt.get().equals(disk);
+        }).count();
   }
 
   private String diskCharacter(Disk disk) {

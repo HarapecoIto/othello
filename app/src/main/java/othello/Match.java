@@ -1,6 +1,7 @@
 package othello;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class Match extends Thread {
   private final Board board;
   private Disk turn;
   private boolean passFlag;
+  private boolean endOfGame;
   private Optional<Player> blackPlayer;
   private Optional<Player> whitePlayer;
 
@@ -29,6 +31,7 @@ public class Match extends Thread {
     this.board.init();
     this.turn = Disk.BLACK;
     this.passFlag = false;
+    this.endOfGame = false;
     this.blackPlayer = Optional.empty();
     this.whitePlayer = Optional.empty();
   }
@@ -41,31 +44,48 @@ public class Match extends Thread {
       System.err.println("Could not select players.");
       return;
     }
-    TurnStatus status = null;
     do {
-      Optional<Player> player = this.turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
       // assert
+      Optional<Player> player = this.turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
       if (player.isEmpty()) {
         System.err.println("Error: no player.");
+        this.endOfGame = true;
         return;
       }
       // exec turn
       this.view.startTurn(this.board.clone(), this.turn);
-      status = this.turn(player.get());
+      Optional<List<Square>> taken = this.turn(player.get());
       // foul -> end
-      if (status.equals(TurnStatus.FOUL)) {
+      if (taken.isEmpty()) {
         this.view.endGameByFoul(this.board.clone(), this.turn);
+        this.endOfGame = true;
         return;
       }
-      // moved or pass -> next turn
-      if (status.equals(TurnStatus.MOVED) || status.equals(TurnStatus.PASS)) {
-        this.view.updateBoard(this.board.clone(), this.turn);
+      // pass
+      if (taken.get().isEmpty()) {
+        // both player's pass -> end of game
+        if (this.passFlag) {
+          this.view.endGame(this.board.clone(), this.turn, taken.get());
+          this.endOfGame = true;
+          return;
+        }
+        // first player's pass
+        this.passFlag = true;
+      } else {
+        // clear pass
+        this.passFlag = false;
       }
-      // switch turn
+      this.view.updateBoard(this.board.clone(), this.turn, taken.get());
       this.turn = this.turn.equals(Disk.BLACK) ? Disk.WHITE : Disk.BLACK;
-    } while (!status.equals(TurnStatus.END_OF_GAME));
-    // end of game
-    this.view.endGame(this.board.clone(), this.turn);
+      // end of game
+      int blackDisks = Tools.countDisks(this.board.clone(), Disk.BLACK);
+      int whiteDisks = Tools.countDisks(this.board.clone(), Disk.WHITE);
+      if (blackDisks + whiteDisks == 64) {
+        this.view.endGame(this.board.clone(), this.turn, taken.get());
+        this.endOfGame = true;
+        return;
+      }
+    } while (true);
   }
 
   private List<Square> getMoveableSquares() {
@@ -74,28 +94,28 @@ public class Match extends Thread {
         .toList();
   }
 
-  public TurnStatus turn(Player player) {
+  public Optional<List<Square>> turn(Player player) {
+    // assert
+    if (this.endOfGame) {
+      return Optional.empty();
+    }
     List<Square> list = getMoveableSquares();
     if (list.isEmpty()) {
-      int blackCount = Tools.countDisks(this.board, Disk.BLACK);
-      int whiteCount = Tools.countDisks(this.board, Disk.WHITE);
-      if (blackCount + whiteCount == 64) {
-        return TurnStatus.END_OF_GAME;
-      }
+
       if (this.passFlag) {
-        return TurnStatus.END_OF_GAME;
+        return Optional.of(new ArrayList<>());
       }
       this.passFlag = true;
-      return TurnStatus.PASS;
+      return Optional.of(new ArrayList<>());
     }
     this.passFlag = false;
     Optional<Square> toMove = player.moveDisk(this.board.clone());
+    // foul
     if (toMove.isEmpty() || !list.contains(toMove.get())) {
-      return TurnStatus.FOUL;
-    } else {
-      Optional<List<Square>> taken = Tools.move(this.board, toMove.get(), this.turn);
-      return TurnStatus.MOVED;
+      return Optional.empty();
     }
+    // moved
+    return Tools.move(this.board, toMove.get(), this.turn);
   }
 
 }
