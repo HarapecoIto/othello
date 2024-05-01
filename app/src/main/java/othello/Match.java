@@ -29,7 +29,7 @@ public class Match extends Thread {
     this.view = view;
     this.board = new Board();
     this.board.init();
-    this.turn = Disk.BLACK;
+    this.turn = Disk.WHITE;
     this.passFlag = false;
     this.endOfGame = false;
     this.blackPlayer = Optional.empty();
@@ -102,17 +102,14 @@ public class Match extends Thread {
     }
     List<Square> list = getMoveableSquares();
     if (list.isEmpty()) {
-
       if (this.passFlag) {
         return Optional.of(new ArrayList<>());
       }
-      this.passFlag = true;
       return Optional.of(new ArrayList<>());
     }
-    this.passFlag = false;
     Optional<Square> toMove = player.moveDisk(this.board.clone());
     // foul
-    if (toMove.isEmpty() || !list.contains(toMove.get())) {
+    if (toMove.isEmpty()) {
       return Optional.empty();
     }
     // moved
