@@ -44,6 +44,7 @@ public class Match extends Thread {
       System.err.println("Could not select players.");
       return;
     }
+    this.view.updateBoard(this.board.clone(), this.turn, new ArrayList<>());
     do {
       // assert
       Optional<Player> player = this.turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;

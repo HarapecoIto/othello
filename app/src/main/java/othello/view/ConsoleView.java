@@ -9,6 +9,7 @@ import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
+import othello.player.ConsolePlayer;
 import othello.player.Player;
 import othello.player.RandomPlayer;
 
@@ -24,7 +25,7 @@ public class ConsoleView implements OthelloView {
 
   @Override
   public Optional<Player> selectBlackPlayer() {
-    this.blackPlayer = Optional.of(new RandomPlayer(Disk.BLACK, 1L, "Random 1"));
+    this.blackPlayer = Optional.of(new ConsolePlayer(Disk.BLACK, "Human 1"));
     return this.blackPlayer;
   }
 
