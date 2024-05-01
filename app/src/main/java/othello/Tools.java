@@ -97,14 +97,14 @@ public class Tools {
     }
     final Disk yours = mine.reverse();
     int count = 0;
-    Optional<Square> nextSquare = next.apply(square);
+    Optional<Square> opt = next.apply(square);
     do {
       // out of board.
-      if (nextSquare.isEmpty()) {
+      if (opt.isEmpty()) {
         return 0;
       }
       // next disk.
-      Optional<Disk> disk = board.getDisk(nextSquare.get());
+      Optional<Disk> disk = board.getDisk(opt.get());
       // if empty, ng.
       if (disk.isEmpty()) {
         return 0;
@@ -117,7 +117,7 @@ public class Tools {
       if (yours.equals(disk.get())) {
         count++;
       }
-      nextSquare = next.apply(nextSquare.orElse(null));
+      opt = next.apply(opt.orElse(null));
     } while (true);
   }
 
