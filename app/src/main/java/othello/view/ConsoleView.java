@@ -1,26 +1,77 @@
 package othello.view;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
+import othello.player.Player;
+import othello.player.RandomPlayer;
 
 public class ConsoleView implements OthelloView {
 
+  private Optional<Player> blackPlayer;
+  private Optional<Player> whitePlayer;
+
   public ConsoleView() {
+    this.blackPlayer = Optional.empty();
+    this.whitePlayer = Optional.empty();
   }
 
   @Override
-  public void update(Board board) {
+  public Optional<Player> selectBlackPlayer() {
+    this.blackPlayer = Optional.of(new RandomPlayer(Disk.BLACK, 1L, "Random 1"));
+    return this.blackPlayer;
+  }
+
+  @Override
+  public Optional<Player> selectWhitePlayer() {
+    this.whitePlayer = Optional.of(new RandomPlayer(Disk.WHITE, 2L, "Random 2"));
+    return this.whitePlayer;
+  }
+
+  @Override
+  public void startTurn(@NotNull Board board, @NotNull Disk turn) {
+    if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
+      Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
+      System.out.printf("%s: %s turn.%n", this.diskCharacter(turn), player.get().getName());
+    }
+  }
+
+  @Override
+  public void endGameByFoul(Board board, Disk turn) {
+    if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
+      Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
+      System.out.printf("Foul! %s: %s lose.%n", this.diskCharacter(turn), player.get().getName());
+      this.updateBoardEngine(board, turn);
+    }
+  }
+
+  @Override
+  public void endGame(Board board, Disk turn) {
+    if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
+      Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
+      System.out.printf("%s: %s win.%n", this.diskCharacter(turn), player.get().getName());
+      this.updateBoardEngine(board, turn);
+    }
+  }
+
+  @Override
+  public void updateBoard(@NotNull Board board, @NotNull Disk turn) {
+    this.updateBoardEngine(board, turn);
+  }
+
+  private void updateBoardEngine(@NotNull Board board, @NotNull Disk turn) {
     List<Square> squares = Arrays.asList(Square.values());
     System.out.println("    A  B  C  D  E  F  G  H");
     System.out.println("  ┌──┬──┬──┬──┬──┬──┬──┬──┐");
     for (Row row : Row.values()) {
       StringBuilder builder = new StringBuilder(String.format("%d |", row.getIndex() + 1));
       squares.stream().filter(sq -> sq.row().equals(row))
-          .map(square -> stoneString(board.getDisk(square).orElse(null)))
+          .map(square -> diskCharacter(board.getDisk(square).orElse(null)))
           .forEach(string -> {
             builder.append(string);
             builder.append("|");
@@ -34,7 +85,7 @@ public class ConsoleView implements OthelloView {
     }
   }
 
-  private String stoneString(Disk disk) {
+  private String diskCharacter(Disk disk) {
     if (disk == null) {
       return "　";
     } else {

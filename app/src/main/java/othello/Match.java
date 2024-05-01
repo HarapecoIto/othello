@@ -1,7 +1,7 @@
 package othello;
 
 import jakarta.validation.constraints.NotNull;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import othello.base.Board;
@@ -10,75 +10,91 @@ import othello.base.Square;
 import othello.player.Player;
 import othello.view.OthelloView;
 
-public class Match {
+public class Match extends Thread {
 
   public enum TurnStatus {
-    OK, PASS, FOUL, GAME_OVER
+    START_OF_GAME, MOVED, PASS, FOUL, END_OF_GAME
   }
 
   private final OthelloView view;
-  private final Player blackPlayer;
-  private final Player whitePlayer;
   private final Board board;
   private Disk turn;
   private boolean passFlag;
+  private Optional<Player> blackPlayer;
+  private Optional<Player> whitePlayer;
 
-  Match(@NotNull OthelloView view, @NotNull Player blackPlayer, @NotNull Player whitePlayer) {
+  Match(@NotNull OthelloView view) {
     this.view = view;
-    this.blackPlayer = blackPlayer;
-    this.whitePlayer = whitePlayer;
     this.board = new Board();
-    this.init();
-  }
-
-  private void init() {
     this.board.init();
-    this.blackPlayer.init(Disk.BLACK);
-    this.whitePlayer.init(Disk.WHITE);
     this.turn = Disk.BLACK;
     this.passFlag = false;
+    this.blackPlayer = Optional.empty();
+    this.whitePlayer = Optional.empty();
+  }
+
+  @Override
+  public void run() {
+    this.blackPlayer = this.view.selectBlackPlayer();
+    this.whitePlayer = this.view.selectWhitePlayer();
+    if (this.blackPlayer.isEmpty() || this.whitePlayer.isEmpty()) {
+      System.err.println("Could not select players.");
+      return;
+    }
+    TurnStatus status = null;
+    do {
+      Optional<Player> player = this.turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
+      // assert
+      if (player.isEmpty()) {
+        System.err.println("Error: no player.");
+        return;
+      }
+      // exec turn
+      this.view.startTurn(this.board.clone(), this.turn);
+      status = this.turn(player.get());
+      // foul -> end
+      if (status.equals(TurnStatus.FOUL)) {
+        this.view.endGameByFoul(this.board.clone(), this.turn);
+        return;
+      }
+      // moved or pass -> next turn
+      if (status.equals(TurnStatus.MOVED) || status.equals(TurnStatus.PASS)) {
+        this.view.updateBoard(this.board.clone(), this.turn);
+      }
+      // switch turn
+      this.turn = this.turn.equals(Disk.BLACK) ? Disk.WHITE : Disk.BLACK;
+    } while (!status.equals(TurnStatus.END_OF_GAME));
+    // end of game
+    this.view.endGame(this.board.clone(), this.turn);
   }
 
   private List<Square> getMoveableSquares() {
-    List<Square> list = new ArrayList<>();
-    for (Square sq : Square.values()) {
-      if (Tools.countReversibleDisks(this.board.clone(), sq, this.turn) > 0) {
-        list.add(sq);
-      }
-    }
-    return list;
+    return Arrays.stream(Square.values())
+        .filter(sq -> Tools.countReversibleDisks(this.board.clone(), sq, this.turn) > 0)
+        .toList();
   }
 
-  private Player getPlayer(@NotNull Disk playerDisk) {
-    return playerDisk.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-  }
-
-  public void turn() {
+  public TurnStatus turn(Player player) {
     List<Square> list = getMoveableSquares();
     if (list.isEmpty()) {
-      if (this.passFlag) {
-        // TODO game over.
-        return;
-      }
-      // TODO pass
-      this.passFlag = true;
-      return;
-    }
-    this.passFlag = false;
-    Optional<Square> toMove = getPlayer(this.turn).moveDisk(this.board.clone());
-    if (toMove.isEmpty() || !list.contains(toMove.get())) {
-      // TODO foul
-      return;
-    } else {
-      Optional<List<Square>> taken = Tools.move(this.board, toMove.get(), this.turn);
       int blackCount = Tools.countDisks(this.board, Disk.BLACK);
       int whiteCount = Tools.countDisks(this.board, Disk.WHITE);
       if (blackCount + whiteCount == 64) {
-        // TODO game over.
-        return;
+        return TurnStatus.END_OF_GAME;
       }
-      // TODO ok
-      return;
+      if (this.passFlag) {
+        return TurnStatus.END_OF_GAME;
+      }
+      this.passFlag = true;
+      return TurnStatus.PASS;
+    }
+    this.passFlag = false;
+    Optional<Square> toMove = player.moveDisk(this.board.clone());
+    if (toMove.isEmpty() || !list.contains(toMove.get())) {
+      return TurnStatus.FOUL;
+    } else {
+      Optional<List<Square>> taken = Tools.move(this.board, toMove.get(), this.turn);
+      return TurnStatus.MOVED;
     }
   }
 
