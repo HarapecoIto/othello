@@ -58,11 +58,15 @@ public class Tools {
       return Optional.empty();
     }
     List<Square> list = new ArrayList<>();
-    Square nextSquare = square;
+    Optional<Square> opt = Optional.of(square);
     for (int i = 0; i < count; i++) {
-      nextSquare = next.apply(nextSquare).orElse(null);
-      board.setDisk(nextSquare, mine);
-      list.add(nextSquare);
+      opt = next.apply(opt.get());
+      if (opt.isEmpty()) {
+        // assertion failed.
+        return Optional.empty();
+      }
+      board.setDisk(opt.get(), mine);
+      list.add(opt.get());
     }
     return Optional.of(list);
   }
@@ -116,5 +120,5 @@ public class Tools {
       nextSquare = next.apply(nextSquare.orElse(null));
     } while (true);
   }
-  
+
 }
