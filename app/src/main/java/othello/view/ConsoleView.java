@@ -9,7 +9,6 @@ import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
-import othello.player.ConsolePlayer;
 import othello.player.Player;
 import othello.player.RandomPlayer;
 
@@ -25,7 +24,7 @@ public class ConsoleView implements OthelloView {
 
   @Override
   public Optional<Player> selectBlackPlayer() {
-    this.blackPlayer = Optional.of(new ConsolePlayer(Disk.BLACK, "Human 1"));
+    this.blackPlayer = Optional.of(new RandomPlayer(Disk.BLACK, 1L, "Random 1"));
     return this.blackPlayer;
   }
 
@@ -39,6 +38,7 @@ public class ConsoleView implements OthelloView {
   public void startTurn(@NotNull Board board, @NotNull Disk turn) {
     if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
       Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
+      this.updateBoardEngine(board, turn, new ArrayList<>());
       System.out.printf("%s(%s) turn.%n", this.diskCharacter(turn), player.get().getName());
     }
   }
@@ -63,11 +63,6 @@ public class ConsoleView implements OthelloView {
 
   @Override
   public void updateBoard(@NotNull Board board, @NotNull Disk turn, @NotNull List<Square> taken) {
-    if (taken.isEmpty()) {
-      System.out.println("pass");
-    } else {
-      this.updateBoardEngine(board, turn, taken);
-    }
   }
 
   private void updateBoardEngine(@NotNull Board board, @NotNull Disk turn,
