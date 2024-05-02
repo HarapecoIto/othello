@@ -1,5 +1,6 @@
 package othello.player;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +12,11 @@ import othello.base.Square;
 
 public class ConsolePlayer implements Player {
 
-  private final Disk myDisk;
+  private Optional<Disk> myDisk;
   private final String name;
 
-  public ConsolePlayer(Disk myDisk, String name) {
-    this.myDisk = myDisk;
+  public ConsolePlayer(@NotNull String name) {
+    this.myDisk = Optional.empty();
     this.name = name;
   }
 
@@ -25,10 +26,21 @@ public class ConsolePlayer implements Player {
   }
 
   @Override
+  public void init(@NotNull Disk myDisk) {
+    this.myDisk = Optional.of(myDisk);
+  }
+
+  @Override
   public Optional<Square> moveDisk(Board board) {
-    List<Square> squares = Arrays.stream(Square.values()).filter(
-        sq -> Tools.countReversibleDisks(board.clone(), sq, this.myDisk) > 0
-    ).toList();
+    //assert
+    if (this.myDisk.isEmpty()) {
+      // not initialized
+      return Optional.empty();
+    }
+    List<Square> squares = Arrays.stream(Square.values())
+        .filter(
+            sq -> Tools.countReversibleDisks(board.clone(), sq, this.myDisk.get()) > 0)
+        .toList();
     System.out.println("Select square.");
     System.out.flush();
     while (true) {

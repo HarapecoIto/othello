@@ -23,7 +23,8 @@ public class RandomPlayerTest {
           Square.SQUARE_3_E, Square.SQUARE_4_F, Square.SQUARE_5_C, Square.SQUARE_6_D
       );
       for (long seed = 0; seed < 10; seed++) {
-        Player player = new RandomPlayer(Disk.WHITE, seed, "Random Player");
+        Player player = new RandomPlayer("Random Player", seed);
+        player.init(Disk.WHITE);
         Optional<Square> square = player.moveDisk(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
@@ -36,7 +37,8 @@ public class RandomPlayerTest {
           Square.SQUARE_3_D, Square.SQUARE_4_C, Square.SQUARE_5_F, Square.SQUARE_6_E
       );
       for (long seed = 0; seed < 10; seed++) {
-        Player player = new RandomPlayer(Disk.BLACK, seed, "Random Player");
+        Player player = new RandomPlayer("Random Player", seed);
+        player.init(Disk.BLACK);
         Optional<Square> square = player.moveDisk(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));
@@ -59,7 +61,8 @@ public class RandomPlayerTest {
           board.setDisk(row, col, Disk.BLACK);
         }
       }
-      Player player = new RandomPlayer(Disk.WHITE, 123L, "Random Player");
+      Player player = new RandomPlayer("Random Player", 13L);
+      player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isEmpty());
     }
@@ -87,7 +90,8 @@ public class RandomPlayerTest {
           Square.SQUARE_2_G, Square.SQUARE_5_G
       );
       for (long seed = 0; seed < 10; seed++) {
-        Player player = new RandomPlayer(Disk.WHITE, seed, "Random Player");
+        Player player = new RandomPlayer("Random Player", seed);
+        player.init(Disk.WHITE);
         Optional<Square> square = player.moveDisk(board.clone());
         assertTrue(square.isPresent());
         assertTrue(expects.contains(square.orElse(null)));

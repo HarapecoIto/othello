@@ -25,13 +25,13 @@ public class ConsoleView implements OthelloView {
 
   @Override
   public Optional<Player> selectBlackPlayer() {
-    this.blackPlayer = Optional.of(new ConsolePlayer(Disk.BLACK, "Human 1"));
+    this.blackPlayer = Optional.of(new ConsolePlayer("Human 1"));
     return this.blackPlayer;
   }
 
   @Override
   public Optional<Player> selectWhitePlayer() {
-    this.whitePlayer = Optional.of(new RandomPlayer(Disk.WHITE, 2L, "Random 2"));
+    this.whitePlayer = Optional.of(new RandomPlayer("Random 2", 2L));
     return this.whitePlayer;
   }
 
