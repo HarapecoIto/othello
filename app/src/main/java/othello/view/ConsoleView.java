@@ -9,6 +9,7 @@ import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
+import othello.player.ConsolePlayer;
 import othello.player.Player;
 import othello.player.RandomPlayer;
 
@@ -24,7 +25,7 @@ public class ConsoleView implements OthelloView {
 
   @Override
   public Optional<Player> selectBlackPlayer() {
-    this.blackPlayer = Optional.of(new RandomPlayer(Disk.BLACK, 1L, "Random 1"));
+    this.blackPlayer = Optional.of(new ConsolePlayer(Disk.BLACK, "Human 1"));
     return this.blackPlayer;
   }
 
@@ -55,18 +56,26 @@ public class ConsoleView implements OthelloView {
   @Override
   public void endGame(Board board, Disk turn, @NotNull List<Square> taken) {
     if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
-      Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-      System.out.printf("%s(%s) win.%n", this.diskCharacter(turn), player.get().getName());
+      int blackDisks = this.countDisk(board, Disk.BLACK);
+      int whiteDisks = this.countDisk(board, Disk.WHITE);
       this.updateBoardEngine(board, turn, taken);
+      if (blackDisks != whiteDisks) {
+        Optional<Player> player = blackDisks > whiteDisks ? this.blackPlayer : this.whitePlayer;
+        String symbol = this.diskCharacter(blackDisks > whiteDisks ? Disk.BLACK : Disk.WHITE);
+        System.out.printf("Winner: %s(%s)%n", symbol, player.get().getName());
+      } else {
+        System.out.println("Draw");
+      }
     }
   }
 
   @Override
-  public void updateBoard(@NotNull Board board, @NotNull Disk turn, @NotNull List<Square> taken) {
+  public void updateBoard(
+      @NotNull Board board, @NotNull Disk turn, @NotNull List<Square> taken) {
   }
 
-  private void updateBoardEngine(@NotNull Board board, @NotNull Disk turn,
-      @NotNull List<Square> taken) {
+  private void updateBoardEngine(
+      @NotNull Board board, @NotNull Disk turn, @NotNull List<Square> taken) {
     int blackDisks = this.countDisk(board, Disk.BLACK);
     int whiteDisks = this.countDisk(board, Disk.WHITE);
     System.out.printf("%s: %d%n", this.diskCharacter(Disk.BLACK), blackDisks);
