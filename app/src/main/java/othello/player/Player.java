@@ -12,6 +12,8 @@ public interface Player {
 
   void init(@NotNull Disk myDisk);
 
+  Optional<Disk> getMyDisk();
+
   Optional<Square> moveDisk(@NotNull Board board);
 
 }

@@ -23,14 +23,18 @@ public class RandomPlayer implements Player {
   }
 
   @Override
-  public void init(@NotNull Disk myDisk) {
-    this.myDisk = Optional.of(myDisk);
-  }
-
-
-  @Override
   public String getName() {
     return this.name;
+  }
+
+  @Override
+  public Optional<Disk> getMyDisk() {
+    return this.myDisk;
+  }
+
+  @Override
+  public void init(@NotNull Disk myDisk) {
+    this.myDisk = Optional.of(myDisk);
   }
 
   @Override

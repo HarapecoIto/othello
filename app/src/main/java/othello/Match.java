@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
 import othello.player.Player;
 import othello.view.OthelloView;
+import othello.view.TurnOrderDeterminer;
 
-public class Match extends Thread {
+public class Match extends Thread implements TurnOrderDeterminer {
 
   public enum TurnStatus {
     START_OF_GAME, MOVED, PASS, FOUL, END_OF_GAME
@@ -37,9 +39,23 @@ public class Match extends Thread {
   }
 
   @Override
+  public void determineTurnOrder(@NotNull Player player1, @NotNull Player player2) {
+    Random rand = new Random();
+    Disk disk = rand.nextInt(2) == 0 ? Disk.BLACK : Disk.WHITE;
+    player1.init(disk);
+    player2.init(disk.reverse());
+    if (disk.equals(Disk.BLACK)) {
+      this.blackPlayer = Optional.of(player1);
+      this.whitePlayer = Optional.of(player2);
+    } else {
+      this.blackPlayer = Optional.of(player2);
+      this.whitePlayer = Optional.of(player1);
+    }
+  }
+
+  @Override
   public void run() {
-    this.blackPlayer = this.view.selectBlackPlayer();
-    this.whitePlayer = this.view.selectWhitePlayer();
+    this.view.selectPlayers(this);
     if (this.blackPlayer.isEmpty() || this.whitePlayer.isEmpty()) {
       System.err.println("Could not select players.");
       return;

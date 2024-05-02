@@ -31,6 +31,11 @@ public class ConsolePlayer implements Player {
   }
 
   @Override
+  public Optional<Disk> getMyDisk() {
+    return this.myDisk;
+  }
+
+  @Override
   public Optional<Square> moveDisk(Board board) {
     //assert
     if (this.myDisk.isEmpty()) {

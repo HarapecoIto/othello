@@ -9,63 +9,54 @@ import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
-import othello.player.ConsolePlayer;
 import othello.player.Player;
 import othello.player.RandomPlayer;
 
 public class ConsoleView implements OthelloView {
 
-  private Optional<Player> blackPlayer;
-  private Optional<Player> whitePlayer;
+  private final Player player1;
+  private final Player player2;
 
   public ConsoleView() {
-    this.blackPlayer = Optional.empty();
-    this.whitePlayer = Optional.empty();
+    this.player1 = new RandomPlayer("Random 1", 1L);
+    this.player2 = new RandomPlayer("Random 2", 2L);
   }
 
   @Override
-  public Optional<Player> selectBlackPlayer() {
-    this.blackPlayer = Optional.of(new ConsolePlayer("Human 1"));
-    return this.blackPlayer;
-  }
-
-  @Override
-  public Optional<Player> selectWhitePlayer() {
-    this.whitePlayer = Optional.of(new RandomPlayer("Random 2", 2L));
-    return this.whitePlayer;
+  public void selectPlayers(@NotNull TurnOrderDeterminer match) {
+    match.determineTurnOrder(this.player1, this.player2);
   }
 
   @Override
   public void startTurn(@NotNull Board board, @NotNull Disk turn) {
-    if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
-      Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-      this.updateBoardEngine(board, turn, new ArrayList<>());
-      System.out.printf("%s(%s) turn.%n", this.diskCharacter(turn), player.get().getName());
-    }
+    Player player =
+        turn.equals(this.player1.getMyDisk().orElse(null)) ? this.player1 : this.player2;
+    this.updateBoardEngine(board, turn, new ArrayList<>());
+    System.out.printf("%s(%s) turn.%n", this.diskCharacter(turn), player.getName());
+
   }
 
   @Override
   public void endGameByFoul(Board board, Disk turn) {
-    if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
-      Optional<Player> player = turn.equals(Disk.BLACK) ? this.blackPlayer : this.whitePlayer;
-      System.out.printf("Foul! %s(%s) lose.%n", this.diskCharacter(turn), player.get().getName());
-      this.updateBoardEngine(board, turn, new ArrayList<>());
-    }
+    Player player =
+        turn.equals(this.player1.getMyDisk().orElse(null)) ? this.player1 : this.player2;
+    System.out.printf("Foul! %s(%s) lose.%n", this.diskCharacter(turn), player.getName());
+    this.updateBoardEngine(board, turn, new ArrayList<>());
   }
+
 
   @Override
   public void endGame(Board board, Disk turn, @NotNull List<Square> taken) {
-    if (this.blackPlayer.isPresent() && this.whitePlayer.isPresent()) {
-      int blackDisks = this.countDisk(board, Disk.BLACK);
-      int whiteDisks = this.countDisk(board, Disk.WHITE);
-      this.updateBoardEngine(board, turn, taken);
-      if (blackDisks != whiteDisks) {
-        Optional<Player> player = blackDisks > whiteDisks ? this.blackPlayer : this.whitePlayer;
-        String symbol = this.diskCharacter(blackDisks > whiteDisks ? Disk.BLACK : Disk.WHITE);
-        System.out.printf("Winner: %s(%s)%n", symbol, player.get().getName());
-      } else {
-        System.out.println("Draw");
-      }
+    Player player =
+        turn.equals(this.player1.getMyDisk().orElse(null)) ? this.player1 : this.player2;
+    int blackDisks = this.countDisk(board, Disk.BLACK);
+    int whiteDisks = this.countDisk(board, Disk.WHITE);
+    this.updateBoardEngine(board, turn, taken);
+    if (blackDisks != whiteDisks) {
+      String symbol = this.diskCharacter(blackDisks > whiteDisks ? Disk.BLACK : Disk.WHITE);
+      System.out.printf("Winner: %s(%s)%n", symbol, player.getName());
+    } else {
+      System.out.println("Draw");
     }
   }
 
