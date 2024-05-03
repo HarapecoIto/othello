@@ -13,14 +13,14 @@ import othello.base.Disk;
 import othello.base.Square;
 import othello.player.Player;
 
-public abstract class Citrus implements Player {
+public abstract class CitrusPlayer implements Player {
 
   protected final String name;
   protected final long seed;
   protected final Random rand;
   protected Optional<Disk> myDisk;
 
-  protected Citrus(@NotNull String name, long seed) {
+  protected CitrusPlayer(@NotNull String name, long seed) {
     this.name = name;
     this.seed = seed;
     this.rand = new Random(this.seed);
