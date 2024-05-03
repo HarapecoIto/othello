@@ -44,8 +44,9 @@ public class RandomPlayer implements Player {
       // not initialized
       return Optional.empty();
     }
+    Board clone = board.clone();
     List<Square> list = Arrays.stream(Square.values())
-        .filter(sq -> Tools.countReversibleDisks(board.clone(), sq, this.myDisk.get()) > 0)
+        .filter(sq -> Tools.countReversibleDisks(clone, sq, this.myDisk.get()) > 0)
         .toList();
     return !list.isEmpty()
         ? Optional.of(list.get(this.rand.nextInt(list.size())))

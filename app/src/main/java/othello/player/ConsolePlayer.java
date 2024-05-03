@@ -42,9 +42,10 @@ public class ConsolePlayer implements Player {
       // not initialized
       return Optional.empty();
     }
+    Board clone = board.clone();
     List<Square> squares = Arrays.stream(Square.values())
         .filter(
-            sq -> Tools.countReversibleDisks(board.clone(), sq, this.myDisk.get()) > 0)
+            sq -> Tools.countReversibleDisks(clone, sq, this.myDisk.get()) > 0)
         .toList();
     System.out.println("Select square.");
     System.out.flush();
