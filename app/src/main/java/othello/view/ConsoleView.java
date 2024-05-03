@@ -16,10 +16,14 @@ public class ConsoleView implements OthelloView {
 
   private final Player player1;
   private final Player player2;
+  private final String blackSymbol;
+  private final String whiteSymbol;
 
-  public ConsoleView() {
+  public ConsoleView(@NotNull String blackSymbol, @NotNull String whiteSymbol) {
     this.player1 = new RandomPlayer("Random 1", 1L);
     this.player2 = new RandomPlayer("Random 2", 2L);
+    this.blackSymbol = blackSymbol;
+    this.whiteSymbol = whiteSymbol;
   }
 
   @Override
@@ -103,9 +107,9 @@ public class ConsoleView implements OthelloView {
       return "　";
     } else {
       if (disk.equals(Disk.BLACK)) {
-        return "㊚";
+        return this.blackSymbol;
       } else if (disk.equals(Disk.WHITE)) {
-        return "㊛";
+        return this.whiteSymbol;
       }
     }
     return "";

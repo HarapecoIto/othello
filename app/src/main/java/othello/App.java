@@ -6,7 +6,7 @@ import othello.view.OthelloView;
 public class App {
 
   public static void main(String[] args) {
-    OthelloView view = new ConsoleView();
+    OthelloView view = new ConsoleView("㊚", "㊛");
     Match match = new Match(view);
     Thread thread = new Thread(match);
     thread.start();
