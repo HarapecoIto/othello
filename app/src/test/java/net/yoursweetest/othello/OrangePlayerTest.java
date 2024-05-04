@@ -1,17 +1,17 @@
-package othello.player;
+package net.yoursweetest.othello;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import net.yoursweetest.othello.OrangePlayer;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
 import othello.base.Col;
 import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
+import othello.player.Player;
 
 public class OrangePlayerTest {
 
