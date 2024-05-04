@@ -11,9 +11,8 @@ import othello.base.Disk;
 import othello.base.Square;
 import othello.player.Player;
 import othello.view.OthelloView;
-import othello.view.TurnOrderDeterminer;
 
-public class Match extends Thread implements TurnOrderDeterminer {
+public class Match extends Thread {
 
   public enum TurnStatus {
     START_OF_GAME, MOVED, PASS, FOUL, END_OF_GAME
@@ -39,27 +38,24 @@ public class Match extends Thread implements TurnOrderDeterminer {
   }
 
   @Override
-  public void determineTurnOrder(@NotNull Player player1, @NotNull Player player2) {
-    Random rand = new Random();
-    Disk disk = rand.nextInt(2) == 0 ? Disk.BLACK : Disk.WHITE;
-    player1.init(disk);
-    player2.init(disk.reverse());
-    if (disk.equals(Disk.BLACK)) {
-      this.blackPlayer = Optional.of(player1);
-      this.whitePlayer = Optional.of(player2);
-    } else {
-      this.blackPlayer = Optional.of(player2);
-      this.whitePlayer = Optional.of(player1);
-    }
-  }
-
-  @Override
   public void run() {
-    this.view.selectPlayers(this);
+    this.view.selectPlayers((player1, player2) -> {
+      Random rand = new Random();
+      Disk disk = rand.nextInt(2) == 0 ? Disk.BLACK : Disk.WHITE;
+      if (disk.equals(Disk.BLACK)) {
+        this.blackPlayer = Optional.of(player1);
+        this.whitePlayer = Optional.of(player2);
+      } else {
+        this.blackPlayer = Optional.of(player2);
+        this.whitePlayer = Optional.of(player1);
+      }
+    });
+
     if (this.blackPlayer.isEmpty() || this.whitePlayer.isEmpty()) {
       System.err.println("Could not select players.");
       return;
     }
+
     this.blackPlayer.get().init(Disk.BLACK);
     this.whitePlayer.get().init(Disk.WHITE);
     this.view.updateBoard(this.board.clone(), this.turn, new ArrayList<>());

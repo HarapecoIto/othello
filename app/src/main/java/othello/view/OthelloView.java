@@ -8,7 +8,7 @@ import othello.base.Square;
 
 public interface OthelloView {
 
-  void selectPlayers(@NotNull TurnOrderDeterminer match);
+  void selectPlayers(@NotNull SetPlayersCallback callback);
 
   void startTurn(@NotNull Board board, @NotNull Disk turn);
 

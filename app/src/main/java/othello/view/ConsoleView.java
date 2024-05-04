@@ -27,8 +27,8 @@ public class ConsoleView implements OthelloView {
   }
 
   @Override
-  public void selectPlayers(@NotNull TurnOrderDeterminer match) {
-    match.determineTurnOrder(this.player1, this.player2);
+  public void selectPlayers(@NotNull SetPlayersCallback callback) {
+    callback.determineTurnOrder(this.player1, this.player2);
   }
 
   @Override
