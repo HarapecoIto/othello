@@ -17,12 +17,12 @@ import othello.base.Square;
 public class SetokaPlayer extends CitrusPlayer {
 
   private final int MAX_STEP;
-  private final ExecutorService service;
+  private ExecutorService service;
 
   public SetokaPlayer(String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
-    this.service = Executors.newFixedThreadPool(32);
+    this.service = null;
   }
 
   @Override
@@ -32,23 +32,26 @@ public class SetokaPlayer extends CitrusPlayer {
       // not initialized
       return Optional.empty();
     }
-    List<Integer> disks = exploreWrapper(board, this.myDisk.get(), 0);
+    this.service = Executors.newFixedThreadPool(16);
+    List<Integer> disks = explore(board, this.myDisk.get(), 0);
     Optional<Integer> max = Arrays.stream(Square.values())
         .filter(sq -> Tools.countReversibleDisks(board, sq, this.myDisk.get()) > 0)
         .map(sq -> disks.get(sq.getIndex()))
         .max(Comparator.naturalOrder());
+    Optional<Square> result = Optional.empty();
     if (max.isPresent() && max.get() > 0) {
       List<Square> squares = Arrays.stream(Square.values())
           .filter(sq -> disks.get(sq.getIndex()).equals(max.get())).toList();
-      return Optional.ofNullable(squares.get(this.rand.nextInt(squares.size())));
+      result = Optional.ofNullable(squares.get(this.rand.nextInt(squares.size())));
     }
-    return Optional.empty();
+    this.service.shutdownNow();
+    return result;
   }
 
   private List<Integer> exploreWrapper(@NotNull Board board, @NotNull Disk turn, int step) {
-    Future<List<Integer>> future = this.service.submit(() -> explore(board, turn, step));
     List<Integer> list = new ArrayList<>();
     try {
+      Future<List<Integer>> future = this.service.submit(() -> explore(board, turn, step));
       list = future.get();
     } catch (Exception e) {
       e.printStackTrace();
@@ -68,7 +71,7 @@ public class SetokaPlayer extends CitrusPlayer {
         if (Tools.countReversibleDisks(work, sq, turn) > 0) {
           Tools.move(work, sq, turn);
           List<Integer> disks =
-              step == 3
+              step == 2
                   ? exploreWrapper(work, turn.reverse(), nextStep)
                   : explore(work, turn.reverse(), nextStep);
           Optional<Integer> max = disks.stream().max(Comparator.naturalOrder());
