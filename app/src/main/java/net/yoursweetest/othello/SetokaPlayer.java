@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -73,10 +75,12 @@ public class SetokaPlayer extends CitrusPlayer {
 
 
   private final int MAX_STEP;
+  private ExecutorService service;
 
   public SetokaPlayer(String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
+    this.service = null;
   }
 
   @Override
@@ -86,10 +90,11 @@ public class SetokaPlayer extends CitrusPlayer {
       // not initialized
       return Optional.empty();
     }
-    ExecutorService service = Executors.newFixedThreadPool(16);
+    // multi-thread exec
     Position position = new Position(board, this.myDisk.get(), 0);
+    this.service = Executors.newFixedThreadPool(16);
     this.explore(position);
-    service.shutdownNow();
+    this.service.shutdownNow();
     int max = position.getMyDisks().stream().max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
@@ -126,22 +131,27 @@ public class SetokaPlayer extends CitrusPlayer {
           return true;
         };
         if (position1.getStep() == 0) {
-          ExecutorService service = Executors.newFixedThreadPool(16);
-          List<Future<Boolean>> futures = movable.stream().map(
-              sq -> service.submit(() ->
-                  proc.apply(sq)
-              )).toList();
+          System.out.println("aaa");
+          List<Callable<Boolean>> tasks = new ArrayList<>();
+          for (Square sq : movable) {
+            tasks.add(() -> proc.apply(sq));
+          }
+          System.out.println("iii");
+          List<Future<Boolean>> futures = new ArrayList<>();
+          for (Callable<Boolean> task : tasks) {
+            futures.add(this.service.submit(task));
+          }
+          System.out.println("uuu");
           futures.forEach(f -> {
             try {
               f.get();
-            } catch (Exception e) {
+            } catch (InterruptedException | ExecutionException e) {
               e.printStackTrace();
             }
           });
+          System.out.println("ooo");
         } else {
-          movable.forEach(
-              proc::apply
-          );
+          movable.forEach(proc::apply);
         }
         return;
       }
