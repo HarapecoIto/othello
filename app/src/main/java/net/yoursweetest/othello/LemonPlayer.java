@@ -123,6 +123,7 @@ public class LemonPlayer extends CitrusPlayer {
         return;
       }
     }
+    // max step or pass or end of game
     Arrays.stream(Square.values()).forEach(sq -> {
       position1.setMyDisks(sq.getIndex(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));

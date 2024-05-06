@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 import othello.Tools;
 import othello.base.Board;
 import othello.base.Disk;
@@ -85,8 +86,10 @@ public class SetokaPlayer extends CitrusPlayer {
       // not initialized
       return Optional.empty();
     }
+    ExecutorService service = Executors.newFixedThreadPool(16);
     Position position = new Position(board, this.myDisk.get(), 0);
-    this.exploreWrapper(position);
+    this.explore(position);
+    service.shutdownNow();
     int max = position.getMyDisks().stream().max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
@@ -97,54 +100,58 @@ public class SetokaPlayer extends CitrusPlayer {
     return Optional.empty();
   }
 
-  private boolean exploreWrapper(@NotNull Position position) {
-    ExecutorService service = Executors.newFixedThreadPool(16);
-    boolean result = false;
-    try {
-      Future<Boolean> future = service.submit(() -> explore(position));
-      result = future.get();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    service.shutdownNow();
-    return result;
-  }
-
-  private boolean explore(@NotNull Position position1) {
+  private void explore(@NotNull Position position1) {
     if (position1.getStep() < MAX_STEP) {
       List<Square> movable = Arrays.stream(Square.values())
           .filter(
               sq -> Tools.countReversibleDisks(position1.getBoard(), sq, position1.getTurn()) > 0
           ).toList();
       if (!movable.isEmpty()) {
-        movable.forEach(
-            // explore
-            sq -> {
-              // move
-              Board work = position1.getBoard().clone();
-              Tools.move(work, sq, position1.getTurn());
-              // next position
-              Position position2 =
-                  new Position(work, position1.getTurn().reverse(), position1.getStep() + 1);
-              // exec explore
-              this.explore(position2);
-              // count max
-              int myMax = position2.getMyDisks().stream()
-                  .max(Comparator.naturalOrder()).orElse(0);
-              int yourMax = position2.getYourDisks().stream()
-                  .max(Comparator.naturalOrder()).orElse(0);
-              position1.setMyDisks(sq.getIndex(), myMax);
-              position1.setYourDisks(sq.getIndex(), yourMax);
-            });
-        return true;
+        Function<Square, Boolean> proc = (sq) -> {
+          // move
+          Board work = position1.getBoard().clone();
+          Tools.move(work, sq, position1.getTurn());
+          // next position
+          Position position2 =
+              new Position(work, position1.getTurn().reverse(), position1.getStep() + 1);
+          // exec explore
+          this.explore(position2);
+          // count max
+          int myMax = position2.getMyDisks().stream()
+              .max(Comparator.naturalOrder()).orElse(0);
+          int yourMax = position2.getYourDisks().stream()
+              .max(Comparator.naturalOrder()).orElse(0);
+          position1.setMyDisks(sq.getIndex(), myMax);
+          position1.setYourDisks(sq.getIndex(), yourMax);
+          return true;
+        };
+        if (position1.getStep() == 0) {
+          ExecutorService service = Executors.newFixedThreadPool(16);
+          List<Future<Boolean>> futures = movable.stream().map(
+              sq -> service.submit(() ->
+                  proc.apply(sq)
+              )).toList();
+          futures.forEach(f -> {
+            try {
+              f.get();
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+          });
+        } else {
+          movable.forEach(
+              proc::apply
+          );
+        }
+        return;
       }
     }
+    // max step or pass or end of game
     Arrays.stream(Square.values()).forEach(sq -> {
       position1.setMyDisks(sq.getIndex(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
       position1.setYourDisks(sq.getIndex(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
     });
-    return false;
   }
 }
