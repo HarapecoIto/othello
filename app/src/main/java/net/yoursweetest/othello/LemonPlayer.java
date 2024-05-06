@@ -94,7 +94,7 @@ public class LemonPlayer extends CitrusPlayer {
     return Optional.empty();
   }
 
-  private void explore(Position position1) {
+  private void explore(@NotNull Position position1) {
     if (position1.getStep() < MAX_STEP) {
       List<Square> movable = Arrays.stream(Square.values())
           .filter(
