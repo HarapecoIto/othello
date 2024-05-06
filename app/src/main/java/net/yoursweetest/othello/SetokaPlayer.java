@@ -32,8 +32,8 @@ public class SetokaPlayer extends CitrusPlayer {
       this.board = board;
       this.turn = turn;
       this.step = step;
-      this.myDisks = new ArrayList<>();
-      this.yourDisks = new ArrayList<>();
+      this.myDisks = Collections.synchronizedList(new ArrayList<>());
+      this.yourDisks = Collections.synchronizedList(new ArrayList<>());
       Arrays.stream(Square.values()).forEach(sq -> {
         this.myDisks.add(0);
         this.yourDisks.add(0);
