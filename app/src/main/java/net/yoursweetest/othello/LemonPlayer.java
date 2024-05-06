@@ -131,4 +131,5 @@ public class LemonPlayer extends CitrusPlayer {
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
     });
   }
+
 }

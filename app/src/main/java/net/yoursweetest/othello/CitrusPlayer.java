@@ -45,6 +45,10 @@ public abstract class CitrusPlayer implements Player {
   @Override
   public abstract Optional<Square> moveDisk(@NotNull Board board);
 
+  @Override
+  public void shutdown() {
+  }
+
   protected List<Square> getMaximumSquares(@NotNull Board board, @NotNull Disk disk) {
     Board clone = board.clone();
     List<Integer> count = Arrays.stream(Square.values())

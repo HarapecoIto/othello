@@ -84,6 +84,13 @@ public class SetokaPlayer extends CitrusPlayer {
   }
 
   @Override
+  public void init(@NotNull Disk myDisk) {
+    super.init(myDisk);
+    this.service = Executors.newFixedThreadPool(16);
+  }
+
+
+  @Override
   public Optional<Square> moveDisk(@NotNull Board board) {
     // assert
     if (this.myDisk.isEmpty()) {
@@ -92,9 +99,7 @@ public class SetokaPlayer extends CitrusPlayer {
     }
     // multi-thread exec
     Position position = new Position(board, this.myDisk.get(), 0);
-    this.service = Executors.newFixedThreadPool(16);
     this.explore(position);
-    this.service.shutdownNow();
     int max = position.getMyDisks().stream().max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
@@ -163,5 +168,11 @@ public class SetokaPlayer extends CitrusPlayer {
       position1.setYourDisks(sq.getIndex(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
     });
+  }
+
+  @Override
+  public void shutdown() {
+    this.service.shutdownNow();
+    super.shutdown();
   }
 }
