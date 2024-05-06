@@ -3,6 +3,7 @@ package net.yoursweetest.othello;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,60 @@ import othello.base.Disk;
 import othello.base.Square;
 
 public class LemonPlayer extends CitrusPlayer {
+
+  private static final class Position {
+
+    private final Board board;
+    private final Disk turn;
+    private final int step;
+    private final List<Integer> myDisks;
+    private final List<Integer> yourDisks;
+
+    Position(@NotNull Board board, @NotNull Disk turn, int step) {
+      this.board = board;
+      this.turn = turn;
+      this.step = step;
+      this.myDisks = new ArrayList<>();
+      this.yourDisks = new ArrayList<>();
+      Arrays.stream(Square.values()).forEach(sq -> {
+        this.myDisks.add(0);
+        this.yourDisks.add(0);
+      });
+    }
+
+    public Board getBoard() {
+      return this.board.clone();
+    }
+
+    public Disk getTurn() {
+      return this.turn;
+    }
+
+    public int getStep() {
+      return this.step;
+    }
+
+    public void setMyDisks(int idx, int disks) {
+      if (this.myDisks.size() > idx) {
+        this.myDisks.set(idx, disks);
+      }
+    }
+
+    public void setYourDisks(int idx, int disks) {
+      if (this.yourDisks.size() > idx) {
+        this.yourDisks.set(idx, disks);
+      }
+    }
+
+    public List<Integer> getMyDisks() {
+      return Collections.unmodifiableList(this.myDisks);
+    }
+
+    public List<Integer> getYourDisks() {
+      return Collections.unmodifiableList(this.yourDisks);
+    }
+  }
+
 
   private final int MAX_STEP;
 
@@ -27,40 +82,52 @@ public class LemonPlayer extends CitrusPlayer {
       // not initialized
       return Optional.empty();
     }
-    List<Integer> disks = explore(board, this.myDisk.get(), 0);
-    Optional<Integer> max = Arrays.stream(Square.values())
-        .filter(sq -> Tools.countReversibleDisks(board, sq, this.myDisk.get()) > 0)
-        .map(sq -> disks.get(sq.getIndex()))
-        .max(Comparator.naturalOrder());
-    if (max.isPresent() && max.get() > 0) {
-      List<Square> squares = Arrays.stream(Square.values())
-          .filter(sq -> disks.get(sq.getIndex()).equals(max.get())).toList();
-      return Optional.ofNullable(squares.get(this.rand.nextInt(squares.size())));
+    Position position = new Position(board, this.myDisk.get(), 0);
+    this.explore(position);
+    int max = position.getMyDisks().stream().max(Comparator.naturalOrder()).orElse(0);
+    List<Square> squares = Arrays.stream(Square.values())
+        .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
+        .toList();
+    if (max > 0 && !squares.isEmpty()) {
+      return Optional.of(squares.get(this.rand.nextInt(squares.size())));
     }
     return Optional.empty();
   }
 
-  private List<Integer> explore(@NotNull Board board, @NotNull Disk turn, int step) {
-    // assert
-    if (this.myDisk.isEmpty()) {
-      return new ArrayList<>();
+  private void explore(Position position1) {
+    if (position1.getStep() < MAX_STEP) {
+      List<Square> movable = Arrays.stream(Square.values())
+          .filter(
+              sq -> Tools.countReversibleDisks(position1.getBoard(), sq, position1.getTurn()) > 0
+          ).toList();
+      if (!movable.isEmpty()) {
+        movable.forEach(
+            // explore
+            sq -> {
+              // move
+              Board work = position1.getBoard().clone();
+              Tools.move(work, sq, position1.getTurn());
+              // next position
+              Position position2 =
+                  new Position(work, position1.getTurn().reverse(), position1.getStep() + 1);
+              // exec explore
+              this.explore(position2);
+              // count max
+              int myMax = position2.getMyDisks().stream()
+                  .max(Comparator.naturalOrder()).orElse(0);
+              int yourMax = position2.getYourDisks().stream()
+                  .max(Comparator.naturalOrder()).orElse(0);
+              position1.setMyDisks(sq.getIndex(), myMax);
+              position1.setYourDisks(sq.getIndex(), yourMax);
+            });
+        return;
+      }
     }
-    if (step < MAX_STEP) {
-      int nextStep = step + 1;
-      return Arrays.stream(Square.values()).map(sq -> {
-        Board work = board.clone();
-        if (Tools.countReversibleDisks(work, sq, turn) > 0) {
-          Tools.move(work, sq, turn);
-          Optional<Integer> max = explore(work, turn.reverse(), nextStep).stream()
-              .max(Comparator.naturalOrder());
-          return max.orElse(0);
-        }
-        return Tools.countDisks(board, this.myDisk.get());
-      }).toList();
-    }
-    return Arrays.stream(Square.values())
-        .map(sq -> Tools.countDisks(board, this.myDisk.get()))
-        .toList();
+    Arrays.stream(Square.values()).forEach(sq -> {
+      position1.setMyDisks(sq.getIndex(),
+          Tools.countDisks(position1.getBoard(), position1.getTurn()));
+      position1.setYourDisks(sq.getIndex(),
+          Tools.countDisks(position1.getBoard(), position1.getTurn()));
+    });
   }
 }
-
