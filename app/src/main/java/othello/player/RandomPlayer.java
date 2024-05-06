@@ -52,4 +52,8 @@ public class RandomPlayer implements Player {
         ? Optional.of(list.get(this.rand.nextInt(list.size())))
         : Optional.empty();
   }
+
+  @Override
+  public void shutdown() {
+  }
 }

@@ -16,4 +16,6 @@ public interface Player {
 
   Optional<Square> moveDisk(@NotNull Board board);
 
+  void shutdown();
+
 }

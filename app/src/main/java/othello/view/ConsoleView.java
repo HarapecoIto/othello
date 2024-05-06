@@ -51,14 +51,15 @@ public class ConsoleView implements OthelloView {
 
   @Override
   public void endGame(Board board, Disk turn, @NotNull List<Square> taken) {
-    Player player =
-        turn.equals(this.player1.getMyDisk().orElse(null)) ? this.player1 : this.player2;
     int blackDisks = this.countDisk(board, Disk.BLACK);
     int whiteDisks = this.countDisk(board, Disk.WHITE);
     this.updateBoardEngine(board, turn, taken);
     if (blackDisks != whiteDisks) {
-      String symbol = this.diskCharacter(blackDisks > whiteDisks ? Disk.BLACK : Disk.WHITE);
-      System.out.printf("Winner: %s(%s)%n", symbol, player.getName());
+      Disk win = blackDisks > whiteDisks ? Disk.BLACK : Disk.WHITE;
+      Player winner = win.equals(this.player1.getMyDisk().orElse(null))
+          ? this.player1 : this.player2;
+      String symbol = this.diskCharacter(win);
+      System.out.printf("Winner: %s(%s)%n", symbol, winner.getName());
     } else {
       System.out.println("Draw");
     }

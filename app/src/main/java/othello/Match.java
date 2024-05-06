@@ -82,6 +82,7 @@ public class Match extends Thread {
         if (this.passFlag) {
           this.view.endGame(this.board.clone(), this.turn, taken.get());
           this.endOfGame = true;
+          this.shutdown();
           return;
         }
         // first player's pass
@@ -98,6 +99,7 @@ public class Match extends Thread {
       if (blackDisks + whiteDisks == 64) {
         this.view.endGame(this.board.clone(), this.turn, taken.get());
         this.endOfGame = true;
+        this.shutdown();
         return;
       }
     } while (true);
@@ -129,6 +131,12 @@ public class Match extends Thread {
     // moved
     return Tools.move(this.board, toMove.get(), this.turn);
   }
+
+  private void shutdown() {
+    this.whitePlayer.ifPresent(Player::shutdown);
+    this.blackPlayer.ifPresent(Player::shutdown);
+  }
+
 
 }
 

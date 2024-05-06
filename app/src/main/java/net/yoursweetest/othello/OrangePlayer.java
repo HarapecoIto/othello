@@ -6,9 +6,9 @@ import java.util.Optional;
 import othello.base.Board;
 import othello.base.Square;
 
-public class Orange extends Citrus {
+public class OrangePlayer extends CitrusPlayer {
 
-  public Orange(String name, long seed) {
+  public OrangePlayer(String name, long seed) {
     super(name, seed);
   }
 

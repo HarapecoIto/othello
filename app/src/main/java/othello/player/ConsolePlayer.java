@@ -78,4 +78,9 @@ public class ConsolePlayer implements Player {
     }
     return Optional.empty();
   }
+
+  @Override
+  public void shutdown() {
+  }
+
 }
