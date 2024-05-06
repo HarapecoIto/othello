@@ -136,17 +136,14 @@ public class SetokaPlayer extends CitrusPlayer {
           return true;
         };
         if (position1.getStep() == 0) {
-          System.out.println("aaa");
           List<Callable<Boolean>> tasks = new ArrayList<>();
           for (Square sq : movable) {
             tasks.add(() -> proc.apply(sq));
           }
-          System.out.println("iii");
           List<Future<Boolean>> futures = new ArrayList<>();
           for (Callable<Boolean> task : tasks) {
             futures.add(this.service.submit(task));
           }
-          System.out.println("uuu");
           for (Future<Boolean> f : futures) {
             try {
               f.get();
@@ -154,7 +151,6 @@ public class SetokaPlayer extends CitrusPlayer {
               e.printStackTrace();
             }
           }
-          System.out.println("ooo");
         } else {
           movable.forEach(proc::apply);
         }
