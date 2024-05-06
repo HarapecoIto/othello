@@ -147,13 +147,13 @@ public class SetokaPlayer extends CitrusPlayer {
             futures.add(this.service.submit(task));
           }
           System.out.println("uuu");
-          futures.forEach(f -> {
+          for (Future<Boolean> f : futures) {
             try {
               f.get();
             } catch (InterruptedException | ExecutionException e) {
               e.printStackTrace();
             }
-          });
+          }
           System.out.println("ooo");
         } else {
           movable.forEach(proc::apply);
