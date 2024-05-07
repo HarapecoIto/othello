@@ -30,6 +30,7 @@ public class LemonPlayerTest {
       Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
+      player.shutdown();
     }
   }
 
@@ -46,6 +47,7 @@ public class LemonPlayerTest {
       Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
+      player.shutdown();
     }
   }
 
@@ -71,6 +73,7 @@ public class LemonPlayerTest {
     player.init(Disk.WHITE);
     Optional<Square> square = player.moveDisk(board.clone());
     assertTrue(square.isEmpty());
+    player.shutdown();
   }
 
   @Test
@@ -103,6 +106,7 @@ public class LemonPlayerTest {
       Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
+      player.shutdown();
     }
   }
 }

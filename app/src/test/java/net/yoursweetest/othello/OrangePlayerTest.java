@@ -28,6 +28,7 @@ public class OrangePlayerTest {
       Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
+      player.shutdown();
     }
   }
 
@@ -44,6 +45,7 @@ public class OrangePlayerTest {
       Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
+      player.shutdown();
     }
   }
 
@@ -69,6 +71,7 @@ public class OrangePlayerTest {
     player.init(Disk.WHITE);
     Optional<Square> square = player.moveDisk(board.clone());
     assertTrue(square.isEmpty());
+    player.shutdown();
   }
 
   @Test
@@ -101,6 +104,7 @@ public class OrangePlayerTest {
       Optional<Square> square = player.moveDisk(board.clone());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
+      player.shutdown();
     }
   }
 }
