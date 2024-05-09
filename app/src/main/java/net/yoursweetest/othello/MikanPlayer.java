@@ -83,8 +83,12 @@ public class MikanPlayer extends CitrusPlayer {
       return this.children.isPresent();
     }
 
-    public boolean hasChildren() {
+    public boolean isLeaf() {
       return !this.children.orElse(new ArrayList<>()).isEmpty();
+    }
+
+    public boolean isBranch() {
+      return this.isExplored() && !this.isLeaf();
     }
 
   }
@@ -109,7 +113,7 @@ public class MikanPlayer extends CitrusPlayer {
       return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
     }
     // you passed
-    if (!this.root.get().isExplored()) {
+    if (this.root.get().isExplored() && this.root.get().isLeaf()) {
       System.err.println("You passed.");
       return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
     }
@@ -122,9 +126,9 @@ public class MikanPlayer extends CitrusPlayer {
         }
       }
     }
-    // assert
     System.err.println("No root found.");
     throw new OthelloException();
+//    return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
   }
 
   @Override
@@ -141,10 +145,9 @@ public class MikanPlayer extends CitrusPlayer {
       System.err.println("The first move or You passed");
     }
     // new root
-    boolean youPassed = this.root.isPresent() && this.root.get().hasChildren();
     Position newRoot = this.searchNewRoot(board);
+    this.explore(newRoot, this.root.isPresent() && this.root.get().isLeaf());
     this.root = Optional.of(newRoot);
-    this.explore(newRoot, youPassed);
     // best move
     if (newRoot.isExplored()) {
       int max = newRoot.getChildren().stream()
@@ -189,7 +192,7 @@ public class MikanPlayer extends CitrusPlayer {
         position1.getChildren().forEach(
             p -> {
               p.setStep(position1.getStep() + 1);
-              this.explore(p, false);
+              this.explore(p, position1.isLeaf());
             }
         );
       } else {
@@ -217,7 +220,7 @@ public class MikanPlayer extends CitrusPlayer {
         position1.setChildren(children);
       }
       // not (pass -> pass)
-      if (!passed || !position1.hasChildren()) {
+      if (!passed || !position1.isLeaf()) {
         mergeMaxDisksOfChildren(position1);
         return;
       }
@@ -237,7 +240,7 @@ public class MikanPlayer extends CitrusPlayer {
       return true;
     }
     // end of game
-    if (position.isExplored() && position.getChildren().isEmpty()) {
+    if (position.isExplored() && position.isLeaf()) {
       return true;
     }
     return false;
