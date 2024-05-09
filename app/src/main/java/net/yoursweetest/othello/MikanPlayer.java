@@ -161,7 +161,7 @@ public class MikanPlayer extends CitrusPlayer {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
-
+    // debug print
     if (position1.getMoved().isPresent()) {
       System.err.printf("Step: %d, Row: %d, Col: %d Max: %d, %s%n", position1.getStep(),
           position1.getMoved().get().row().getIndex(),
@@ -172,9 +172,7 @@ public class MikanPlayer extends CitrusPlayer {
 
     position1.setMyDiskCount(0);
     position1.setYourDiskCount(0);
-    int myDisks = Tools.countDisks(position1.getBoard(), this.myDisk.get());
-    int yourDisks = Tools.countDisks(position1.getBoard(), this.myDisk.get().reverse());
-    if (position1.getStep() < MAX_STEP && myDisks + yourDisks < 64) {
+    if (!isLeaf(position1)) {
       // there exists data of previous turn
       if (position1.getChildren().isPresent()) {
         System.err.println("position1 had already explored");
@@ -212,21 +210,50 @@ public class MikanPlayer extends CitrusPlayer {
       // not (pass -> pass)
       if (!(passed && position1.getChildren().orElse(new ArrayList<>()).isEmpty())) {
         // count max
-        int myMax = position1.getChildren().get().stream().map(Position::getMyDiskCount)
-            .max(Comparator.naturalOrder()).orElse(0);
-        int yourMax = position1.getChildren().get().stream().map(Position::getYourDiskCount)
-            .max(Comparator.naturalOrder()).orElse(0);
-        position1.setMyDiskCount(myMax);
-        position1.setYourDiskCount(yourMax);
+        mergeMaxDisksOfChildren(position1);
         return;
       }
     }
     // (max step) or (pass -> pass) or (end of game)
     System.err.println("Leaf");
-    position1.setMyDiskCount(
-        Tools.countDisks(position1.getBoard(), position1.getTurn()));
-    position1.setYourDiskCount(
-        Tools.countDisks(position1.getBoard(), position1.getTurn().reverse()));
+    countDisksOfLeaf(position1);
   }
+
+  private boolean isLeaf(@NotNull Position position) {
+    // asset
+    if (this.myDisk.isEmpty()) {
+      throw new OthelloException();
+    }
+    if (position.getStep() >= this.MAX_STEP) {
+      return true;
+    }
+    if (position.getChildren().isPresent() && position.getChildren().get().isEmpty()) {
+      return true;
+    }
+    return false;
+  }
+
+
+  private void mergeMaxDisksOfChildren(Position position) {
+    // assert
+    if (position.getChildren().isEmpty()) {
+      throw new OthelloException();
+    }
+    int myMax = position.getChildren().get().stream().map(Position::getMyDiskCount)
+        .max(Comparator.naturalOrder()).orElse(0);
+    int yourMax = position.getChildren().get().stream().map(Position::getYourDiskCount)
+        .max(Comparator.naturalOrder()).orElse(0);
+    position.setMyDiskCount(myMax);
+    position.setYourDiskCount(yourMax);
+  }
+
+
+  private void countDisksOfLeaf(Position position) {
+    position.setMyDiskCount(
+        Tools.countDisks(position.getBoard(), position.getTurn()));
+    position.setYourDiskCount(
+        Tools.countDisks(position.getBoard(), position.getTurn().reverse()));
+  }
+
 
 }
