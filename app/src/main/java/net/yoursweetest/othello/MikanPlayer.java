@@ -17,14 +17,14 @@ public class MikanPlayer extends CitrusPlayer {
   private static final class Position {
 
     private final Board board;
-    private Optional<Square> moved;
+    private final Optional<Square> moved;
     private final Disk turn;
     private int step;
     private int myDiskCount;
     private int yourDiskCount;
     private Optional<List<Position>> children;
 
-    Position(@NotNull Board board, Optional<Square> moved, @NotNull Disk turn, int step) {
+    Position(@NotNull Board board, @NotNull Optional<Square> moved, @NotNull Disk turn, int step) {
       this.board = board;
       this.moved = moved;
       this.turn = turn;
@@ -48,10 +48,6 @@ public class MikanPlayer extends CitrusPlayer {
 
     public int getStep() {
       return this.step;
-    }
-
-    public void setMoved(Optional<Square> square) {
-      this.moved = square;
     }
 
     public Optional<Square> getMoved() {
@@ -93,7 +89,7 @@ public class MikanPlayer extends CitrusPlayer {
     this.root = Optional.empty();
   }
 
-  private Position searchNewRoot(@NotNull Board board, Optional<Square> moved) {
+  private Position searchNewRoot(@NotNull Board board) {
     // assert
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
@@ -105,7 +101,8 @@ public class MikanPlayer extends CitrusPlayer {
     }
     // you passed
     if (this.root.get().getChildren().isEmpty()) {
-      return new Position(board, moved, this.myDisk.get().reverse(), 0);
+      System.err.println("You passed.");
+      return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
     }
     // root is already explored -> search children
     for (Position p1 : this.root.get().getChildren().get()) {
@@ -122,21 +119,21 @@ public class MikanPlayer extends CitrusPlayer {
   }
 
   @Override
-  public Optional<Square> moveDisk(
-      @NotNull Board board, Optional<Square> moved) {
+  public Optional<Square> moveDisk(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
-    if (moved.isPresent()) {
-      System.err.printf("You moved, Row: %d, Col: %d%n", moved.get().row().getIndex(),
-          moved.get().col().getIndex());
+    // Debug print
+    if (moved != null) {
+      System.err.printf("You moved, Row: %d, Col: %d%n", moved.row().getIndex(),
+          moved.col().getIndex());
     } else {
       System.err.println("The first move or You passed");
     }
     // new root
     boolean youPassed = this.root.isPresent() && this.root.get().getChildren().isEmpty();
-    Position newRoot = this.searchNewRoot(board, moved);
+    Position newRoot = this.searchNewRoot(board);
     this.root = Optional.of(newRoot);
     this.explore(newRoot, youPassed);
     // best move
@@ -164,6 +161,15 @@ public class MikanPlayer extends CitrusPlayer {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
+
+    if (position1.getMoved().isPresent()) {
+      System.err.printf("Step: %d, Row: %d, Col: %d Max: %d, %s%n", position1.getStep(),
+          position1.getMoved().get().row().getIndex(),
+          position1.getMoved().get().col().getIndex(),
+          position1.getMyDiskCount(),
+          position1.getTurn().equals(Disk.BLACK) ? "BLACK" : "WHITE");
+    }
+
     position1.setMyDiskCount(0);
     position1.setYourDiskCount(0);
     int myDisks = Tools.countDisks(position1.getBoard(), this.myDisk.get());
@@ -201,20 +207,6 @@ public class MikanPlayer extends CitrusPlayer {
                   this.explore(position2, passed);
                   return position2;
                 }).toList();
-
-        // debug print
-        children.forEach(
-            p -> {
-              if (p.getMoved().isPresent()) {
-                System.err.printf("Step: %d, Row: %d, Col: %d Max: %d, %s%n", p.getStep(),
-                    p.getMoved().get().row().getIndex(),
-                    p.getMoved().get().col().getIndex(),
-                    p.getMyDiskCount(),
-                    p.getTurn().equals(Disk.BLACK) ? "BLACK" : "WHITE");
-              }
-
-            });
-
         position1.setChildren(children);
       }
       // not (pass -> pass)

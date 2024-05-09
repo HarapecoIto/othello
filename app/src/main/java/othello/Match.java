@@ -125,7 +125,7 @@ public class Match extends Thread {
       }
       return Optional.of(new ArrayList<>());
     }
-    this.moved = player.moveDisk(this.board.clone(), this.moved);
+    this.moved = player.moveDisk(this.board.clone(), this.moved.orElse(null));
     // foul
     if (this.moved.isEmpty()) {
       return Optional.empty();
