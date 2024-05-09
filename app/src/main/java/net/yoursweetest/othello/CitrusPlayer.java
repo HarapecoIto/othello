@@ -43,7 +43,8 @@ public abstract class CitrusPlayer implements Player {
   }
 
   @Override
-  public abstract Optional<Square> moveDisk(@NotNull Board board);
+  public abstract Optional<Square> moveDisk(
+      @NotNull Board board, Optional<Square> moved);
 
   @Override
   public void shutdown() {

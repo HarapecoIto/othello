@@ -27,7 +27,7 @@ public class SetokaPlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new SetokaPlayer("Setoka Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone());
+      Optional<Square> square = player.moveDisk(board.clone(), Optional.empty());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
       player.shutdown();
@@ -44,7 +44,7 @@ public class SetokaPlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new SetokaPlayer("Setoka Player", seed, MAX_STEP);
       player.init(Disk.BLACK);
-      Optional<Square> square = player.moveDisk(board.clone());
+      Optional<Square> square = player.moveDisk(board.clone(), Optional.empty());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
       player.shutdown();
@@ -71,7 +71,7 @@ public class SetokaPlayerTest {
     }
     Player player = new SetokaPlayer("Setoka Player", 13L, MAX_STEP);
     player.init(Disk.WHITE);
-    Optional<Square> square = player.moveDisk(board.clone());
+    Optional<Square> square = player.moveDisk(board.clone(), Optional.of(Square.SQUARE_6_F));
     assertTrue(square.isEmpty());
     player.shutdown();
   }
@@ -103,7 +103,7 @@ public class SetokaPlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new SetokaPlayer("Setoka Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone());
+      Optional<Square> square = player.moveDisk(board.clone(), Optional.of(Square.SQUARE_6_F));
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
       player.shutdown();

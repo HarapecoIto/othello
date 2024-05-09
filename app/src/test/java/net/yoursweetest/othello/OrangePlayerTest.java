@@ -25,7 +25,7 @@ public class OrangePlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new OrangePlayer("Orange Player", seed);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone());
+      Optional<Square> square = player.moveDisk(board.clone(), Optional.empty());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
       player.shutdown();
@@ -42,7 +42,7 @@ public class OrangePlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new OrangePlayer("Orange Player", seed);
       player.init(Disk.BLACK);
-      Optional<Square> square = player.moveDisk(board.clone());
+      Optional<Square> square = player.moveDisk(board.clone(), Optional.empty());
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
       player.shutdown();
@@ -69,7 +69,7 @@ public class OrangePlayerTest {
     }
     Player player = new OrangePlayer("Orange Player", 13L);
     player.init(Disk.WHITE);
-    Optional<Square> square = player.moveDisk(board.clone());
+    Optional<Square> square = player.moveDisk(board.clone(), Optional.of(Square.SQUARE_6_F));
     assertTrue(square.isEmpty());
     player.shutdown();
   }
@@ -101,7 +101,7 @@ public class OrangePlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new OrangePlayer("Orange Player", seed);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone());
+      Optional<Square> square = player.moveDisk(board.clone(), Optional.of(Square.SQUARE_6_F));
       assertTrue(square.isPresent());
       assertTrue(expects.contains(square.orElse(null)));
       player.shutdown();

@@ -14,7 +14,8 @@ public interface Player {
 
   Optional<Disk> getMyDisk();
 
-  Optional<Square> moveDisk(@NotNull Board board);
+  Optional<Square> moveDisk(
+      @NotNull Board board, @NotNull Optional<Square> moved);
 
   void shutdown();
 

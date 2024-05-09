@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import net.yoursweetest.othello.LemonPlayer;
+import net.yoursweetest.othello.MikanPlayer;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
 import othello.player.Player;
-import othello.player.RandomPlayer;
 
 public class ConsoleView implements OthelloView {
 
@@ -20,8 +21,8 @@ public class ConsoleView implements OthelloView {
   private final String whiteSymbol;
 
   public ConsoleView(@NotNull String blackSymbol, @NotNull String whiteSymbol) {
-    this.player1 = new RandomPlayer("Random 1", 1L);
-    this.player2 = new RandomPlayer("Random 2", 2L);
+    this.player1 = new LemonPlayer("Lemon 1", 1L, 3);
+    this.player2 = new MikanPlayer("Mikan 2", 2L, 5);
     this.blackSymbol = blackSymbol;
     this.whiteSymbol = whiteSymbol;
   }

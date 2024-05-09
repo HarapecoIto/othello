@@ -13,7 +13,8 @@ public class OrangePlayer extends CitrusPlayer {
   }
 
   @Override
-  public Optional<Square> moveDisk(@NotNull Board board) {
+  public Optional<Square> moveDisk(
+      @NotNull Board board, Optional<Square> moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized

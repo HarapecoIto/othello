@@ -25,6 +25,7 @@ public class Match extends Thread {
   private boolean endOfGame;
   private Optional<Player> blackPlayer;
   private Optional<Player> whitePlayer;
+  private Optional<Square> moved;
 
   Match(@NotNull OthelloView view) {
     this.view = view;
@@ -35,6 +36,7 @@ public class Match extends Thread {
     this.endOfGame = false;
     this.blackPlayer = Optional.empty();
     this.whitePlayer = Optional.empty();
+    this.moved = Optional.empty();
   }
 
   @Override
@@ -123,20 +125,19 @@ public class Match extends Thread {
       }
       return Optional.of(new ArrayList<>());
     }
-    Optional<Square> toMove = player.moveDisk(this.board.clone());
+    this.moved = player.moveDisk(this.board.clone(), this.moved);
     // foul
-    if (toMove.isEmpty()) {
+    if (this.moved.isEmpty()) {
       return Optional.empty();
     }
     // moved
-    return Tools.move(this.board, toMove.get(), this.turn);
+    return Tools.move(this.board, this.moved.get(), this.turn);
   }
 
   private void shutdown() {
     this.whitePlayer.ifPresent(Player::shutdown);
     this.blackPlayer.ifPresent(Player::shutdown);
   }
-
 
 }
 
