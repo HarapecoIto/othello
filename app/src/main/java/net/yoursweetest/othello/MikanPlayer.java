@@ -3,6 +3,7 @@ package net.yoursweetest.othello;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -74,8 +75,16 @@ public class MikanPlayer extends CitrusPlayer {
       this.children = Optional.of(children);
     }
 
-    public Optional<List<Position>> getChildren() {
-      return this.children;
+    public List<Position> getChildren() {
+      return Collections.unmodifiableList(this.children.orElse(new ArrayList<>()));
+    }
+
+    public boolean isExplored() {
+      return this.children.isPresent();
+    }
+
+    public boolean hasChildren() {
+      return !this.children.orElse(new ArrayList<>()).isEmpty();
     }
 
   }
@@ -100,13 +109,13 @@ public class MikanPlayer extends CitrusPlayer {
       return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
     }
     // you passed
-    if (this.root.get().getChildren().isEmpty()) {
+    if (!this.root.get().isExplored()) {
       System.err.println("You passed.");
       return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
     }
     // root is already explored -> search children
-    for (Position p1 : this.root.get().getChildren().get()) {
-      for (Position p2 : p1.getChildren().orElse(new ArrayList<>())) {
+    for (Position p1 : this.root.get().getChildren()) {
+      for (Position p2 : p1.getChildren()) {
         if (p2.getBoard().equals(board)) {
           p2.setStep(0);
           return p2;
@@ -132,16 +141,16 @@ public class MikanPlayer extends CitrusPlayer {
       System.err.println("The first move or You passed");
     }
     // new root
-    boolean youPassed = this.root.isPresent() && this.root.get().getChildren().isEmpty();
+    boolean youPassed = this.root.isPresent() && this.root.get().hasChildren();
     Position newRoot = this.searchNewRoot(board);
     this.root = Optional.of(newRoot);
     this.explore(newRoot, youPassed);
     // best move
-    if (newRoot.getChildren().isPresent()) {
-      int max = newRoot.getChildren().get().stream()
+    if (newRoot.isExplored()) {
+      int max = newRoot.getChildren().stream()
           .map(Position::getMyDiskCount)
           .max(Comparator.naturalOrder()).orElse(0);
-      Optional<Square> square = newRoot.getChildren().get().stream()
+      Optional<Square> square = newRoot.getChildren().stream()
           .filter(p -> p.getMyDiskCount() == max)
           .filter(p -> p.getMoved().isPresent())
           .map(p -> p.getMoved().get()).findFirst();
@@ -174,10 +183,10 @@ public class MikanPlayer extends CitrusPlayer {
     position1.setYourDiskCount(0);
     if (!isLeaf(position1)) {
       // there exists data of previous turn
-      if (position1.getChildren().isPresent()) {
+      if (position1.isExplored()) {
         System.err.println("position1 had already explored");
         // just update step
-        position1.getChildren().get().forEach(
+        position1.getChildren().forEach(
             p -> {
               p.setStep(position1.getStep() + 1);
               this.explore(p, false);
@@ -208,8 +217,7 @@ public class MikanPlayer extends CitrusPlayer {
         position1.setChildren(children);
       }
       // not (pass -> pass)
-      if (!(passed && position1.getChildren().orElse(new ArrayList<>()).isEmpty())) {
-        // count max
+      if (!passed || !position1.hasChildren()) {
         mergeMaxDisksOfChildren(position1);
         return;
       }
@@ -224,10 +232,12 @@ public class MikanPlayer extends CitrusPlayer {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
+    // max step
     if (position.getStep() >= this.MAX_STEP) {
       return true;
     }
-    if (position.getChildren().isPresent() && position.getChildren().get().isEmpty()) {
+    // end of game
+    if (position.isExplored() && position.getChildren().isEmpty()) {
       return true;
     }
     return false;
@@ -235,13 +245,9 @@ public class MikanPlayer extends CitrusPlayer {
 
 
   private void mergeMaxDisksOfChildren(Position position) {
-    // assert
-    if (position.getChildren().isEmpty()) {
-      throw new OthelloException();
-    }
-    int myMax = position.getChildren().get().stream().map(Position::getMyDiskCount)
+    int myMax = position.getChildren().stream().map(Position::getMyDiskCount)
         .max(Comparator.naturalOrder()).orElse(0);
-    int yourMax = position.getChildren().get().stream().map(Position::getYourDiskCount)
+    int yourMax = position.getChildren().stream().map(Position::getYourDiskCount)
         .max(Comparator.naturalOrder()).orElse(0);
     position.setMyDiskCount(myMax);
     position.setYourDiskCount(yourMax);
