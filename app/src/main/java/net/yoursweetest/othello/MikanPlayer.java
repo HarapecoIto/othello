@@ -23,7 +23,6 @@ public class MikanPlayer extends CitrusPlayer {
     private int myDiskCount;
     private int yourDiskCount;
     private Optional<List<Position>> children;
-    private boolean isPassed;
 
     Position(@NotNull Board board, Optional<Square> moved, @NotNull Disk turn, int step) {
       this.board = board;
@@ -33,7 +32,6 @@ public class MikanPlayer extends CitrusPlayer {
       this.myDiskCount = 0;
       this.yourDiskCount = 0;
       this.children = Optional.empty();
-      this.isPassed = false;
     }
 
     public Board getBoard() {
@@ -84,14 +82,6 @@ public class MikanPlayer extends CitrusPlayer {
       return this.children;
     }
 
-    public boolean isPassed() {
-      return this.isPassed;
-    }
-
-    public void setPassed(boolean passed) {
-      this.isPassed = passed;
-    }
-
   }
 
   private final int MAX_STEP;
@@ -113,19 +103,22 @@ public class MikanPlayer extends CitrusPlayer {
       System.err.println("The first move.");
       return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
     }
-    if (this.root.get().getChildren().isPresent()) {
-      // root is already explored -> search children
-      for (Position p1 : this.root.get().getChildren().get()) {
-        for (Position p2 : p1.getChildren().orElse(new ArrayList<>())) {
-          if (p2.getBoard().equals(board)) {
-            p2.setStep(0);
-            return p2;
-          }
+    // you passed
+    if (this.root.get().getChildren().isEmpty()) {
+      return new Position(board, moved, this.myDisk.get().reverse(), 0);
+    }
+    // root is already explored -> search children
+    for (Position p1 : this.root.get().getChildren().get()) {
+      for (Position p2 : p1.getChildren().orElse(new ArrayList<>())) {
+        if (p2.getBoard().equals(board)) {
+          p2.setStep(0);
+          return p2;
         }
       }
     }
+    // assert
     System.err.println("No root found.");
-    return new Position(board, moved, this.myDisk.get().reverse(), 0);
+    throw new OthelloException();
   }
 
   @Override
@@ -142,9 +135,10 @@ public class MikanPlayer extends CitrusPlayer {
       System.err.println("The first move or You passed");
     }
     // new root
+    boolean youPassed = this.root.isPresent() && this.root.get().getChildren().isEmpty();
     Position newRoot = this.searchNewRoot(board, moved);
     this.root = Optional.of(newRoot);
-    this.explore(newRoot, moved);
+    this.explore(newRoot, youPassed);
     // best move
     if (newRoot.getChildren().isPresent()) {
       int max = newRoot.getChildren().get().stream()
@@ -166,7 +160,7 @@ public class MikanPlayer extends CitrusPlayer {
     return Optional.empty();
   }
 
-  private void explore(@NotNull Position position1, @NotNull Optional<Square> moved) {
+  private void explore(@NotNull Position position1, boolean passed) {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
@@ -182,7 +176,7 @@ public class MikanPlayer extends CitrusPlayer {
         position1.getChildren().get().forEach(
             p -> {
               p.setStep(position1.getStep() + 1);
-              this.explore(p, moved);
+              this.explore(p, false);
             }
         );
       } else {
@@ -204,7 +198,7 @@ public class MikanPlayer extends CitrusPlayer {
                           work, Optional.of(sq), position1.getTurn().reverse(),
                           position1.getStep() + 1);
                   // exec explore
-                  this.explore(position2, Optional.of(sq));
+                  this.explore(position2, passed);
                   return position2;
                 }).toList();
 
@@ -221,13 +215,10 @@ public class MikanPlayer extends CitrusPlayer {
 
             });
 
-        if (children.isEmpty()) {
-          position1.setPassed(true);
-        }
         position1.setChildren(children);
       }
       // not (pass -> pass)
-      if (!(position1.isPassed() && position1.getChildren().orElse(new ArrayList<>()).isEmpty())) {
+      if (!(passed && position1.getChildren().orElse(new ArrayList<>()).isEmpty())) {
         // count max
         int myMax = position1.getChildren().get().stream().map(Position::getMyDiskCount)
             .max(Comparator.naturalOrder()).orElse(0);
