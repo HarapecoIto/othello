@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
@@ -43,7 +44,7 @@ public class RandomPlayer implements Player {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
-      return Optional.empty();
+      throw new OthelloException();
     }
     Board clone = board.clone();
     Score score = Tools.countReversibleDisks(clone, this.myDisk.get());

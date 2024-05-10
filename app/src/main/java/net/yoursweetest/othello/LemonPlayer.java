@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
@@ -81,7 +82,7 @@ public class LemonPlayer extends CitrusPlayer {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
-      return Optional.empty();
+      throw new OthelloException();
     }
     Position position = new Position(board, this.myDisk.get(), 0);
     this.explore(position);
