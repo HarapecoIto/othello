@@ -896,12 +896,12 @@ public class ToolsTest {
     assertEquals(expects, board);
   }
 
-  private void dumpBoard(
+  public static void dumpBoard(
       @NotNull Board board, @NotNull Score score) {
-    int blackDisks = this.countDisk(board, Disk.BLACK);
-    int whiteDisks = this.countDisk(board, Disk.WHITE);
-    System.err.printf("%s: %d%n", this.diskCharacter(Disk.BLACK), blackDisks);
-    System.err.printf("%s: %d%n", this.diskCharacter(Disk.WHITE), whiteDisks);
+    int blackDisks = countDisk(board, Disk.BLACK);
+    int whiteDisks = countDisk(board, Disk.WHITE);
+    System.err.printf("%s: %d%n", diskCharacter(Disk.BLACK), blackDisks);
+    System.err.printf("%s: %d%n", diskCharacter(Disk.WHITE), whiteDisks);
     System.err.println("    A  B  C  D  E  F  G  H");
     System.err.println("  ┌──┬──┬──┬──┬──┬──┬──┬──┐");
     for (Row row : Row.values()) {
@@ -923,7 +923,7 @@ public class ToolsTest {
     }
   }
 
-  private int countDisk(@NotNull Board board, @NotNull Disk disk) {
+  private static int countDisk(@NotNull Board board, @NotNull Disk disk) {
     return (int) Arrays.stream(Square.values()).filter(
         sq -> {
           Optional<Disk> opt = board.getDisk(sq);
@@ -931,7 +931,7 @@ public class ToolsTest {
         }).count();
   }
 
-  private String diskCharacter(Disk disk) {
+  private static String diskCharacter(Disk disk) {
     if (disk == null) {
       return "　";
     } else {

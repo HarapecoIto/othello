@@ -50,7 +50,7 @@ public abstract class CitrusPlayer implements Player {
     return Optional.of(candidates.get(this.rand.nextInt(candidates.size())));
   }
 
-  List<Square> allCandidates(@NotNull Board board, Square moved) {
+  public List<Square> allCandidates(@NotNull Board board, Square moved) {
     return moveCandidates(board, moved)
         .stream().sorted(squareComparator)
         .toList();
