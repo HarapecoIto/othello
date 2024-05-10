@@ -78,7 +78,7 @@ public class Tools {
     return score;
   }
 
-  public static int countReversibleDisks(
+  static int countReversibleDisks(
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     int[] count = new int[8];
     count[0] = countReversibleDisksEngine(Square::up, board, square, mine);

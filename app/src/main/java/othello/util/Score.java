@@ -37,10 +37,18 @@ public class Score implements Cloneable {
   }
 
   @Override
-  protected Score clone() {
+  public Score clone() {
     Score s = new Score();
     Arrays.stream(Square.values()).forEach(sq -> s.setScore(sq, this.getScore(sq)));
     return s;
+  }
+
+  public int getMaximum() {
+    return Arrays.stream(this.score).max().orElse(0);
+  }
+
+  public int getMinimum() {
+    return Arrays.stream(this.score).min().orElse(0);
   }
 
 }

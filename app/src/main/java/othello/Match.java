@@ -10,6 +10,7 @@ import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
 import othello.player.Player;
+import othello.util.Score;
 import othello.util.Tools;
 import othello.view.OthelloView;
 
@@ -109,8 +110,9 @@ public class Match extends Thread {
   }
 
   private List<Square> getMoveableSquares() {
+    Score score = Tools.countReversibleDisks(this.board.clone(), this.turn);
     return Arrays.stream(Square.values())
-        .filter(sq -> Tools.countReversibleDisks(this.board.clone(), sq, this.turn) > 0)
+        .filter(sq -> score.getScore(sq) > 0)
         .toList();
   }
 

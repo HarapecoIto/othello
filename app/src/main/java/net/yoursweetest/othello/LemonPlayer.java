@@ -10,6 +10,7 @@ import java.util.Optional;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Score;
 import othello.util.Tools;
 
 public class LemonPlayer extends CitrusPlayer {
@@ -96,9 +97,10 @@ public class LemonPlayer extends CitrusPlayer {
 
   private void explore(@NotNull Position position1) {
     if (position1.getStep() < MAX_STEP) {
+      Score score = Tools.countReversibleDisks(position1.getBoard(), position1.getTurn());
       List<Square> movable = Arrays.stream(Square.values())
           .filter(
-              sq -> Tools.countReversibleDisks(position1.getBoard(), sq, position1.getTurn()) > 0
+              sq -> score.getScore(sq) > 0
           ).toList();
       if (!movable.isEmpty()) {
         movable.forEach(

@@ -8,6 +8,7 @@ import java.util.Scanner;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Score;
 import othello.util.Tools;
 
 public class ConsolePlayer implements Player {
@@ -43,10 +44,9 @@ public class ConsolePlayer implements Player {
       return Optional.empty();
     }
     Board clone = board.clone();
+    Score score = Tools.countReversibleDisks(clone, this.myDisk.get());
     List<Square> squares = Arrays.stream(Square.values())
-        .filter(
-            sq -> Tools.countReversibleDisks(clone, sq, this.myDisk.get()) > 0)
-        .toList();
+        .filter(sq -> score.getScore(sq) > 0).toList();
     System.out.println("Select square.");
     System.out.flush();
     while (true) {
