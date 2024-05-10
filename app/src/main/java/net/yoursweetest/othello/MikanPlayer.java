@@ -129,13 +129,6 @@ public class MikanPlayer extends CitrusPlayer {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
-    // Debug print
-    if (moved != null) {
-      System.err.printf("You moved, Row: %d, Col: %d%n", moved.row().getIndex(),
-          moved.col().getIndex());
-    } else {
-      System.err.println("The first move or You passed");
-    }
     // new root
     Position newRoot = this.searchNewRoot(board);
     this.explore(newRoot, this.root.isPresent() && this.root.get().isLeaf());
@@ -149,11 +142,10 @@ public class MikanPlayer extends CitrusPlayer {
           .filter(p -> p.getMyDiskCount() == max)
           .filter(p -> p.getMoved().isPresent())
           .map(p -> p.getMoved().get()).toList();
-      if (max > 0 && !squares.isEmpty()) {
+      if (max >= 0) {
         return squares;
       }
     }
-    System.err.println("pass or failed");
     return new ArrayList<>();
   }
 
@@ -161,21 +153,11 @@ public class MikanPlayer extends CitrusPlayer {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
-    // debug print
-    if (position1.getMoved().isPresent()) {
-      System.err.printf("Step: %d, Row: %d, Col: %d Max: %d, %s%n", position1.getStep(),
-          position1.getMoved().get().row().getIndex(),
-          position1.getMoved().get().col().getIndex(),
-          position1.getMyDiskCount(),
-          position1.getTurn().equals(Disk.BLACK) ? "BLACK" : "WHITE");
-    }
-
     position1.setMyDiskCount(0);
     position1.setYourDiskCount(0);
     if (!stopExploration(position1)) {
       // there exists data of previous turn
       if (position1.isExplored()) {
-        System.err.println("position1 had already explored");
         // just update step
         position1.getChildren().forEach(
             p -> {
@@ -184,7 +166,6 @@ public class MikanPlayer extends CitrusPlayer {
             }
         );
       } else {
-        System.err.println("position1 had not explored");
         // unexplored -> (normal move)
         Score score = Tools.countReversibleDisks(position1.getBoard(),
             position1.getTurn().reverse());
@@ -209,13 +190,11 @@ public class MikanPlayer extends CitrusPlayer {
       }
       // not (pass -> pass)
       if (!passed || !position1.isLeaf()) {
-        System.err.println("Branch");
         mergeMaxDisksOfChildren(position1);
         return;
       }
     }
     // (max step) or (pass -> pass) or (end of game)
-    System.err.println("Leaf");
     countDisksOfLeaf(position1);
   }
 
@@ -240,9 +219,9 @@ public class MikanPlayer extends CitrusPlayer {
 
   private void countDisksOfLeaf(Position position) {
     position.setMyDiskCount(
-        Tools.countDisks(position.getBoard(), position.getTurn()));
-    position.setYourDiskCount(
         Tools.countDisks(position.getBoard(), position.getTurn().reverse()));
+    position.setYourDiskCount(
+        Tools.countDisks(position.getBoard(), position.getTurn()));
   }
 
 }

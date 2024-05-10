@@ -89,14 +89,11 @@ public class LemonPlayer extends CitrusPlayer {
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
         .toList();
-    if (max > 0 && !squares.isEmpty()) {
-      return squares;
-    }
-    return new ArrayList<>();
+    return max >= 0 ? squares : new ArrayList<>();
   }
 
   private void explore(@NotNull Position position1) {
-    if (position1.getStep() < MAX_STEP) {
+    if (position1.getStep() <= MAX_STEP) {
       Score score = Tools.countReversibleDisks(position1.getBoard(), position1.getTurn());
       List<Square> movable = Arrays.stream(Square.values())
           .filter(

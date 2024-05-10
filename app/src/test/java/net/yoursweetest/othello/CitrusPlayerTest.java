@@ -30,12 +30,12 @@ public class CitrusPlayerTest {
     for (int j = 0; j < 5; j++) {
       List<Square> candidates1 = player1.allCandidates(board1, moved1);
       List<Square> candidates2 = player2.allCandidates(board2, moved2);
+      System.err.println(candidates1 + " " + candidates2);
       assertEquals(candidates1.size(), candidates2.size());
       assertNotEquals(0, candidates1.size());
-      System.err.printf("Candidates: %d%n", candidates1.size());
+      System.err.printf("Candidates: %d %d%n", candidates1.size(), candidates2.size());
       ToolsTest.dumpBoard(board1, new Score());
       ToolsTest.dumpBoard(board2, new Score());
-      System.err.println(candidates1 + " " + candidates2);
       for (int k = 0; k < candidates1.size(); k++) {
         assertEquals(candidates1.get(k), candidates2.get(k));
       }
