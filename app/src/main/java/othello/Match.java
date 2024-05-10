@@ -10,6 +10,7 @@ import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
 import othello.player.Player;
+import othello.util.Tools;
 import othello.view.OthelloView;
 
 public class Match extends Thread {

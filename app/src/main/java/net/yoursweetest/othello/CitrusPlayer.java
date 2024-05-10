@@ -7,11 +7,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import othello.Tools;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
 import othello.player.Player;
+import othello.util.Tools;
 
 public abstract class CitrusPlayer implements Player {
 

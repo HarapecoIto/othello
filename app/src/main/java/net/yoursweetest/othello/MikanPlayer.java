@@ -8,10 +8,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import othello.OthelloException;
-import othello.Tools;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Tools;
 
 public class MikanPlayer extends CitrusPlayer {
 

@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import othello.Tools;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Tools;
 
 public class ConsolePlayer implements Player {
 

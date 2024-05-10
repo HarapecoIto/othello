@@ -1,4 +1,4 @@
-package othello;
+package othello.util;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
