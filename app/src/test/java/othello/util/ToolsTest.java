@@ -1,6 +1,7 @@
 package othello.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Col;
 import othello.base.Disk;
@@ -812,19 +814,21 @@ public class ToolsTest {
     assertEquals(expects, score);
   }
 
+  @Test
+  void testMoveException() {
+    Board board = new Board();
+    board.init();
+    Board clone = board.clone();
+    assertThrows(OthelloException.class,
+        () -> Tools.move(clone, Square.SQUARE_4_D, Disk.BLACK));
+  }
 
   @Test
   void testMove() {
     Board board = new Board();
     board.init();
     Board clone = board.clone();
-    Optional<List<Square>> opt = Tools.move(clone, Square.SQUARE_4_D, Disk.BLACK);
-    assertTrue(opt.isEmpty());
-    assertEquals(board, clone);
-
-    board.init();
-    clone = board.clone();
-    opt = Tools.move(clone, Square.SQUARE_6_D, Disk.BLACK);
+    Optional<List<Square>> opt = Tools.move(clone, Square.SQUARE_6_D, Disk.BLACK);
     assertTrue(opt.isPresent());
     assertEquals(0, opt.get().size());
     assertEquals(board, clone);
