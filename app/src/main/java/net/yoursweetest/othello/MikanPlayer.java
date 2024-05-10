@@ -8,10 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import othello.OthelloException;
-import othello.Tools;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Score;
+import othello.util.Tools;
 
 public class MikanPlayer extends CitrusPlayer {
 
@@ -188,11 +189,11 @@ public class MikanPlayer extends CitrusPlayer {
       } else {
         System.err.println("position1 had not explored");
         // unexplored -> (normal move)
+        Score score = Tools.countReversibleDisks(position1.getBoard(),
+            position1.getTurn().reverse());
         List<Position> children = Arrays.stream(Square.values())
             .filter(
-                sq -> Tools.countReversibleDisks(position1.getBoard(), sq,
-                    position1.getTurn().reverse())
-                    > 0
+                sq -> score.getScore(sq) > 0
             ).map(
                 sq -> {
                   // move

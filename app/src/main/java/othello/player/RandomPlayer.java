@@ -5,10 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import othello.Tools;
+import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Score;
+import othello.util.Tools;
 
 public class RandomPlayer implements Player {
 
@@ -42,14 +44,14 @@ public class RandomPlayer implements Player {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
-      return Optional.empty();
+      throw new OthelloException();
     }
     Board clone = board.clone();
-    List<Square> list = Arrays.stream(Square.values())
-        .filter(sq -> Tools.countReversibleDisks(clone, sq, this.myDisk.get()) > 0)
-        .toList();
-    return !list.isEmpty()
-        ? Optional.of(list.get(this.rand.nextInt(list.size())))
+    Score score = Tools.countReversibleDisks(clone, this.myDisk.get());
+    List<Square> squares = Arrays.stream(Square.values())
+        .filter(sq -> score.getScore(sq) > 0).toList();
+    return !squares.isEmpty()
+        ? Optional.of(squares.get(this.rand.nextInt(squares.size())))
         : Optional.empty();
   }
 

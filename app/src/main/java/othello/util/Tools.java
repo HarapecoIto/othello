@@ -1,4 +1,4 @@
-package othello;
+package othello.util;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
@@ -30,24 +31,23 @@ public class Tools {
     listOfList.add(moveEngine(Square::downLeft, work, square, mine));
     listOfList.add(moveEngine(Square::downRight, work, square, mine));
     if (listOfList.stream().anyMatch(Optional::isEmpty)) {
-      return Optional.empty();
+      throw new OthelloException();
     }
-    List<Square> list = new ArrayList<>();
-    listOfList.forEach(
-        l -> list.addAll(l.orElse(new ArrayList<>()))
-    );
-    if (list.isEmpty()) {
-      return Optional.of(list);
+    List<Square> reversed = listOfList.stream()
+        .flatMap(opt -> opt.orElse(new ArrayList<>()).stream())
+        .toList();
+    if (reversed.isEmpty()) {
+      return Optional.of(reversed);
     }
     // assert
-    if (Tools.countDisks(work, mine) != Tools.countDisks(board, mine) + list.size()) {
-      return Optional.empty();
+    if (Tools.countDisks(work, mine) != Tools.countDisks(board, mine) + reversed.size()) {
+      throw new OthelloException();
     }
     // ok -> place the disk.
     work.setDisk(square, mine);
     // write back work -> board.
     Arrays.stream(Square.values()).forEach(sq -> board.setDisk(sq, work.getDisk(sq).orElse(null)));
-    return Optional.of(list);
+    return Optional.of(reversed);
   }
 
   private static Optional<List<Square>> moveEngine(
@@ -63,7 +63,7 @@ public class Tools {
       opt = next.apply(opt.get());
       if (opt.isEmpty()) {
         // assertion failed.
-        return Optional.empty();
+        throw new OthelloException();
       }
       board.setDisk(opt.get(), mine);
       list.add(opt.get());
@@ -71,7 +71,14 @@ public class Tools {
     return Optional.of(list);
   }
 
-  public static int countReversibleDisks(
+  public static Score countReversibleDisks(@NotNull Board board, @NotNull Disk mine) {
+    Score score = new Score();
+    Arrays.stream(Square.values())
+        .forEach(sq -> score.setScore(sq, countReversibleDisks(board, sq, mine)));
+    return score;
+  }
+
+  static int countReversibleDisks(
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     int[] count = new int[8];
     count[0] = countReversibleDisksEngine(Square::up, board, square, mine);
@@ -82,7 +89,7 @@ public class Tools {
     count[5] = countReversibleDisksEngine(Square::upRight, board, square, mine);
     count[6] = countReversibleDisksEngine(Square::downLeft, board, square, mine);
     count[7] = countReversibleDisksEngine(Square::downRight, board, square, mine);
-    if (Arrays.stream(count).filter(c -> c < 0).count() != 0L) {
+    if (Arrays.stream(count).anyMatch(c -> c < 0)) {
       return -1;
     }
     return Arrays.stream(count).sum();

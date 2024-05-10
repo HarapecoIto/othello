@@ -13,10 +13,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
-import othello.Tools;
+import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Score;
+import othello.util.Tools;
 
 public class SetokaPlayer extends CitrusPlayer {
 
@@ -95,7 +97,7 @@ public class SetokaPlayer extends CitrusPlayer {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
-      return Optional.empty();
+      throw new OthelloException();
     }
     // multi-thread exec
     Position position = new Position(board, this.myDisk.get(), 0);
@@ -112,9 +114,10 @@ public class SetokaPlayer extends CitrusPlayer {
 
   private void explore(@NotNull Position position1) {
     if (position1.getStep() < MAX_STEP) {
+      Score score = Tools.countReversibleDisks(position1.getBoard(), position1.getTurn());
       List<Square> movable = Arrays.stream(Square.values())
           .filter(
-              sq -> Tools.countReversibleDisks(position1.getBoard(), sq, position1.getTurn()) > 0
+              sq -> score.getScore(sq) > 0
           ).toList();
       if (!movable.isEmpty()) {
         Function<Square, Boolean> proc = (sq) -> {

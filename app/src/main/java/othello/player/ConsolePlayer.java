@@ -5,10 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import othello.Tools;
+import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
+import othello.util.Score;
+import othello.util.Tools;
 
 public class ConsolePlayer implements Player {
 
@@ -40,13 +42,12 @@ public class ConsolePlayer implements Player {
     //assert
     if (this.myDisk.isEmpty()) {
       // not initialized
-      return Optional.empty();
+      throw new OthelloException();
     }
     Board clone = board.clone();
+    Score score = Tools.countReversibleDisks(clone, this.myDisk.get());
     List<Square> squares = Arrays.stream(Square.values())
-        .filter(
-            sq -> Tools.countReversibleDisks(clone, sq, this.myDisk.get()) > 0)
-        .toList();
+        .filter(sq -> score.getScore(sq) > 0).toList();
     System.out.println("Select square.");
     System.out.flush();
     while (true) {
