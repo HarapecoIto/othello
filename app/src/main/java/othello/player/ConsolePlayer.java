@@ -36,7 +36,7 @@ public class ConsolePlayer implements Player {
   }
 
   @Override
-  public Optional<Square> moveDisk(Board board) {
+  public Optional<Square> moveDisk(@NotNull Board board, @NotNull Square moved) {
     //assert
     if (this.myDisk.isEmpty()) {
       // not initialized

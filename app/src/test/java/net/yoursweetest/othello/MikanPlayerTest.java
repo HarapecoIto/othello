@@ -13,7 +13,7 @@ import othello.base.Row;
 import othello.base.Square;
 import othello.player.Player;
 
-public class LemonPlayerTest {
+public class MikanPlayerTest {
 
   static final int MAX_STEP = 5;
 
@@ -25,7 +25,7 @@ public class LemonPlayerTest {
         Square.SQUARE_3_E, Square.SQUARE_4_F, Square.SQUARE_5_C, Square.SQUARE_6_D
     );
     for (long seed = 0; seed < 10; seed++) {
-      Player player = new LemonPlayer("Lemon Player", seed, MAX_STEP);
+      Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), null);
       assertTrue(square.isPresent());
@@ -42,7 +42,7 @@ public class LemonPlayerTest {
         Square.SQUARE_3_D, Square.SQUARE_4_C, Square.SQUARE_5_F, Square.SQUARE_6_E
     );
     for (long seed = 0; seed < 10; seed++) {
-      Player player = new LemonPlayer("Lemon Player", seed, MAX_STEP);
+      Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
       player.init(Disk.BLACK);
       Optional<Square> square = player.moveDisk(board.clone(), null);
       assertTrue(square.isPresent());
@@ -69,7 +69,7 @@ public class LemonPlayerTest {
         board.setDisk(row, col, Disk.BLACK);
       }
     }
-    Player player = new LemonPlayer("Lemon Player", 13L, MAX_STEP);
+    Player player = new MikanPlayer("Mikan Player", 13L, MAX_STEP);
     player.init(Disk.WHITE);
     Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
     assertTrue(square.isEmpty());
@@ -101,7 +101,7 @@ public class LemonPlayerTest {
         Square.SQUARE_2_G, Square.SQUARE_5_G
     );
     for (long seed = 0; seed < 10; seed++) {
-      Player player = new LemonPlayer("Lemon Player", seed, MAX_STEP);
+      Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
       assertTrue(square.isPresent());
