@@ -1,7 +1,5 @@
 package net.yoursweetest.othello;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -14,8 +12,6 @@ import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
 import othello.player.Player;
-import othello.player.RandomPlayer;
-import othello.util.Tools;
 
 public class SetokaPlayerTest {
 
@@ -115,48 +111,16 @@ public class SetokaPlayerTest {
   }
 
   @Test
-  void compareWithLemonPlayer() {
-    for (long i = 0; i < 3; i++) {
-      for (int step = 3; step < 5; step++) {
-        Board board1 = new Board();
-        board1.init();
-        Board board2 = board1.clone();
-        CitrusPlayer player1 = new SetokaPlayer("Setoka", i, step);
-        CitrusPlayer player2 = new LemonPlayer("Lemon", i, step);
-        Player randomPlayer1 = new RandomPlayer("Random", i);
-        Player randomPlayer2 = new RandomPlayer("Random", i);
-        player1.init(Disk.WHITE);
-        player2.init(Disk.WHITE);
-        randomPlayer1.init(Disk.BLACK);
-        randomPlayer2.init(Disk.BLACK);
-        Square moved1 = null;
-        Square moved2 = null;
-        for (int j = 0; j < 5; j++) {
-          List<Square> candidates1 = player1.allCandidates(board1, moved1);
-          List<Square> candidates2 = player2.allCandidates(board2, moved2);
-          assertEquals(candidates1.size(), candidates2.size());
-          assertNotEquals(0, candidates1.size());
-          System.err.printf("Candidates: %d%n", candidates1.size());
-          for (int k = 0; k < candidates1.size(); k++) {
-            assertEquals(candidates1.get(k), candidates2.get(k));
-          }
-          moved1 = player1.moveDisk(board1, moved1).orElse(null);
-          moved2 = player2.moveDisk(board2, moved2).orElse(null);
-          assertEquals(moved1, moved2);
-          Tools.move(board1, moved1, Disk.WHITE);
-          Tools.move(board2, moved2, Disk.WHITE);
-          assertEquals(board1, board2);
-
-          moved1 = randomPlayer1.moveDisk(board1, moved1).orElse(null);
-          moved2 = randomPlayer2.moveDisk(board2, moved2).orElse(null);
-          assertEquals(moved1, moved2);
-          Tools.move(board1, moved1, Disk.BLACK);
-          Tools.move(board2, moved2, Disk.BLACK);
-          assertEquals(board1, board2);
-        }
-        player1.shutdown();
-        player2.shutdown();
-      }
+  void compareMove() {
+    for (long seed = 0; seed < 3; seed++) {
+      CitrusPlayer player1 = new SetokaPlayer("Setoka", seed, 3);
+      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 3);
+      CitrusPlayerTest.compareMovedWith(player1, player2);
+    }
+    for (long seed = 10; seed < 13; seed++) {
+      CitrusPlayer player1 = new SetokaPlayer("Setoka", seed, 4);
+      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 4);
+      CitrusPlayerTest.compareMovedWith(player1, player2);
     }
   }
 }
