@@ -1,9 +1,9 @@
 package net.yoursweetest.othello;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Square;
@@ -17,7 +17,7 @@ public class OrangePlayer extends CitrusPlayer {
   }
 
   @Override
-  public Optional<Square> moveDisk(@NotNull Board board, Square moved) {
+  List<Square> moveCandidates(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
@@ -25,12 +25,12 @@ public class OrangePlayer extends CitrusPlayer {
     }
     Score score = Tools.countReversibleDisks(board, this.myDisk.get());
     int max = score.getMaximum();
-    List<Square> list = Arrays.stream(Square.values())
+    List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> score.getScore(sq) == max)
         .toList();
-    return max > 0 && !list.isEmpty()
-        ? Optional.of(list.get(this.rand.nextInt(list.size())))
-        : Optional.empty();
-  }
+    return max > 0 && !squares.isEmpty()
+        ? squares
+        : new ArrayList<>();
 
+  }
 }

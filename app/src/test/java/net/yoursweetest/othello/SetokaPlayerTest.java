@@ -109,4 +109,18 @@ public class SetokaPlayerTest {
       player.shutdown();
     }
   }
+
+  @Test
+  void compareMove() {
+    for (long seed = 0; seed < 2; seed++) {
+      CitrusPlayer player1 = new SetokaPlayer("Setoka", seed, 3);
+      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 3);
+      CitrusPlayerTest.compareMovedWith(player1, player2);
+    }
+    for (long seed = 10; seed < 12; seed++) {
+      CitrusPlayer player1 = new SetokaPlayer("Setoka", seed, 4);
+      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 4);
+      CitrusPlayerTest.compareMovedWith(player1, player2);
+    }
+  }
 }

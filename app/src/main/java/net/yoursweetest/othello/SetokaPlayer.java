@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -75,7 +74,6 @@ public class SetokaPlayer extends CitrusPlayer {
     }
   }
 
-
   private final int MAX_STEP;
   private ExecutorService service;
 
@@ -91,9 +89,8 @@ public class SetokaPlayer extends CitrusPlayer {
     this.service = Executors.newFixedThreadPool(16);
   }
 
-
   @Override
-  public Optional<Square> moveDisk(@NotNull Board board, Square moved) {
+  List<Square> moveCandidates(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
@@ -106,14 +103,11 @@ public class SetokaPlayer extends CitrusPlayer {
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
         .toList();
-    if (max > 0 && !squares.isEmpty()) {
-      return Optional.of(squares.get(this.rand.nextInt(squares.size())));
-    }
-    return Optional.empty();
+    return max >= 0 ? squares : new ArrayList<>();
   }
 
   private void explore(@NotNull Position position1) {
-    if (position1.getStep() < MAX_STEP) {
+    if (position1.getStep() <= MAX_STEP) {
       Score score = Tools.countReversibleDisks(position1.getBoard(), position1.getTurn());
       List<Square> movable = Arrays.stream(Square.values())
           .filter(
