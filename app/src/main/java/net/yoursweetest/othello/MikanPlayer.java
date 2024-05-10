@@ -124,7 +124,7 @@ public class MikanPlayer extends CitrusPlayer {
   }
 
   @Override
-  public Optional<Square> moveDisk(@NotNull Board board, Square moved) {
+  List<Square> moveCandidates(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
@@ -150,14 +150,11 @@ public class MikanPlayer extends CitrusPlayer {
           .filter(p -> p.getMoved().isPresent())
           .map(p -> p.getMoved().get()).toList();
       if (max > 0 && !squares.isEmpty()) {
-        Square square = squares.get(rand.nextInt(squares.size()));
-        System.err.printf("I move, Row: %d, Col: %d%n", square.row().getIndex(),
-            square.col().getIndex());
-        return Optional.of(square);
+        return squares;
       }
     }
     System.err.println("pass or failed");
-    return Optional.empty();
+    return new ArrayList<>();
   }
 
   private void explore(@NotNull Position position1, boolean passed) {

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
@@ -78,7 +77,7 @@ public class LemonPlayer extends CitrusPlayer {
   }
 
   @Override
-  public Optional<Square> moveDisk(@NotNull Board board, Square moved) {
+  List<Square> moveCandidates(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
@@ -91,9 +90,9 @@ public class LemonPlayer extends CitrusPlayer {
         .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
         .toList();
     if (max > 0 && !squares.isEmpty()) {
-      return Optional.of(squares.get(this.rand.nextInt(squares.size())));
+      return squares;
     }
-    return Optional.empty();
+    return new ArrayList<>();
   }
 
   private void explore(@NotNull Position position1) {
