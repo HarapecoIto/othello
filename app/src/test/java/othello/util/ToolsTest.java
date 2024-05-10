@@ -754,6 +754,66 @@ public class ToolsTest {
   }
 
   @Test
+  void testCountReversibleDisks2() {
+    // ㊚㊚㊚㊚㊚㊚＿＿
+    // ㊚㊛㊛㊛㊛㊚＿＿
+    // ㊚㊛＿㊛㊛㊚＿＿
+    // ㊚㊛㊛㊛㊛㊚＿＿
+    // ㊚㊛㊛㊛㊛㊚＿＿
+    // ㊚㊚㊚㊚㊚㊚＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    Board board = new Board();
+    board.clear();
+    for (Row row : new Row[]{Row.ROW_1, Row.ROW_2, Row.ROW_3, Row.ROW_4, Row.ROW_5, Row.ROW_6}) {
+      for (Col col : new Col[]{Col.COL_A, Col.COL_B, Col.COL_C, Col.COL_D, Col.COL_E, Col.COL_F}) {
+        board.setDisk(row, col, Disk.BLACK);
+      }
+    }
+    for (Row row : new Row[]{Row.ROW_2, Row.ROW_3, Row.ROW_4, Row.ROW_5}) {
+      for (Col col : new Col[]{Col.COL_B, Col.COL_C, Col.COL_D, Col.COL_E}) {
+        board.setDisk(row, col, Disk.WHITE);
+      }
+    }
+    board.setDisk(Square.SQUARE_3_C, null);
+    dumpBoard(board, new Score());
+
+    // ㊚㊚㊚㊚㊚㊚＿＿
+    // ㊚㊚㊚㊚㊛㊚＿＿
+    // ㊚㊚㊚㊚㊚㊚＿＿
+    // ㊚㊚㊚㊚㊛㊚＿＿
+    // ㊚㊛㊚㊛㊚㊚＿＿
+    // ㊚㊚㊚㊚㊚㊚＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    Tools.move(board, Square.SQUARE_3_C, Disk.BLACK);
+    dumpBoard(board, new Score());
+
+    Board dummy = new Board();
+    dummy.clear();
+    Score expects = new Score();
+    Arrays.stream(Square.values()).filter(
+        sq -> sq.row().getIndex() < 6 && sq.col().getIndex() < 6
+    ).forEach(
+        sq -> expects.setScore(sq, -1)
+    );
+    expects.setScore(Square.SQUARE_2_G, 2);
+    expects.setScore(Square.SQUARE_4_G, 2);
+    expects.setScore(Square.SQUARE_5_G, 2);
+    expects.setScore(Square.SQUARE_6_G, 1);
+    expects.setScore(Square.SQUARE_7_B, 2);
+    expects.setScore(Square.SQUARE_7_D, 2);
+    expects.setScore(Square.SQUARE_7_E, 2);
+    expects.setScore(Square.SQUARE_7_F, 1);
+    dumpBoard(dummy, expects);
+
+    Score score = Tools.countReversibleDisks(board, Disk.WHITE);
+    dumpBoard(dummy, score);
+    assertEquals(expects, score);
+  }
+
+
+  @Test
   void testMove() {
     Board board = new Board();
     board.init();
@@ -832,4 +892,51 @@ public class ToolsTest {
     assertEquals(expects, board);
   }
 
+  private void dumpBoard(
+      @NotNull Board board, @NotNull Score score) {
+    int blackDisks = this.countDisk(board, Disk.BLACK);
+    int whiteDisks = this.countDisk(board, Disk.WHITE);
+    System.err.printf("%s: %d%n", this.diskCharacter(Disk.BLACK), blackDisks);
+    System.err.printf("%s: %d%n", this.diskCharacter(Disk.WHITE), whiteDisks);
+    System.err.println("    A  B  C  D  E  F  G  H");
+    System.err.println("  ┌──┬──┬──┬──┬──┬──┬──┬──┐");
+    for (Row row : Row.values()) {
+      StringBuilder builder = new StringBuilder(String.format("%d |", row.getIndex() + 1));
+      Arrays.stream(Square.values()).filter(sq -> sq.row().equals(row))
+          .map(square -> board.getDisk(square).isPresent()
+              ? diskCharacter(board.getDisk(square).get())
+              : String.format("%2d", score.getScore(square)))
+          .forEach(string -> {
+            builder.append(string);
+            builder.append("|");
+          });
+      System.err.println(builder);
+      if (!row.equals(Row.ROW_8)) {
+        System.err.println("  ├──┼──┼──┼──┼──┼──┼──┼──┤");
+      } else {
+        System.err.println("  └──┴──┴──┴──┴──┴──┴──┴──┘");
+      }
+    }
+  }
+
+  private int countDisk(@NotNull Board board, @NotNull Disk disk) {
+    return (int) Arrays.stream(Square.values()).filter(
+        sq -> {
+          Optional<Disk> opt = board.getDisk(sq);
+          return opt.isPresent() && opt.get().equals(disk);
+        }).count();
+  }
+
+  private String diskCharacter(Disk disk) {
+    if (disk == null) {
+      return "　";
+    } else {
+      if (disk.equals(Disk.BLACK)) {
+        return "㊚";
+      } else if (disk.equals(Disk.WHITE)) {
+        return "㊛";
+      }
+    }
+    return "";
+  }
 }

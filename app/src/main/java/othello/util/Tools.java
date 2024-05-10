@@ -71,6 +71,13 @@ public class Tools {
     return Optional.of(list);
   }
 
+  public static Score countReversibleDisks(@NotNull Board board, @NotNull Disk mine) {
+    Score score = new Score();
+    Arrays.stream(Square.values())
+        .forEach(sq -> score.setScore(sq, countReversibleDisks(board, sq, mine)));
+    return score;
+  }
+
   public static int countReversibleDisks(
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     int[] count = new int[8];
