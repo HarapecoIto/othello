@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
 import othello.base.Col;
@@ -18,6 +19,7 @@ public class LemonPlayerTest {
   static final int MAX_STEP = 5;
 
   @Test
+  @DisplayName("Test 1 of lemonPlayer.moveDisk();")
   void testMoveDisk1() {
     Board board = new Board();
     board.init();
@@ -35,6 +37,7 @@ public class LemonPlayerTest {
   }
 
   @Test
+  @DisplayName("Test 2 of lemonPlayer.moveDisk();")
   void testMoveDisk2() {
     Board board = new Board();
     board.init();
@@ -52,6 +55,7 @@ public class LemonPlayerTest {
   }
 
   @Test
+  @DisplayName("Test 3 of lemonPlayer.moveDisk();")
   void testMoveDisk3() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -77,6 +81,7 @@ public class LemonPlayerTest {
   }
 
   @Test
+  @DisplayName("Test 4 of lemonPlayer.moveDisk();")
   void testMoveDisk4() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿

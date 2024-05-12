@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
 import othello.base.Col;
@@ -16,6 +17,7 @@ import othello.player.Player;
 public class OrangePlayerTest {
 
   @Test
+  @DisplayName("Test 1 of orangePlayer.moveDisk();")
   void testMoveDisk1() {
     Board board = new Board();
     board.init();
@@ -33,6 +35,7 @@ public class OrangePlayerTest {
   }
 
   @Test
+  @DisplayName("Test 2 of orangePlayer.moveDisk();")
   void testMoveDisk2() {
     Board board = new Board();
     board.init();
@@ -50,6 +53,7 @@ public class OrangePlayerTest {
   }
 
   @Test
+  @DisplayName("Test 3 of orangePlayer.moveDisk();")
   void testMoveDisk3() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -75,6 +79,7 @@ public class OrangePlayerTest {
   }
 
   @Test
+  @DisplayName("Test 4 of orangePlayer.moveDisk();")
   void testMoveDisk4() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿

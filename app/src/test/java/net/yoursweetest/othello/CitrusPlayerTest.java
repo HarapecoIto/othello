@@ -166,6 +166,5 @@ public class CitrusPlayerTest {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-
   }
 }

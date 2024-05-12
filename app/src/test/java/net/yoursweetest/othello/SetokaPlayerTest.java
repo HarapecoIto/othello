@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
 import othello.base.Col;
@@ -18,6 +19,7 @@ public class SetokaPlayerTest {
   static final int MAX_STEP = 5;
 
   @Test
+  @DisplayName("Test 1 of setokaPlayer.moveDisk();")
   void testMoveDisk1() {
     Board board = new Board();
     board.init();
@@ -35,6 +37,7 @@ public class SetokaPlayerTest {
   }
 
   @Test
+  @DisplayName("Test 2 of setokaPlayer.moveDisk();")
   void testMoveDisk2() {
     Board board = new Board();
     board.init();
@@ -52,6 +55,7 @@ public class SetokaPlayerTest {
   }
 
   @Test
+  @DisplayName("Test 3 of setokaPlayer.moveDisk();")
   void testMoveDisk3() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -77,6 +81,7 @@ public class SetokaPlayerTest {
   }
 
   @Test
+  @DisplayName("Test 4 of setokaPlayer.moveDisk();")
   void testMoveDisk4() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -111,6 +116,7 @@ public class SetokaPlayerTest {
   }
 
   @Test
+  @DisplayName("Compare SetokaPlayer to LemonPlayer")
   void compareMovedWith() {
     for (long seed = 0; seed < 1; seed++) {
       CitrusPlayer player1 = new SetokaPlayer("Setoka", seed, 3);
