@@ -28,8 +28,9 @@ public class Match extends Thread {
   private Optional<Player> blackPlayer;
   private Optional<Player> whitePlayer;
   private Optional<Square> moved;
+  private final Random rand;
 
-  Match(@NotNull OthelloView view) {
+  public Match(@NotNull OthelloView view, long seed) {
     this.view = view;
     this.board = new Board();
     this.board.init();
@@ -39,12 +40,13 @@ public class Match extends Thread {
     this.blackPlayer = Optional.empty();
     this.whitePlayer = Optional.empty();
     this.moved = Optional.empty();
+    this.rand = new Random(seed);
   }
 
   @Override
   public void run() {
     this.view.selectPlayers((player1, player2) -> {
-      Random rand = new Random();
+
       Disk disk = rand.nextInt(2) == 0 ? Disk.BLACK : Disk.WHITE;
       if (disk.equals(Disk.BLACK)) {
         this.blackPlayer = Optional.of(player1);

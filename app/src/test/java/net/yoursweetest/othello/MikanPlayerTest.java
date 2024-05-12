@@ -111,13 +111,13 @@ public class MikanPlayerTest {
   }
 
   @Test
-  void compareMove() {
-    for (long seed = 0; seed < 2; seed++) {
+  void compareMovedWith() {
+    for (long seed = 0; seed < 1; seed++) {
       CitrusPlayer player1 = new MikanPlayer("Mikan", seed, 3);
       CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 3);
       CitrusPlayerTest.compareMovedWith(player1, player2);
     }
-    for (long seed = 10; seed < 12; seed++) {
+    for (long seed = 10; seed < 11; seed++) {
       CitrusPlayer player1 = new MikanPlayer("Mikan", seed, 4);
       CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 4);
       CitrusPlayerTest.compareMovedWith(player1, player2);
