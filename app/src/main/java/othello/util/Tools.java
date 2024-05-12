@@ -11,25 +11,44 @@ import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Square;
 
+/**
+ * You can use these tools to check the board status. Built-in classes are also use these tools.
+ */
 public class Tools {
 
+  /**
+   * Count disks on the board.
+   *
+   * @param board Target board to count disks.
+   * @param disk  The disk color to be counted. {@code Disk.BLACK} or {@code Disk.WHITE}.
+   * @return Number of disks specified by disk parameter.
+   */
   public static int countDisks(@NotNull Board board, @NotNull Disk disk) {
     return (int) Arrays.stream(Square.values())
         .filter(sq -> disk.equals(board.getDisk(sq).orElse(null))).count();
   }
 
+  /**
+   * Move new disk to the board.
+   *
+   * @param board  The board to move the disk.
+   * @param square Target square to move the disk.
+   * @param myDisk Disk color to be moved. {@code Disk.BLACK} or {@code Disk.WHITE}.
+   * @return {@code Optional} of List containing turned over disks.
+   * @throws OthelloException This square cannot be placed due to the rules.
+   */
   public static Optional<List<Square>> move(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
+      @NotNull Disk myDisk) {
     Board work = board.clone();
     List<Optional<List<Square>>> listOfList = new ArrayList<>();
-    listOfList.add(moveEngine(Square::up, work, square, mine));
-    listOfList.add(moveEngine(Square::down, work, square, mine));
-    listOfList.add(moveEngine(Square::left, work, square, mine));
-    listOfList.add(moveEngine(Square::right, work, square, mine));
-    listOfList.add(moveEngine(Square::upLeft, work, square, mine));
-    listOfList.add(moveEngine(Square::upRight, work, square, mine));
-    listOfList.add(moveEngine(Square::downLeft, work, square, mine));
-    listOfList.add(moveEngine(Square::downRight, work, square, mine));
+    listOfList.add(moveEngine(Square::up, work, square, myDisk));
+    listOfList.add(moveEngine(Square::down, work, square, myDisk));
+    listOfList.add(moveEngine(Square::left, work, square, myDisk));
+    listOfList.add(moveEngine(Square::right, work, square, myDisk));
+    listOfList.add(moveEngine(Square::upLeft, work, square, myDisk));
+    listOfList.add(moveEngine(Square::upRight, work, square, myDisk));
+    listOfList.add(moveEngine(Square::downLeft, work, square, myDisk));
+    listOfList.add(moveEngine(Square::downRight, work, square, myDisk));
     if (listOfList.stream().anyMatch(Optional::isEmpty)) {
       throw new OthelloException();
     }
@@ -40,11 +59,11 @@ public class Tools {
       return Optional.of(reversed);
     }
     // assert
-    if (Tools.countDisks(work, mine) != Tools.countDisks(board, mine) + reversed.size()) {
+    if (Tools.countDisks(work, myDisk) != Tools.countDisks(board, myDisk) + reversed.size()) {
       throw new OthelloException();
     }
     // ok -> place the disk.
-    work.setDisk(square, mine);
+    work.setDisk(square, myDisk);
     // write back work -> board.
     Arrays.stream(Square.values()).forEach(sq -> board.setDisk(sq, work.getDisk(sq).orElse(null)));
     return Optional.of(reversed);
@@ -52,8 +71,8 @@ public class Tools {
 
   private static Optional<List<Square>> moveEngine(
       @NotNull Function<Square, Optional<Square>> next,
-      @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
-    int count = countReversibleDisksEngine(next, board, square, mine);
+      @NotNull Board board, @NotNull Square square, @NotNull Disk myDisk) {
+    int count = countReversibleDisksEngine(next, board, square, myDisk);
     if (count < 0) {
       return Optional.empty();
     }
@@ -65,16 +84,25 @@ public class Tools {
         // assertion failed.
         throw new OthelloException();
       }
-      board.setDisk(opt.get(), mine);
+      board.setDisk(opt.get(), myDisk);
       list.add(opt.get());
     }
     return Optional.of(list);
   }
 
-  public static Score countReversibleDisks(@NotNull Board board, @NotNull Disk mine) {
+  /**
+   * Count how many another player's disk to be turned over, if you move the disk on these squares
+   * correspond to each square. Note: No actual moves are made.
+   *
+   * @param board   Target board which to be moved the disk.
+   * @param myStone Disk color to be moved. {@code Disk.BLACK} or {@code Disk.WHITE}.
+   * @return Score object containing the number of disks to be turned over corresponding to each
+   * square.
+   */
+  public static Score countReversibleDisks(@NotNull Board board, @NotNull Disk myStone) {
     Score score = new Score();
     Arrays.stream(Square.values())
-        .forEach(sq -> score.setScore(sq, countReversibleDisks(board, sq, mine)));
+        .forEach(sq -> score.setScore(sq, countReversibleDisks(board, sq, myStone)));
     return score;
   }
 
