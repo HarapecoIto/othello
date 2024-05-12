@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.OthelloException;
 import othello.base.Board;
@@ -19,6 +20,7 @@ import othello.base.Square;
 public class ToolsTest {
 
   @Test
+  @DisplayName("Test Tools.countDisk();")
   void testCountDisks() {
     Board board = new Board();
     board.clear();
@@ -37,7 +39,8 @@ public class ToolsTest {
   }
 
   @Test
-  void testCountReversibleDisks() {
+  @DisplayName("Test total of Tools.countReversibleDisk();")
+  void testTotalCountReversibleDisks() {
     Board board = new Board();
     board.init();
     assertEquals(1, Tools.countReversibleDisks(board, Square.SQUARE_6_E, Disk.BLACK));
@@ -92,6 +95,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test up side of Tools.countUpReversibleDisks();")
   void testUpCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -174,6 +178,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test down side of Tools.countUpReversibleDisks();")
   void testDownCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -254,6 +259,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test left side of Tools.countUpReversibleDisks();")
   void testLeftCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -335,6 +341,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test right side of Tools.countUpReversibleDisks();")
   void testRightCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -416,6 +423,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test up left side of Tools.countUpReversibleDisks();")
   void testUpLeftCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -501,6 +509,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test up right side of Tools.countUpReversibleDisks();")
   void testUpRightCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -586,6 +595,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test down left side of Tools.countUpReversibleDisks();")
   void testDownLeftCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -671,6 +681,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test down right side of Tools.countUpReversibleDisks();")
   void testDownRightCountReversibleDisks() {
     Board board = new Board();
     board.init();
@@ -756,7 +767,8 @@ public class ToolsTest {
   }
 
   @Test
-  void testCountReversibleDisks2() {
+  @DisplayName("Test of Tools.countReversibleDisks();")
+  void testCountReversibleDisks() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊛㊛㊛㊛㊚＿＿
     // ㊚㊛＿㊛㊛㊚＿＿
@@ -815,6 +827,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test exception of move();")
   void testMoveException() {
     Board board = new Board();
     board.init();
@@ -824,6 +837,7 @@ public class ToolsTest {
   }
 
   @Test
+  @DisplayName("Test Tools.move();")
   void testMove() {
     Board board = new Board();
     board.init();

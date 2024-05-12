@@ -3,11 +3,13 @@ package othello.base;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class SquareTest {
 
   @Test
+  @DisplayName("Test square.col();")
   void testCol() {
     for (Square sq : arrayA) {
       assertEquals(Col.COL_A, sq.col());
@@ -36,6 +38,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.row();")
   void testRow() {
     for (Square sq : array1) {
       assertEquals(Row.ROW_1, sq.row());
@@ -64,6 +67,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.getIndex();")
   void testGetIndex() {
     for (int i = 0; i < 64; i++) {
       assertEquals(i, Square.values()[i].getIndex());
@@ -71,6 +75,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.up();")
   void testUp() {
     for (int col = 0; col < 8; col++) {
       assertNull(array1[col].up().orElse(null));
@@ -85,6 +90,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.down();")
   void testDown() {
     for (int col = 0; col < 8; col++) {
       assertEquals(array2[col], array1[col].down().orElse(null));
@@ -99,6 +105,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.left();")
   void testLeft() {
     for (int row = 0; row < 8; row++) {
       assertNull(arrayA[row].left().orElse(null));
@@ -113,6 +120,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.right();")
   void testRight() {
     for (int row = 0; row < 8; row++) {
       assertEquals(arrayB[row], arrayA[row].right().orElse(null));
@@ -127,6 +135,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.upLeft();")
   void testUpLeft() {
     assertNull(Square.SQUARE_1_A.upLeft().orElse(null));
     assertNull(Square.SQUARE_2_A.upLeft().orElse(null));
@@ -149,6 +158,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.upRight();")
   void testUpRight() {
     assertNull(Square.SQUARE_1_H.upRight().orElse(null));
     assertNull(Square.SQUARE_2_H.upRight().orElse(null));
@@ -171,6 +181,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.downLeft();")
   void testDownLeft() {
     assertNull(Square.SQUARE_1_A.downLeft().orElse(null));
     assertNull(Square.SQUARE_2_A.downLeft().orElse(null));
@@ -193,6 +204,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test square.downRight();")
   void testDownRight() {
     assertNull(Square.SQUARE_1_H.downRight().orElse(null));
     assertNull(Square.SQUARE_2_H.downRight().orElse(null));
@@ -215,6 +227,7 @@ public class SquareTest {
   }
 
   @Test
+  @DisplayName("Test Square.getSquare(row, col);")
   void testGetSquare() {
     assertEquals(Square.SQUARE_1_A, Square.getSquare(Row.ROW_1, Col.COL_A).orElse(null));
     assertEquals(Square.SQUARE_1_B, Square.getSquare(Row.ROW_1, Col.COL_B).orElse(null));
@@ -288,8 +301,7 @@ public class SquareTest {
     assertEquals(Square.SQUARE_8_G, Square.getSquare(Row.ROW_8, Col.COL_G).orElse(null));
     assertEquals(Square.SQUARE_8_H, Square.getSquare(Row.ROW_8, Col.COL_H).orElse(null));
   }
-
-
+  
   static Square[] array1 = new Square[]{
       Square.SQUARE_1_A, Square.SQUARE_1_B, Square.SQUARE_1_C, Square.SQUARE_1_D,
       Square.SQUARE_1_E, Square.SQUARE_1_F, Square.SQUARE_1_G, Square.SQUARE_1_H};

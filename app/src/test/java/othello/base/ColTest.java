@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ColTest {
 
   @Test
+  @DisplayName("Test col.getIndex();")
   void testGetIndex() {
     assertEquals(0, Col.COL_A.getIndex());
     assertEquals(1, Col.COL_B.getIndex());
@@ -21,6 +23,7 @@ public class ColTest {
   }
 
   @Test
+  @DisplayName("Test col.equals();")
   void testEquals() {
     assertNotEquals(Col.COL_A, Col.COL_B);
     assertNotEquals(Col.COL_A, Col.COL_C);
@@ -88,6 +91,7 @@ public class ColTest {
   }
 
   @Test
+  @DisplayName("Test col.right();")
   void testRight() {
     assertEquals(Col.COL_B, Col.COL_A.right().orElse(null));
     assertEquals(Col.COL_C, Col.COL_B.right().orElse(null));
@@ -100,6 +104,7 @@ public class ColTest {
   }
 
   @Test
+  @DisplayName("Test col.left();")
   void testLeft() {
     assertNull(Col.COL_A.left().orElse(null));
     assertEquals(Col.COL_A, Col.COL_B.left().orElse(null));

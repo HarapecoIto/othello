@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import java.util.Random;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class BoardTest {
@@ -21,6 +22,7 @@ public class BoardTest {
   }
 
   @Test
+  @DisplayName("Test board.clear();")
   void testClear() {
     Board board = new Board();
     board.clear();
@@ -30,6 +32,7 @@ public class BoardTest {
   }
 
   @Test
+  @DisplayName("Test board.init();")
   void testInit() {
     for (long seed = 0L; seed < 5L; seed++) {
       Board board = randomBoard(seed);
@@ -52,6 +55,7 @@ public class BoardTest {
   }
 
   @Test
+  @DisplayName("Test setter and getter of Board")
   void testSetDisk() {
     Random rand = new Random(12345);
     Board board = new Board();
@@ -79,6 +83,7 @@ public class BoardTest {
   }
 
   @Test
+  @DisplayName("Test board.clone();")
   void testClone() {
     Board original = randomBoard(12345L);
     original.setDisk(Square.SQUARE_1_A, Disk.BLACK);
@@ -92,6 +97,7 @@ public class BoardTest {
   }
 
   @Test
+  @DisplayName("Test board.equals();")
   void testEquals() {
     Board board = randomBoard(12345L);
     board.setDisk(Square.SQUARE_1_A, null);
@@ -104,6 +110,7 @@ public class BoardTest {
   }
 
   @Test
+  @DisplayName("Test board.hashCode();")
   void testHashCode() {
     for (int i = 0; i < 5; i++) {
       Board board = randomBoard(12345L);

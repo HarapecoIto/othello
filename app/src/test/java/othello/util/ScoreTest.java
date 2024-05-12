@@ -5,18 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.Arrays;
 import java.util.function.Function;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.base.Square;
 
 public class ScoreTest {
 
   @Test
+  @DisplayName("Test setter and getter of Score.")
   void setterTest() {
     Score s = new Score();
     Arrays.stream(Square.values()).forEach(
         sq -> assertEquals(0, s.getScore(sq))
     );
-
     Arrays.stream(Square.values()).forEach(
         sq -> s.setScore(sq, 100 + sq.getIndex())
     );
@@ -26,6 +27,7 @@ public class ScoreTest {
   }
 
   @Test
+  @DisplayName("Test score.equals();")
   void equalsTest() {
     Function<Boolean, Score> f = (b) -> {
       Score s = new Score();
@@ -48,6 +50,7 @@ public class ScoreTest {
   }
 
   @Test
+  @DisplayName("Test score.hashCode();")
   void hashCodeTest() {
     Function<Boolean, Score> f = (b) -> {
       Score s = new Score();
@@ -64,6 +67,7 @@ public class ScoreTest {
   }
 
   @Test
+  @DisplayName("Test score.clone();")
   void cloneTest() {
     Function<Boolean, Score> f = (b) -> {
       Score s = new Score();
