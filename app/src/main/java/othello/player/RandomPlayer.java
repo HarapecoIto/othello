@@ -12,12 +12,21 @@ import othello.base.Square;
 import othello.util.Score;
 import othello.util.Tools;
 
+/**
+ * Random player is a computer player which moving disk to random square.
+ */
 public class RandomPlayer implements Player {
 
   private final String name;
   private Optional<Disk> myDisk;
   private final Random rand;
 
+  /**
+   * Constructor of RandomPlayer.
+   *
+   * @param name Player's name.
+   * @param seed Random number seed.
+   */
   public RandomPlayer(@NotNull String name, long seed) {
     this.myDisk = Optional.empty();
     this.rand = new Random(seed);

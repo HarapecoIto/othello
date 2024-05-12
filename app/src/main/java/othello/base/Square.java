@@ -3,7 +3,16 @@ package othello.base;
 import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 
+/**
+ * A "square" represents 64 8x8 squares on the board. Each square can contain a black or white disk,
+ * and there are also empty squares.
+ */
 public enum Square {
+
+  /**
+   * {@code SQUARE_1_A} is the square represented by row 1 and column A. The same applies to the
+   * other enumerated squares.
+   */
   SQUARE_1_A(Row.ROW_1, Col.COL_A), SQUARE_1_B(Row.ROW_1, Col.COL_B),
   SQUARE_1_C(Row.ROW_1, Col.COL_C), SQUARE_1_D(Row.ROW_1, Col.COL_D),
   SQUARE_1_E(Row.ROW_1, Col.COL_E), SQUARE_1_F(Row.ROW_1, Col.COL_F),
@@ -52,42 +61,93 @@ public enum Square {
     this.col = col;
   }
 
+  /**
+   * Get the {@code Row}.
+   *
+   * @return The {@code Row} on which this square is placed.
+   */
   public final Row row() {
     return this.row;
   }
 
+  /**
+   * Get the {@code Col}.
+   *
+   * @return The {@code Col} on which this square is placed.
+   */
   public final Col col() {
     return this.col;
   }
 
+  /**
+   * Get the index of each square.
+   *
+   * @return For example, {@code 0} for {@code SQUARE_1_A},...,{@code 7} for {@code SQUARE_1_H},
+   * {@code 8} for {@code SQUARE_2_A},...,{@code 63} for {@code SQUARE_8_H}.
+   */
   public int getIndex() {
     return row.getIndex() * 8 + col.getIndex();
   }
 
+  /**
+   * Get {@code Optional} of one square up.
+   *
+   * @return For example: {@code Optional.(SQUARE_4_D)} for {@code SQUARE_5_D},
+   * {@code Optional.(SQUARE_6_F)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_1_E}.
+   */
   public Optional<Square> up() {
     Optional<Row> row = this.row.up();
     Optional<Col> col = Optional.of(this.col);
     return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
   }
 
+  /**
+   * Get {@code Optional} of one square down.
+   *
+   * @return For example: {@code Optional.(SQUARE_6_D)} for {@code SQUARE_5_D},
+   * {@code Optional.(SQUARE_8_F)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_8_E}.
+   */
   public Optional<Square> down() {
     Optional<Row> row = this.row.down();
     Optional<Col> col = Optional.of(this.col);
     return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
   }
 
+  /**
+   * Get {@code Optional} of one square left.
+   *
+   * @return For example: {@code Optional.(SQUARE_5_C)} for {@code SQUARE_5_D},
+   * {@code Optional.(SQUARE_7_E)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_3_A}.
+   */
   public Optional<Square> left() {
     Optional<Row> row = Optional.of(this.row);
     Optional<Col> col = this.col.left();
     return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
   }
 
+  /**
+   * Get {@code Optional} of one square right.
+   *
+   * @return For example: {@code Optional.(SQUARE_5_E)} for {@code SQUARE_5_D},
+   * {@code Optional.(SQUARE_7_G)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_3_H}.
+   */
   public Optional<Square> right() {
     Optional<Row> row = Optional.of(this.row);
     Optional<Col> col = this.col.right();
     return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
   }
 
+  /**
+   * Get {@code Optional} of one upper left square.
+   *
+   * @return For example: {@code Optional.(SQUARE_4_C)} for {@code SQUARE_5_D},
+   * {@code Optional.(SQUARE_6_E)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_1_E}, {@code SQUARE_3_A}.
+   */
   public Optional<Square> upLeft() {
     Optional<Row> row = this.row.up();
     Optional<Col> col = this.col.left();
@@ -97,6 +157,13 @@ public enum Square {
     return Optional.empty();
   }
 
+  /**
+   * Get {@code Optional} of one upper right square.
+   *
+   * @return For example: {@code Optional.(SQUARE_2_E)} for {@code SQUARE_3_D},
+   * {@code Optional.(SQUARE_6_G)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_1_E}, {@code SQUARE_3_H}.
+   */
   public Optional<Square> upRight() {
     Optional<Row> row = this.row.up();
     Optional<Col> col = this.col.right();
@@ -106,6 +173,13 @@ public enum Square {
     return Optional.empty();
   }
 
+  /**
+   * Get {@code Optional} of one lower left square.
+   *
+   * @return For example: {@code Optional.(SQUARE_4_C)} for {@code SQUARE_3_D},
+   * {@code Optional.(SQUARE_8_E)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_8_E}, {@code SQUARE_3_A}.
+   */
   public Optional<Square> downLeft() {
     Optional<Row> row = this.row.down();
     Optional<Col> col = this.col.left();
@@ -115,6 +189,14 @@ public enum Square {
     return Optional.empty();
   }
 
+
+  /**
+   * Get {@code Optional} of one lower right square.
+   *
+   * @return For example: {@code Optional.(SQUARE_4_E)} for {@code SQUARE_3_D},
+   * {@code Optional.(SQUARE_8_G)} for {@code SQUARE_7_F}. return {@code Optional.empty()} for
+   * undefined square. For example, {@code SQUARE_8_E}, {@code SQUARE_3_H}.
+   */
   public Optional<Square> downRight() {
     Optional<Row> row = this.row.down();
     Optional<Col> col = this.col.right();
@@ -124,6 +206,13 @@ public enum Square {
     return Optional.empty();
   }
 
+  /**
+   * Get square of specific {@code Row} and {@code Col}.
+   *
+   * @param row {@code Row} which is square placed.
+   * @param col {@code Col} which is square placed.
+   * @return square which is specified by given {@code row} and {@code col}.
+   */
   public
   static Optional<Square> getSquare(@NotNull Row row, @NotNull Col col) {
     return Optional.of(Square.values()[row.getIndex() * 8 + col.getIndex()]);
