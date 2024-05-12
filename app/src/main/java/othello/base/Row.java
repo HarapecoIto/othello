@@ -14,37 +14,37 @@ public enum Row {
   ROW_1(0),
 
   /**
-   * second row from the top.
+   * Second row from the top.
    */
   ROW_2(1),
 
   /**
-   * third row from the top.
+   * Third row from the top.
    */
   ROW_3(2),
 
   /**
-   * fourth row from the top.
+   * Fourth row from the top.
    */
   ROW_4(3),
 
   /**
-   * fifth row from the top.
+   * Fifth row from the top.
    */
   ROW_5(4),
 
   /**
-   * sixth row from the top.
+   * Sixth row from the top.
    */
   ROW_6(5),
 
   /**
-   * seventh row from the top.
+   * Seventh row from the top.
    */
   ROW_7(6),
 
   /**
-   * bottom row.
+   * Bottom row.
    */
   ROW_8(7);
 

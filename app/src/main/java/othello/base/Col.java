@@ -10,42 +10,42 @@ import java.util.Optional;
 public enum Col {
 
   /**
-   * left-most column.
+   * Left-most column.
    */
   COL_A(0),
 
   /**
-   * second column from the left.
+   * Second column from the left.
    */
   COL_B(1),
 
   /**
-   * third column from the left.
+   * Third column from the left.
    */
   COL_C(2),
 
   /**
-   * forth column from the left.
+   * Forth column from the left.
    */
   COL_D(3),
 
   /**
-   * fifth column from the left.
+   * Fifth column from the left.
    */
   COL_E(4),
 
   /**
-   * sixth column from the left.
+   * Sixth column from the left.
    */
   COL_F(5),
 
   /**
-   * seventh column from the left.
+   * Seventh column from the left.
    */
   COL_G(6),
 
   /**
-   * right-most column.
+   * Right-most column.
    */
   COL_H(7);
 
