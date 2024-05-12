@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import net.yoursweetest.othello.LemonPlayer;
 import net.yoursweetest.othello.MikanPlayer;
 import othello.base.Board;
 import othello.base.Disk;
@@ -21,8 +20,8 @@ public class ConsoleView implements OthelloView {
   private final String whiteSymbol;
 
   public ConsoleView(@NotNull String blackSymbol, @NotNull String whiteSymbol) {
-    this.player1 = new LemonPlayer("Lemon 1", 1L, 3);
-    this.player2 = new MikanPlayer("Mikan 2", 2L, 5);
+    this.player1 = new MikanPlayer("Mikan 1", 1L, 4);
+    this.player2 = new MikanPlayer("Mikan 2", 2L, 4);
     this.blackSymbol = blackSymbol;
     this.whiteSymbol = whiteSymbol;
   }

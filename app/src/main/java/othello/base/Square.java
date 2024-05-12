@@ -3,6 +3,10 @@ package othello.base;
 import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 
+/**
+ * A "square" represents 64 8x8 squares on the board. Each square can contain a black or white disk,
+ * and there are also empty squares.
+ */
 public enum Square {
   SQUARE_1_A(Row.ROW_1, Col.COL_A), SQUARE_1_B(Row.ROW_1, Col.COL_B),
   SQUARE_1_C(Row.ROW_1, Col.COL_C), SQUARE_1_D(Row.ROW_1, Col.COL_D),

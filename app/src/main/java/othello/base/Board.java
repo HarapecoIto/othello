@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * "Board" is the board on which the game is played and consists of 64 (8 x 8) squares. In each
+ * square you can place a black or white disk.
+ */
 public final class Board implements Cloneable {
 
   private final List<Optional<Disk>> disks;
