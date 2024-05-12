@@ -1,7 +1,6 @@
 package net.yoursweetest.othello;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
@@ -135,17 +134,14 @@ public class CitrusPlayerTest {
     public Optional<Square> moveDisk(Board board, Square moved) {
       Board board1 = board.clone();
       Board board2 = board.clone();
-      List<Square> candidates1 = player1.allCandidates(board1, moved);
-      List<Square> candidates2 = player2.allCandidates(board2, moved);
-      assertEquals(candidates1.size(), candidates2.size());
-      assertNotEquals(0, candidates1.size());
+      List<Square> candidates1 = this.player1.allCandidates(board1, moved);
+      List<Square> candidates2 = this.player2.allCandidates(board2, moved);
+      assertThat(candidates1).hasSameSizeAs(candidates2).isNotEmpty();
       System.err.printf("Candidates: %d %d%n", candidates1.size(), candidates2.size());
-      for (int k = 0; k < candidates1.size(); k++) {
-        assertEquals(candidates1.get(k), candidates2.get(k));
-      }
-      Square moved1 = player1.moveDisk(board1, moved).orElse(null);
-      Square moved2 = player2.moveDisk(board2, moved).orElse(null);
-      assertEquals(moved1, moved2);
+      assertThat(candidates1).containsExactlyElementsOf(candidates2);
+      Square moved1 = this.player1.moveDisk(board1, moved).orElse(null);
+      Square moved2 = this.player2.moveDisk(board2, moved).orElse(null);
+      assertThat(moved1).isEqualTo(moved2);
       return Optional.ofNullable(moved1);
     }
 
