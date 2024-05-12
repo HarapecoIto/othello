@@ -12,11 +12,20 @@ import othello.base.Square;
 import othello.util.Score;
 import othello.util.Tools;
 
+/**
+ * Console player is a manual player, which can be input the square to move the disc to be input
+ * from the console.
+ */
 public class ConsolePlayer implements Player {
 
   private Optional<Disk> myDisk;
   private final String name;
 
+  /**
+   * Constructor of console player.
+   *
+   * @param name Player's name.
+   */
   public ConsolePlayer(@NotNull String name) {
     this.myDisk = Optional.empty();
     this.name = name;
