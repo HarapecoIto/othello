@@ -30,6 +30,7 @@ run {
 
 tasks.named('test') {
     useJUnitPlatform()
+    maxParallelForks = 8
 }
 
 compileJava.options.encoding = 'UTF-8'
