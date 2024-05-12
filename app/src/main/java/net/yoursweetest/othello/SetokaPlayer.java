@@ -103,7 +103,7 @@ public class SetokaPlayer extends CitrusPlayer {
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
         .toList();
-    return max >= 0 ? squares : new ArrayList<>();
+    return max > 0 ? squares : new ArrayList<>();
   }
 
   private void explore(@NotNull Position position1) {
