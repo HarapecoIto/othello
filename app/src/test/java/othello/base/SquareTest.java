@@ -1,7 +1,6 @@
 package othello.base;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,57 +11,58 @@ public class SquareTest {
   @DisplayName("Test square.col();")
   void testCol() {
     for (Square sq : arrayA) {
-      assertEquals(Col.COL_A, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_A);
     }
     for (Square sq : arrayB) {
-      assertEquals(Col.COL_B, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_B);
     }
     for (Square sq : arrayC) {
-      assertEquals(Col.COL_C, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_C);
     }
     for (Square sq : arrayD) {
-      assertEquals(Col.COL_D, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_D);
     }
     for (Square sq : arrayE) {
-      assertEquals(Col.COL_E, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_E);
     }
     for (Square sq : arrayF) {
-      assertEquals(Col.COL_F, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_F);
     }
     for (Square sq : arrayG) {
-      assertEquals(Col.COL_G, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_G);
     }
     for (Square sq : arrayH) {
-      assertEquals(Col.COL_H, sq.col());
+      assertThat(sq.col()).isEqualTo(Col.COL_H);
     }
+
   }
 
   @Test
   @DisplayName("Test square.row();")
   void testRow() {
     for (Square sq : array1) {
-      assertEquals(Row.ROW_1, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_1);
     }
     for (Square sq : array2) {
-      assertEquals(Row.ROW_2, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_2);
     }
     for (Square sq : array3) {
-      assertEquals(Row.ROW_3, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_3);
     }
     for (Square sq : array4) {
-      assertEquals(Row.ROW_4, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_4);
     }
     for (Square sq : array5) {
-      assertEquals(Row.ROW_5, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_5);
     }
     for (Square sq : array6) {
-      assertEquals(Row.ROW_6, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_6);
     }
     for (Square sq : array7) {
-      assertEquals(Row.ROW_7, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_7);
     }
     for (Square sq : array8) {
-      assertEquals(Row.ROW_8, sq.row());
+      assertThat(sq.row()).isEqualTo(Row.ROW_8);
     }
   }
 
@@ -70,7 +70,7 @@ public class SquareTest {
   @DisplayName("Test square.getIndex();")
   void testGetIndex() {
     for (int i = 0; i < 64; i++) {
-      assertEquals(i, Square.values()[i].getIndex());
+      assertThat(Square.values()[i].getIndex()).isEqualTo(i);
     }
   }
 
@@ -78,14 +78,14 @@ public class SquareTest {
   @DisplayName("Test square.up();")
   void testUp() {
     for (int col = 0; col < 8; col++) {
-      assertNull(array1[col].up().orElse(null));
-      assertEquals(array1[col], array2[col].up().orElse(null));
-      assertEquals(array2[col], array3[col].up().orElse(null));
-      assertEquals(array3[col], array4[col].up().orElse(null));
-      assertEquals(array4[col], array5[col].up().orElse(null));
-      assertEquals(array5[col], array6[col].up().orElse(null));
-      assertEquals(array6[col], array7[col].up().orElse(null));
-      assertEquals(array7[col], array8[col].up().orElse(null));
+      assertThat(array1[col].up().orElse(null)).isNull();
+      assertThat(array2[col].up().orElse(null)).isEqualTo(array1[col]);
+      assertThat(array3[col].up().orElse(null)).isEqualTo(array2[col]);
+      assertThat(array4[col].up().orElse(null)).isEqualTo(array3[col]);
+      assertThat(array5[col].up().orElse(null)).isEqualTo(array4[col]);
+      assertThat(array6[col].up().orElse(null)).isEqualTo(array5[col]);
+      assertThat(array7[col].up().orElse(null)).isEqualTo(array6[col]);
+      assertThat(array8[col].up().orElse(null)).isEqualTo(array7[col]);
     }
   }
 
@@ -93,14 +93,14 @@ public class SquareTest {
   @DisplayName("Test square.down();")
   void testDown() {
     for (int col = 0; col < 8; col++) {
-      assertEquals(array2[col], array1[col].down().orElse(null));
-      assertEquals(array3[col], array2[col].down().orElse(null));
-      assertEquals(array4[col], array3[col].down().orElse(null));
-      assertEquals(array5[col], array4[col].down().orElse(null));
-      assertEquals(array6[col], array5[col].down().orElse(null));
-      assertEquals(array7[col], array6[col].down().orElse(null));
-      assertEquals(array8[col], array7[col].down().orElse(null));
-      assertNull(array8[col].down().orElse(null));
+      assertThat(array1[col].down().orElse(null)).isEqualTo(array2[col]);
+      assertThat(array2[col].down().orElse(null)).isEqualTo(array3[col]);
+      assertThat(array3[col].down().orElse(null)).isEqualTo(array4[col]);
+      assertThat(array4[col].down().orElse(null)).isEqualTo(array5[col]);
+      assertThat(array5[col].down().orElse(null)).isEqualTo(array6[col]);
+      assertThat(array6[col].down().orElse(null)).isEqualTo(array7[col]);
+      assertThat(array7[col].down().orElse(null)).isEqualTo(array8[col]);
+      assertThat(array8[col].down().orElse(null)).isNull();
     }
   }
 
@@ -108,14 +108,14 @@ public class SquareTest {
   @DisplayName("Test square.left();")
   void testLeft() {
     for (int row = 0; row < 8; row++) {
-      assertNull(arrayA[row].left().orElse(null));
-      assertEquals(arrayA[row], arrayB[row].left().orElse(null));
-      assertEquals(arrayB[row], arrayC[row].left().orElse(null));
-      assertEquals(arrayC[row], arrayD[row].left().orElse(null));
-      assertEquals(arrayD[row], arrayE[row].left().orElse(null));
-      assertEquals(arrayE[row], arrayF[row].left().orElse(null));
-      assertEquals(arrayF[row], arrayG[row].left().orElse(null));
-      assertEquals(arrayG[row], arrayH[row].left().orElse(null));
+      assertThat(arrayA[row].left().orElse(null)).isNull();
+      assertThat(arrayB[row].left().orElse(null)).isEqualTo(arrayA[row]);
+      assertThat(arrayC[row].left().orElse(null)).isEqualTo(arrayB[row]);
+      assertThat(arrayD[row].left().orElse(null)).isEqualTo(arrayC[row]);
+      assertThat(arrayE[row].left().orElse(null)).isEqualTo(arrayD[row]);
+      assertThat(arrayF[row].left().orElse(null)).isEqualTo(arrayE[row]);
+      assertThat(arrayG[row].left().orElse(null)).isEqualTo(arrayF[row]);
+      assertThat(arrayH[row].left().orElse(null)).isEqualTo(arrayG[row]);
     }
   }
 
@@ -123,185 +123,188 @@ public class SquareTest {
   @DisplayName("Test square.right();")
   void testRight() {
     for (int row = 0; row < 8; row++) {
-      assertEquals(arrayB[row], arrayA[row].right().orElse(null));
-      assertEquals(arrayC[row], arrayB[row].right().orElse(null));
-      assertEquals(arrayD[row], arrayC[row].right().orElse(null));
-      assertEquals(arrayE[row], arrayD[row].right().orElse(null));
-      assertEquals(arrayF[row], arrayE[row].right().orElse(null));
-      assertEquals(arrayG[row], arrayF[row].right().orElse(null));
-      assertEquals(arrayH[row], arrayG[row].right().orElse(null));
-      assertNull(arrayH[row].right().orElse(null));
+      assertThat(arrayA[row].right().orElse(null)).isEqualTo(arrayB[row]);
+      assertThat(arrayB[row].right().orElse(null)).isEqualTo(arrayC[row]);
+      assertThat(arrayC[row].right().orElse(null)).isEqualTo(arrayD[row]);
+      assertThat(arrayD[row].right().orElse(null)).isEqualTo(arrayE[row]);
+      assertThat(arrayE[row].right().orElse(null)).isEqualTo(arrayF[row]);
+      assertThat(arrayF[row].right().orElse(null)).isEqualTo(arrayG[row]);
+      assertThat(arrayG[row].right().orElse(null)).isEqualTo(arrayH[row]);
+      assertThat(arrayH[row].right().orElse(null)).isNull();
     }
   }
 
   @Test
   @DisplayName("Test square.upLeft();")
   void testUpLeft() {
-    assertNull(Square.SQUARE_1_A.upLeft().orElse(null));
-    assertNull(Square.SQUARE_2_A.upLeft().orElse(null));
-    assertNull(Square.SQUARE_3_A.upLeft().orElse(null));
-    assertNull(Square.SQUARE_4_A.upLeft().orElse(null));
-    assertNull(Square.SQUARE_5_A.upLeft().orElse(null));
-    assertNull(Square.SQUARE_6_A.upLeft().orElse(null));
-    assertNull(Square.SQUARE_7_A.upLeft().orElse(null));
-    assertNull(Square.SQUARE_8_A.upLeft().orElse(null));
+    assertThat(Square.SQUARE_1_A.upLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_2_A.upLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_3_A.upLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_4_A.upLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_5_A.upLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_6_A.upLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_7_A.upLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_8_A.upLeft().orElse(null)).isNull();
     for (int col = 1; col < 8; col++) {
-      assertNull(array1[col].upLeft().orElse(null));
-      assertEquals(array1[col - 1], array2[col].upLeft().orElse(null));
-      assertEquals(array2[col - 1], array3[col].upLeft().orElse(null));
-      assertEquals(array3[col - 1], array4[col].upLeft().orElse(null));
-      assertEquals(array4[col - 1], array5[col].upLeft().orElse(null));
-      assertEquals(array5[col - 1], array6[col].upLeft().orElse(null));
-      assertEquals(array6[col - 1], array7[col].upLeft().orElse(null));
-      assertEquals(array7[col - 1], array8[col].upLeft().orElse(null));
+      assertThat(array1[col].upLeft().orElse(null)).isNull();
+      assertThat(array2[col].upLeft().orElse(null)).isEqualTo(array1[col - 1]);
+      assertThat(array3[col].upLeft().orElse(null)).isEqualTo(array2[col - 1]);
+      assertThat(array4[col].upLeft().orElse(null)).isEqualTo(array3[col - 1]);
+      assertThat(array5[col].upLeft().orElse(null)).isEqualTo(array4[col - 1]);
+      assertThat(array6[col].upLeft().orElse(null)).isEqualTo(array5[col - 1]);
+      assertThat(array7[col].upLeft().orElse(null)).isEqualTo(array6[col - 1]);
+      assertThat(array8[col].upLeft().orElse(null)).isEqualTo(array7[col - 1]);
     }
+
   }
 
   @Test
   @DisplayName("Test square.upRight();")
   void testUpRight() {
-    assertNull(Square.SQUARE_1_H.upRight().orElse(null));
-    assertNull(Square.SQUARE_2_H.upRight().orElse(null));
-    assertNull(Square.SQUARE_3_H.upRight().orElse(null));
-    assertNull(Square.SQUARE_4_H.upRight().orElse(null));
-    assertNull(Square.SQUARE_5_H.upRight().orElse(null));
-    assertNull(Square.SQUARE_6_H.upRight().orElse(null));
-    assertNull(Square.SQUARE_7_H.upRight().orElse(null));
-    assertNull(Square.SQUARE_8_H.upRight().orElse(null));
+    assertThat(Square.SQUARE_1_H.upRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_2_H.upRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_3_H.upRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_4_H.upRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_5_H.upRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_6_H.upRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_7_H.upRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_8_H.upRight().orElse(null)).isNull();
+
     for (int col = 0; col < 7; col++) {
-      assertNull(array1[col].upRight().orElse(null));
-      assertEquals(array1[col + 1], array2[col].upRight().orElse(null));
-      assertEquals(array2[col + 1], array3[col].upRight().orElse(null));
-      assertEquals(array3[col + 1], array4[col].upRight().orElse(null));
-      assertEquals(array4[col + 1], array5[col].upRight().orElse(null));
-      assertEquals(array5[col + 1], array6[col].upRight().orElse(null));
-      assertEquals(array6[col + 1], array7[col].upRight().orElse(null));
-      assertEquals(array7[col + 1], array8[col].upRight().orElse(null));
+      assertThat(array1[col].upRight().orElse(null)).isNull();
+      assertThat(array2[col].upRight().orElse(null)).isEqualTo(array1[col + 1]);
+      assertThat(array3[col].upRight().orElse(null)).isEqualTo(array2[col + 1]);
+      assertThat(array4[col].upRight().orElse(null)).isEqualTo(array3[col + 1]);
+      assertThat(array5[col].upRight().orElse(null)).isEqualTo(array4[col + 1]);
+      assertThat(array6[col].upRight().orElse(null)).isEqualTo(array5[col + 1]);
+      assertThat(array7[col].upRight().orElse(null)).isEqualTo(array6[col + 1]);
+      assertThat(array8[col].upRight().orElse(null)).isEqualTo(array7[col + 1]);
     }
   }
 
   @Test
   @DisplayName("Test square.downLeft();")
   void testDownLeft() {
-    assertNull(Square.SQUARE_1_A.downLeft().orElse(null));
-    assertNull(Square.SQUARE_2_A.downLeft().orElse(null));
-    assertNull(Square.SQUARE_3_A.downLeft().orElse(null));
-    assertNull(Square.SQUARE_4_A.downLeft().orElse(null));
-    assertNull(Square.SQUARE_5_A.downLeft().orElse(null));
-    assertNull(Square.SQUARE_6_A.downLeft().orElse(null));
-    assertNull(Square.SQUARE_7_A.downLeft().orElse(null));
-    assertNull(Square.SQUARE_8_A.downLeft().orElse(null));
+    assertThat(Square.SQUARE_1_A.downLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_2_A.downLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_3_A.downLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_4_A.downLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_5_A.downLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_6_A.downLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_7_A.downLeft().orElse(null)).isNull();
+    assertThat(Square.SQUARE_8_A.downLeft().orElse(null)).isNull();
+
     for (int col = 1; col < 8; col++) {
-      assertEquals(array2[col - 1], array1[col].downLeft().orElse(null));
-      assertEquals(array3[col - 1], array2[col].downLeft().orElse(null));
-      assertEquals(array4[col - 1], array3[col].downLeft().orElse(null));
-      assertEquals(array5[col - 1], array4[col].downLeft().orElse(null));
-      assertEquals(array6[col - 1], array5[col].downLeft().orElse(null));
-      assertEquals(array7[col - 1], array6[col].downLeft().orElse(null));
-      assertEquals(array8[col - 1], array7[col].downLeft().orElse(null));
-      assertNull(array8[col].downLeft().orElse(null));
+      assertThat(array1[col].downLeft().orElse(null)).isEqualTo(array2[col - 1]);
+      assertThat(array2[col].downLeft().orElse(null)).isEqualTo(array3[col - 1]);
+      assertThat(array3[col].downLeft().orElse(null)).isEqualTo(array4[col - 1]);
+      assertThat(array4[col].downLeft().orElse(null)).isEqualTo(array5[col - 1]);
+      assertThat(array5[col].downLeft().orElse(null)).isEqualTo(array6[col - 1]);
+      assertThat(array6[col].downLeft().orElse(null)).isEqualTo(array7[col - 1]);
+      assertThat(array7[col].downLeft().orElse(null)).isEqualTo(array8[col - 1]);
+      assertThat(array8[col].downLeft().orElse(null)).isNull();
     }
   }
 
   @Test
   @DisplayName("Test square.downRight();")
   void testDownRight() {
-    assertNull(Square.SQUARE_1_H.downRight().orElse(null));
-    assertNull(Square.SQUARE_2_H.downRight().orElse(null));
-    assertNull(Square.SQUARE_3_H.downRight().orElse(null));
-    assertNull(Square.SQUARE_4_H.downRight().orElse(null));
-    assertNull(Square.SQUARE_5_H.downRight().orElse(null));
-    assertNull(Square.SQUARE_6_H.downRight().orElse(null));
-    assertNull(Square.SQUARE_7_H.downRight().orElse(null));
-    assertNull(Square.SQUARE_8_H.downRight().orElse(null));
+    assertThat(Square.SQUARE_1_H.downRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_2_H.downRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_3_H.downRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_4_H.downRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_5_H.downRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_6_H.downRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_7_H.downRight().orElse(null)).isNull();
+    assertThat(Square.SQUARE_8_H.downRight().orElse(null)).isNull();
     for (int col = 0; col < 7; col++) {
-      assertEquals(array2[col + 1], array1[col].downRight().orElse(null));
-      assertEquals(array3[col + 1], array2[col].downRight().orElse(null));
-      assertEquals(array4[col + 1], array3[col].downRight().orElse(null));
-      assertEquals(array5[col + 1], array4[col].downRight().orElse(null));
-      assertEquals(array6[col + 1], array5[col].downRight().orElse(null));
-      assertEquals(array7[col + 1], array6[col].downRight().orElse(null));
-      assertEquals(array8[col + 1], array7[col].downRight().orElse(null));
-      assertNull(array8[col].downRight().orElse(null));
+      assertThat(array1[col].downRight().orElse(null)).isEqualTo(array2[col + 1]);
+      assertThat(array2[col].downRight().orElse(null)).isEqualTo(array3[col + 1]);
+      assertThat(array3[col].downRight().orElse(null)).isEqualTo(array4[col + 1]);
+      assertThat(array4[col].downRight().orElse(null)).isEqualTo(array5[col + 1]);
+      assertThat(array5[col].downRight().orElse(null)).isEqualTo(array6[col + 1]);
+      assertThat(array6[col].downRight().orElse(null)).isEqualTo(array7[col + 1]);
+      assertThat(array7[col].downRight().orElse(null)).isEqualTo(array8[col + 1]);
+      assertThat(array8[col].downRight().orElse(null)).isNull();
     }
   }
 
   @Test
   @DisplayName("Test Square.getSquare(row, col);")
   void testGetSquare() {
-    assertEquals(Square.SQUARE_1_A, Square.getSquare(Row.ROW_1, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_1_B, Square.getSquare(Row.ROW_1, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_1_C, Square.getSquare(Row.ROW_1, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_1_D, Square.getSquare(Row.ROW_1, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_1_E, Square.getSquare(Row.ROW_1, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_1_F, Square.getSquare(Row.ROW_1, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_1_G, Square.getSquare(Row.ROW_1, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_1_H, Square.getSquare(Row.ROW_1, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_1_A);
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_1_B);
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_1_C);
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_1_D);
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_1_E);
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_1_F);
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_1_G);
+    assertThat(Square.getSquare(Row.ROW_1, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_1_H);
 
-    assertEquals(Square.SQUARE_2_A, Square.getSquare(Row.ROW_2, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_2_B, Square.getSquare(Row.ROW_2, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_2_C, Square.getSquare(Row.ROW_2, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_2_D, Square.getSquare(Row.ROW_2, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_2_E, Square.getSquare(Row.ROW_2, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_2_F, Square.getSquare(Row.ROW_2, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_2_G, Square.getSquare(Row.ROW_2, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_2_H, Square.getSquare(Row.ROW_2, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_2_A);
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_2_B);
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_2_C);
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_2_D);
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_2_E);
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_2_F);
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_2_G);
+    assertThat(Square.getSquare(Row.ROW_2, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_2_H);
 
-    assertEquals(Square.SQUARE_3_A, Square.getSquare(Row.ROW_3, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_3_B, Square.getSquare(Row.ROW_3, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_3_C, Square.getSquare(Row.ROW_3, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_3_D, Square.getSquare(Row.ROW_3, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_3_E, Square.getSquare(Row.ROW_3, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_3_F, Square.getSquare(Row.ROW_3, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_3_G, Square.getSquare(Row.ROW_3, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_3_H, Square.getSquare(Row.ROW_3, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_3_A);
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_3_B);
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_3_C);
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_3_D);
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_3_E);
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_3_F);
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_3_G);
+    assertThat(Square.getSquare(Row.ROW_3, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_3_H);
 
-    assertEquals(Square.SQUARE_4_A, Square.getSquare(Row.ROW_4, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_4_B, Square.getSquare(Row.ROW_4, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_4_C, Square.getSquare(Row.ROW_4, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_4_D, Square.getSquare(Row.ROW_4, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_4_E, Square.getSquare(Row.ROW_4, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_4_F, Square.getSquare(Row.ROW_4, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_4_G, Square.getSquare(Row.ROW_4, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_4_H, Square.getSquare(Row.ROW_4, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_4_A);
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_4_B);
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_4_C);
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_4_D);
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_4_E);
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_4_F);
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_4_G);
+    assertThat(Square.getSquare(Row.ROW_4, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_4_H);
 
-    assertEquals(Square.SQUARE_5_A, Square.getSquare(Row.ROW_5, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_5_B, Square.getSquare(Row.ROW_5, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_5_C, Square.getSquare(Row.ROW_5, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_5_D, Square.getSquare(Row.ROW_5, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_5_E, Square.getSquare(Row.ROW_5, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_5_F, Square.getSquare(Row.ROW_5, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_5_G, Square.getSquare(Row.ROW_5, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_5_H, Square.getSquare(Row.ROW_5, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_5_A);
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_5_B);
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_5_C);
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_5_D);
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_5_E);
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_5_F);
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_5_G);
+    assertThat(Square.getSquare(Row.ROW_5, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_5_H);
 
-    assertEquals(Square.SQUARE_6_A, Square.getSquare(Row.ROW_6, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_6_B, Square.getSquare(Row.ROW_6, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_6_C, Square.getSquare(Row.ROW_6, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_6_D, Square.getSquare(Row.ROW_6, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_6_E, Square.getSquare(Row.ROW_6, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_6_F, Square.getSquare(Row.ROW_6, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_6_G, Square.getSquare(Row.ROW_6, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_6_H, Square.getSquare(Row.ROW_6, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_6_A);
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_6_B);
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_6_C);
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_6_D);
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_6_E);
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_6_F);
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_6_G);
+    assertThat(Square.getSquare(Row.ROW_6, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_6_H);
 
-    assertEquals(Square.SQUARE_7_A, Square.getSquare(Row.ROW_7, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_7_B, Square.getSquare(Row.ROW_7, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_7_C, Square.getSquare(Row.ROW_7, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_7_D, Square.getSquare(Row.ROW_7, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_7_E, Square.getSquare(Row.ROW_7, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_7_F, Square.getSquare(Row.ROW_7, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_7_G, Square.getSquare(Row.ROW_7, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_7_H, Square.getSquare(Row.ROW_7, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_7_A);
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_7_B);
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_7_C);
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_7_D);
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_7_E);
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_7_F);
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_7_G);
+    assertThat(Square.getSquare(Row.ROW_7, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_7_H);
 
-    assertEquals(Square.SQUARE_8_A, Square.getSquare(Row.ROW_8, Col.COL_A).orElse(null));
-    assertEquals(Square.SQUARE_8_B, Square.getSquare(Row.ROW_8, Col.COL_B).orElse(null));
-    assertEquals(Square.SQUARE_8_C, Square.getSquare(Row.ROW_8, Col.COL_C).orElse(null));
-    assertEquals(Square.SQUARE_8_D, Square.getSquare(Row.ROW_8, Col.COL_D).orElse(null));
-    assertEquals(Square.SQUARE_8_E, Square.getSquare(Row.ROW_8, Col.COL_E).orElse(null));
-    assertEquals(Square.SQUARE_8_F, Square.getSquare(Row.ROW_8, Col.COL_F).orElse(null));
-    assertEquals(Square.SQUARE_8_G, Square.getSquare(Row.ROW_8, Col.COL_G).orElse(null));
-    assertEquals(Square.SQUARE_8_H, Square.getSquare(Row.ROW_8, Col.COL_H).orElse(null));
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_A).orElse(null)).isEqualTo(Square.SQUARE_8_A);
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_B).orElse(null)).isEqualTo(Square.SQUARE_8_B);
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_C).orElse(null)).isEqualTo(Square.SQUARE_8_C);
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_D).orElse(null)).isEqualTo(Square.SQUARE_8_D);
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_E).orElse(null)).isEqualTo(Square.SQUARE_8_E);
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_F).orElse(null)).isEqualTo(Square.SQUARE_8_F);
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_G).orElse(null)).isEqualTo(Square.SQUARE_8_G);
+    assertThat(Square.getSquare(Row.ROW_8, Col.COL_H).orElse(null)).isEqualTo(Square.SQUARE_8_H);
   }
-  
+
   static Square[] array1 = new Square[]{
       Square.SQUARE_1_A, Square.SQUARE_1_B, Square.SQUARE_1_C, Square.SQUARE_1_D,
       Square.SQUARE_1_E, Square.SQUARE_1_F, Square.SQUARE_1_G, Square.SQUARE_1_H};
