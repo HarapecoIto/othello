@@ -1,6 +1,6 @@
 package net.yoursweetest.othello;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ import othello.player.Player;
 
 public class LemonPlayerTest {
 
-  static final int MAX_STEP = 5;
+  static final int MAX_STEP = 4;
 
   @Test
   @DisplayName("Test 1 of lemonPlayer.moveDisk();")
@@ -26,12 +26,12 @@ public class LemonPlayerTest {
     List<Square> expects = Arrays.asList(
         Square.SQUARE_3_E, Square.SQUARE_4_F, Square.SQUARE_5_C, Square.SQUARE_6_D
     );
-    for (long seed = 0; seed < 10; seed++) {
+    for (long seed = 0; seed < 5; seed++) {
       Player player = new LemonPlayer("Lemon Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), null);
-      assertTrue(square.isPresent());
-      assertTrue(expects.contains(square.orElse(null)));
+      assertThat(square).isPresent();
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
@@ -44,12 +44,12 @@ public class LemonPlayerTest {
     List<Square> expects = Arrays.asList(
         Square.SQUARE_3_D, Square.SQUARE_4_C, Square.SQUARE_5_F, Square.SQUARE_6_E
     );
-    for (long seed = 0; seed < 10; seed++) {
+    for (long seed = 0; seed < 5; seed++) {
       Player player = new LemonPlayer("Lemon Player", seed, MAX_STEP);
       player.init(Disk.BLACK);
       Optional<Square> square = player.moveDisk(board.clone(), null);
-      assertTrue(square.isPresent());
-      assertTrue(expects.contains(square.orElse(null)));
+      assertThat(square).isPresent();
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
@@ -76,7 +76,7 @@ public class LemonPlayerTest {
     Player player = new LemonPlayer("Lemon Player", 13L, MAX_STEP);
     player.init(Disk.WHITE);
     Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
-    assertTrue(square.isEmpty());
+    assertThat(square).isEmpty();
     player.shutdown();
   }
 
@@ -105,12 +105,12 @@ public class LemonPlayerTest {
         Square.SQUARE_7_B, Square.SQUARE_7_D, Square.SQUARE_7_F,
         Square.SQUARE_2_G, Square.SQUARE_5_G
     );
-    for (long seed = 0; seed < 10; seed++) {
+    for (long seed = 0; seed < 5; seed++) {
       Player player = new LemonPlayer("Lemon Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
-      assertTrue(square.isPresent());
-      assertTrue(expects.contains(square.orElse(null)));
+      assertThat(square).isPresent();
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }

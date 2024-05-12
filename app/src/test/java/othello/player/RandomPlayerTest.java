@@ -1,6 +1,6 @@
 package othello.player;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +27,8 @@ public class RandomPlayerTest {
       Player player = new RandomPlayer("Random Player", seed);
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), null);
-      assertTrue(square.isPresent());
-      assertTrue(expects.contains(square.orElse(null)));
+      assertThat(square).isPresent();
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
@@ -45,8 +45,8 @@ public class RandomPlayerTest {
       Player player = new RandomPlayer("Random Player", seed);
       player.init(Disk.BLACK);
       Optional<Square> square = player.moveDisk(board.clone(), null);
-      assertTrue(square.isPresent());
-      assertTrue(expects.contains(square.orElse(null)));
+      assertThat(square).isPresent();
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
@@ -74,7 +74,7 @@ public class RandomPlayerTest {
     Player player = new RandomPlayer("Random Player", 13L);
     player.init(Disk.WHITE);
     Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
-    assertTrue(square.isEmpty());
+    assertThat(square).isEmpty();
     player.shutdown();
   }
 
@@ -108,8 +108,8 @@ public class RandomPlayerTest {
       Player player = new RandomPlayer("Random Player", seed);
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
-      assertTrue(square.isPresent());
-      assertTrue(expects.contains(square.orElse(null)));
+      assertThat(square).isPresent();
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
