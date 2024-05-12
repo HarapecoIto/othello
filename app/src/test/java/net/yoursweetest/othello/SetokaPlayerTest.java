@@ -31,7 +31,7 @@ public class SetokaPlayerTest {
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), null);
       assertThat(square).isPresent();
-      assertThat(square.orElse(null)).isIn(expects);
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
@@ -49,7 +49,7 @@ public class SetokaPlayerTest {
       player.init(Disk.BLACK);
       Optional<Square> square = player.moveDisk(board.clone(), null);
       assertThat(square).isPresent();
-      assertThat(square.orElse(null)).isIn(expects);
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
@@ -110,7 +110,7 @@ public class SetokaPlayerTest {
       player.init(Disk.WHITE);
       Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
       assertThat(square).isPresent();
-      assertThat(square.orElse(null)).isIn(expects);
+      assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
