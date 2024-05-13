@@ -57,7 +57,7 @@ public class SetokaPlayer extends CitrusPlayer {
     }
 
     public Board getBoard() {
-      return this.board.clone();
+      return this.board;
     }
 
     public Disk getTurn() {
