@@ -1,4 +1,4 @@
-package net.yoursweetest.othello;
+package net.yoursweetest.othello.citrus;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;

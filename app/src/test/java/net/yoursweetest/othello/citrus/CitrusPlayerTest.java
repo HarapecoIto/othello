@@ -1,4 +1,4 @@
-package net.yoursweetest.othello;
+package net.yoursweetest.othello.citrus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

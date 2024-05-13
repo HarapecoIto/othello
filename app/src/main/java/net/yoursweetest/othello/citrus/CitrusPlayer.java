@@ -1,4 +1,4 @@
-package net.yoursweetest.othello;
+package net.yoursweetest.othello.citrus;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.Comparator;
@@ -61,5 +61,5 @@ public abstract class CitrusPlayer implements Player {
   @Override
   public void shutdown() {
   }
-  
+
 }
