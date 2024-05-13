@@ -97,7 +97,7 @@ public class LemonPlayer extends CitrusPlayer {
    * @param seed    Random seed.
    * @param maxStep Maximum step what this player explores to move.
    */
-  public LemonPlayer(String name, long seed, int maxStep) {
+  public LemonPlayer(@NotNull String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
   }

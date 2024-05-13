@@ -10,6 +10,10 @@ import othello.base.Disk;
 import othello.base.Square;
 import othello.player.Player;
 
+/**
+ * This player is super class that the type of player who explores a certain number of moves. All
+ * subclasses are verified one's behaviour by comparing consistency of each other.
+ */
 public abstract class CitrusPlayer implements Player {
 
   protected final String name;
@@ -50,12 +54,27 @@ public abstract class CitrusPlayer implements Player {
     return Optional.of(candidates.get(this.rand.nextInt(candidates.size())));
   }
 
+  /**
+   * Get list of squares to move disk from candidates. This list is sorted in ascending order by
+   * {code square.getIndex()}. All this method of subclass, they should be return the same list.
+   *
+   * @param board The board that Position issues. This method should not edit this board.
+   * @param moved The square what another player move his disk at previous turn.
+   * @return List of candidate squares to be moved the disk.
+   */
   public List<Square> allCandidates(@NotNull Board board, Square moved) {
     return moveCandidates(board, moved)
         .stream().sorted(squareComparator)
         .toList();
   }
 
+  /**
+   * Get list of squares to move disk from candidates. This list may is not sorted.
+   *
+   * @param board The board that Position issues. This method should not edit this board.
+   * @param moved The square what another player move his disk at previous turn.
+   * @return List of candidate squares to be moved the disk.
+   */
   abstract List<Square> moveCandidates(@NotNull Board board, Square moved);
 
   @Override

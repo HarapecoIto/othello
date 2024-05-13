@@ -19,8 +19,16 @@ import othello.base.Square;
 import othello.util.Score;
 import othello.util.Tools;
 
+/**
+ * This player is a multi-thread version of {@code LemonPlayer}. All public methods return the same
+ * result as {@code LemonPlayer}. In particular, given the same random seed as {@code LemonPlayer},
+ * they return the same result for each seed.
+ */
 public class SetokaPlayer extends CitrusPlayer {
 
+  /**
+   * Position is the state of the disk (BLACK, WHITE, or empty) on the squares at specified time.
+   */
   private static final class Position {
 
     private final Board board;
@@ -29,6 +37,13 @@ public class SetokaPlayer extends CitrusPlayer {
     private final List<Integer> myDisks;
     private final List<Integer> yourDisks;
 
+    /**
+     * Constructor of Position.
+     *
+     * @param board The board that Position issues.
+     * @param turn  The disk represent who's turn is this.
+     * @param step  {@code MAX_STEP} what this player explores.
+     */
     Position(@NotNull Board board, @NotNull Disk turn, int step) {
       this.board = board;
       this.turn = turn;
@@ -74,10 +89,24 @@ public class SetokaPlayer extends CitrusPlayer {
     }
   }
 
+  /**
+   * Maximum step what this player explores to move.
+   */
   private final int MAX_STEP;
+
+  /**
+   * Thread pool.
+   */
   private ExecutorService service;
 
-  public SetokaPlayer(String name, long seed, int maxStep) {
+  /**
+   * Constructor of Setoka player.
+   *
+   * @param name    Player's name.
+   * @param seed    Random seed.
+   * @param maxStep Maximum step what this player explores to move.
+   */
+  public SetokaPlayer(@NotNull String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
     this.service = null;
