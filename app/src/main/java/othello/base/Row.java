@@ -60,7 +60,7 @@ public enum Row {
    * @return {@code 0} for {@code ROW_1}, {@code 1} for {@code ROW_2}, ..., {@code 7} for
    * {@code ROW_8}.
    */
-  public int getIndex() {
+  public int index() {
     return this.index;
   }
 

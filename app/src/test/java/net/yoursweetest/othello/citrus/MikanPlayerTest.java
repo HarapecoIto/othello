@@ -19,8 +19,8 @@ public class MikanPlayerTest {
   static final int MAX_STEP = 4;
 
   @Test
-  @DisplayName("Test 1 of lemonPlayer.moveDisk();")
-  void testMoveDisk1() {
+  @DisplayName("Test 1 of lemonPlayer.move();")
+  void testMove1() {
     Board board = new Board();
     board.init();
     List<Square> expects = Arrays.asList(
@@ -29,7 +29,7 @@ public class MikanPlayerTest {
     for (long seed = 0; seed < 5; seed++) {
       Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone(), null);
+      Optional<Square> square = player.move(board.clone(), null);
       assertThat(square).isPresent();
       assertThat(square.get()).isIn(expects);
       player.shutdown();
@@ -37,8 +37,8 @@ public class MikanPlayerTest {
   }
 
   @Test
-  @DisplayName("Test 2 of mikanPlayer.moveDisk();")
-  void testMoveDisk2() {
+  @DisplayName("Test 2 of mikanPlayer.move();")
+  void testMove2() {
     Board board = new Board();
     board.init();
     List<Square> expects = Arrays.asList(
@@ -47,7 +47,7 @@ public class MikanPlayerTest {
     for (long seed = 0; seed < 5; seed++) {
       Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
       player.init(Disk.BLACK);
-      Optional<Square> square = player.moveDisk(board.clone(), null);
+      Optional<Square> square = player.move(board.clone(), null);
       assertThat(square).isPresent();
       assertThat(square.get()).isIn(expects);
       player.shutdown();
@@ -55,8 +55,8 @@ public class MikanPlayerTest {
   }
 
   @Test
-  @DisplayName("Test 3 of lemonPlayer.moveDisk();")
-  void testMoveDisk3() {
+  @DisplayName("Test 3 of lemonPlayer.move();")
+  void testMove3() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -75,14 +75,14 @@ public class MikanPlayerTest {
     }
     Player player = new MikanPlayer("Mikan Player", 13L, MAX_STEP);
     player.init(Disk.WHITE);
-    Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
+    Optional<Square> square = player.move(board.clone(), Square.SQUARE_6_F);
     assertThat(square).isEmpty();
     player.shutdown();
   }
 
   @Test
-  @DisplayName("Test 4 of lemonPlayer.moveDisk();")
-  void testMoveDisk4() {
+  @DisplayName("Test 4 of lemonPlayer.move();")
+  void testMove4() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -108,7 +108,7 @@ public class MikanPlayerTest {
     for (long seed = 0; seed < 5; seed++) {
       Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
+      Optional<Square> square = player.move(board.clone(), Square.SQUARE_6_F);
       assertThat(square).isPresent();
       assertThat(square.get()).isIn(expects);
       player.shutdown();

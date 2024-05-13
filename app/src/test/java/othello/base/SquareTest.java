@@ -68,9 +68,9 @@ public class SquareTest {
 
   @Test
   @DisplayName("Test square.getIndex();")
-  void testGetIndex() {
+  void testIndex() {
     for (int i = 0; i < 64; i++) {
-      assertThat(Square.values()[i].getIndex()).isEqualTo(i);
+      assertThat(Square.values()[i].index()).isEqualTo(i);
     }
   }
 

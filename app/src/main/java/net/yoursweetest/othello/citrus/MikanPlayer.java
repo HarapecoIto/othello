@@ -141,7 +141,7 @@ public class MikanPlayer extends CitrusPlayer {
    * @param seed    Random seed.
    * @param maxStep Maximum step what this player explores to move.
    */
-  public MikanPlayer(String name, long seed, int maxStep) {
+  public MikanPlayer(@NotNull String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
     this.root = Optional.empty();
@@ -170,11 +170,11 @@ public class MikanPlayer extends CitrusPlayer {
         }
       }
     }
-    return new Position(board, Optional.empty(), this.myDisk.get().reverse(), 0);
+    return new Position(board, Optional.empty(), this.myDisk.get().turnOver(), 0);
   }
 
   @Override
-  List<Square> moveCandidates(@NotNull Board board, Square moved) {
+  List<Square> calculateCandidates(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
@@ -217,8 +217,8 @@ public class MikanPlayer extends CitrusPlayer {
         );
       } else {
         // unexplored -> (normal move)
-        Score score = Tools.countReversibleDisks(position1.getBoard(),
-            position1.getTurn().reverse());
+        Score score = Tools.countTurnoverableDisks(position1.getBoard(),
+            position1.getTurn().turnOver());
         List<Position> children = Arrays.stream(Square.values())
             .filter(
                 sq -> score.getScore(sq) > 0
@@ -226,11 +226,11 @@ public class MikanPlayer extends CitrusPlayer {
                 sq -> {
                   // move
                   Board work = position1.getBoard().clone();
-                  Tools.move(work, sq, position1.getTurn().reverse());
+                  Tools.move(work, sq, position1.getTurn().turnOver());
                   // next position
                   Position position2 =
                       new Position(
-                          work, Optional.of(sq), position1.getTurn().reverse(),
+                          work, Optional.of(sq), position1.getTurn().turnOver(),
                           position1.getStep() + 1);
                   // exec explore
                   this.explore(position2, position1.getChildren().isEmpty());
@@ -269,7 +269,7 @@ public class MikanPlayer extends CitrusPlayer {
 
   private void countDisksOfLeaf(Position position) {
     position.setMyDiskCount(
-        Tools.countDisks(position.getBoard(), position.getTurn().reverse()));
+        Tools.countDisks(position.getBoard(), position.getTurn().turnOver()));
     position.setYourDiskCount(
         Tools.countDisks(position.getBoard(), position.getTurn()));
   }

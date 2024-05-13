@@ -49,7 +49,7 @@ public final class Board implements Cloneable {
    * @param disk   Disk to place. {@code null} to empty cell.
    */
   public void setDisk(@NotNull Square square, Disk disk) {
-    this.disks.set(square.getIndex(), Optional.ofNullable(disk));
+    this.disks.set(square.index(), Optional.ofNullable(disk));
   }
 
   /**
@@ -60,7 +60,7 @@ public final class Board implements Cloneable {
    * {@code Optional.empty()}, responding to the given square.
    */
   public Optional<Disk> getDisk(@NotNull Square square) {
-    return this.disks.get(square.getIndex());
+    return this.disks.get(square.index());
   }
 
   /**
@@ -72,7 +72,7 @@ public final class Board implements Cloneable {
    */
   public void setDisk(@NotNull Row row, @NotNull Col col, Disk disk) {
     Optional<Square> square = Square.getSquare(row, col);
-    square.ifPresent(sq -> this.disks.set(sq.getIndex(), Optional.ofNullable(disk)));
+    square.ifPresent(sq -> this.disks.set(sq.index(), Optional.ofNullable(disk)));
   }
 
   /**
@@ -85,7 +85,7 @@ public final class Board implements Cloneable {
    */
   public Optional<Disk> getDisk(@NotNull Row row, @NotNull Col col) {
     Optional<Square> square = Square.getSquare(row, col);
-    return square.isPresent() ? this.disks.get(square.get().getIndex()) : Optional.empty();
+    return square.isPresent() ? this.disks.get(square.get().index()) : Optional.empty();
   }
 
   /**

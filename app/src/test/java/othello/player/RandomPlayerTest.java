@@ -16,8 +16,8 @@ import othello.base.Square;
 public class RandomPlayerTest {
 
   @Test
-  @DisplayName("Test 1 of randomPlayer.moveDisk();")
-  void testMoveDisk1() {
+  @DisplayName("Test 1 of randomPlayer.move();")
+  void testMove1() {
     Board board = new Board();
     board.init();
     List<Square> expects = Arrays.asList(
@@ -26,7 +26,7 @@ public class RandomPlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new RandomPlayer("Random Player", seed);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone(), null);
+      Optional<Square> square = player.move(board.clone(), null);
       assertThat(square).isPresent();
       assertThat(square.get()).isIn(expects);
       player.shutdown();
@@ -34,8 +34,8 @@ public class RandomPlayerTest {
   }
 
   @Test
-  @DisplayName("Test 2 of randomPlayer.moveDisk();")
-  void testMoveDisk2() {
+  @DisplayName("Test 2 of randomPlayer.move();")
+  void testMove2() {
     Board board = new Board();
     board.init();
     List<Square> expects = Arrays.asList(
@@ -44,7 +44,7 @@ public class RandomPlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new RandomPlayer("Random Player", seed);
       player.init(Disk.BLACK);
-      Optional<Square> square = player.moveDisk(board.clone(), null);
+      Optional<Square> square = player.move(board.clone(), null);
       assertThat(square).isPresent();
       assertThat(square.get()).isIn(expects);
       player.shutdown();
@@ -52,8 +52,8 @@ public class RandomPlayerTest {
   }
 
   @Test
-  @DisplayName("Test 3 of randomPlayer.moveDisk();")
-  void testMoveDisk3() {
+  @DisplayName("Test 3 of randomPlayer.move();")
+  void testMove3() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -73,14 +73,14 @@ public class RandomPlayerTest {
     }
     Player player = new RandomPlayer("Random Player", 13L);
     player.init(Disk.WHITE);
-    Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
+    Optional<Square> square = player.move(board.clone(), Square.SQUARE_6_F);
     assertThat(square).isEmpty();
     player.shutdown();
   }
 
   @Test
-  @DisplayName("Test 4 of randomPlayer.moveDisk();")
-  void testMoveDisk4() {
+  @DisplayName("Test 4 of randomPlayer.move();")
+  void testMove4() {
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊚㊚㊚㊚㊚＿＿
@@ -107,7 +107,7 @@ public class RandomPlayerTest {
     for (long seed = 0; seed < 10; seed++) {
       Player player = new RandomPlayer("Random Player", seed);
       player.init(Disk.WHITE);
-      Optional<Square> square = player.moveDisk(board.clone(), Square.SQUARE_6_F);
+      Optional<Square> square = player.move(board.clone(), Square.SQUARE_6_F);
       assertThat(square).isPresent();
       assertThat(square.get()).isIn(expects);
       player.shutdown();

@@ -43,7 +43,7 @@ public class HungryPlayer implements Player {
   }
 
   @Override
-  public Optional<Square> moveDisk(@NotNull Board board, Square moved) {
+  public Optional<Square> move(@NotNull Board board, Square moved) {
     List<Square> squares = moveCandidates(board, moved);
     return !squares.isEmpty()
         ? Optional.of(squares.get(rand.nextInt(squares.size())))
@@ -56,7 +56,7 @@ public class HungryPlayer implements Player {
       // not initialized
       throw new OthelloException();
     }
-    Score score = Tools.countReversibleDisks(board, this.myDisk.get());
+    Score score = Tools.countTurnoverableDisks(board, this.myDisk.get());
     int max = Arrays.stream(Square.values())
         .map(score::getScore).max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())

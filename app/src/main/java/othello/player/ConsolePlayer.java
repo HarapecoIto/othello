@@ -47,14 +47,14 @@ public class ConsolePlayer implements Player {
   }
 
   @Override
-  public Optional<Square> moveDisk(@NotNull Board board, @NotNull Square moved) {
+  public Optional<Square> move(@NotNull Board board, @NotNull Square moved) {
     //assert
     if (this.myDisk.isEmpty()) {
       // not initialized
       throw new OthelloException();
     }
     Board clone = board.clone();
-    Score score = Tools.countReversibleDisks(clone, this.myDisk.get());
+    Score score = Tools.countTurnoverableDisks(clone, this.myDisk.get());
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> score.getScore(sq) > 0).toList();
     System.out.println("Select square.");

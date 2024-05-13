@@ -28,8 +28,6 @@ public abstract class CitrusPlayer implements Player {
     this.myDisk = Optional.of(Disk.BLACK);
   }
 
-  private static final Comparator<Square> squareComparator = Comparator.comparing(Square::getIndex);
-
   @Override
   public String getName() {
     return this.name;
@@ -46,8 +44,8 @@ public abstract class CitrusPlayer implements Player {
   }
 
   @Override
-  public final Optional<Square> moveDisk(@NotNull Board board, Square moved) {
-    List<Square> candidates = allCandidates(board, moved);
+  public final Optional<Square> move(@NotNull Board board, Square moved) {
+    List<Square> candidates = sortCandidates(board, moved);
     if (candidates.isEmpty()) {
       return Optional.empty();
     }
@@ -55,27 +53,27 @@ public abstract class CitrusPlayer implements Player {
   }
 
   /**
-   * Get list of squares to move disk from candidates. This list is sorted in ascending order by
-   * {code square.getIndex()}. All this method of subclass, they should be return the same list.
+   * Get list of candidate squares to move disk. This list is sorted in ascending order by
+   * {@code square.index()}. Every this method of subclasses, they should be return the same list.
    *
    * @param board The board that Position issues. This method should not edit this board.
    * @param moved The square what another player move his disk at previous turn.
    * @return List of candidate squares to be moved the disk.
    */
-  public List<Square> allCandidates(@NotNull Board board, Square moved) {
-    return moveCandidates(board, moved)
-        .stream().sorted(squareComparator)
+  public List<Square> sortCandidates(@NotNull Board board, Square moved) {
+    return calculateCandidates(board, moved)
+        .stream().sorted(Comparator.comparing(Square::index))
         .toList();
   }
 
   /**
-   * Get list of squares to move disk from candidates. This list may is not sorted.
+   * Get list of candidate squares to move disk. This list may is not sorted.
    *
    * @param board The board that Position issues. This method should not edit this board.
    * @param moved The square what another player move his disk at previous turn.
    * @return List of candidate squares to be moved the disk.
    */
-  abstract List<Square> moveCandidates(@NotNull Board board, Square moved);
+  abstract List<Square> calculateCandidates(@NotNull Board board, Square moved);
 
   @Override
   public void shutdown() {

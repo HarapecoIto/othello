@@ -119,7 +119,7 @@ public class SetokaPlayer extends CitrusPlayer {
   }
 
   @Override
-  List<Square> moveCandidates(@NotNull Board board, Square moved) {
+  List<Square> calculateCandidates(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
@@ -130,14 +130,14 @@ public class SetokaPlayer extends CitrusPlayer {
     this.explore(position);
     int max = position.getMyDisks().stream().max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())
-        .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
+        .filter(sq -> position.getMyDisks().get(sq.index()) == max)
         .toList();
     return max > 0 ? squares : new ArrayList<>();
   }
 
   private void explore(@NotNull Position position1) {
     if (position1.getStep() <= MAX_STEP) {
-      Score score = Tools.countReversibleDisks(position1.getBoard(), position1.getTurn());
+      Score score = Tools.countTurnoverableDisks(position1.getBoard(), position1.getTurn());
       List<Square> movable = Arrays.stream(Square.values())
           .filter(
               sq -> score.getScore(sq) > 0
@@ -149,7 +149,7 @@ public class SetokaPlayer extends CitrusPlayer {
           Tools.move(work, sq, position1.getTurn());
           // next position
           Position position2 =
-              new Position(work, position1.getTurn().reverse(), position1.getStep() + 1);
+              new Position(work, position1.getTurn().turnOver(), position1.getStep() + 1);
           // exec explore
           this.explore(position2);
           // count max
@@ -157,8 +157,8 @@ public class SetokaPlayer extends CitrusPlayer {
               .max(Comparator.naturalOrder()).orElse(0);
           int yourMax = position2.getYourDisks().stream()
               .max(Comparator.naturalOrder()).orElse(0);
-          position1.setMyDisks(sq.getIndex(), myMax);
-          position1.setYourDisks(sq.getIndex(), yourMax);
+          position1.setMyDisks(sq.index(), myMax);
+          position1.setYourDisks(sq.index(), yourMax);
           return true;
         };
         if (position1.getStep() == 0) {
@@ -185,9 +185,9 @@ public class SetokaPlayer extends CitrusPlayer {
     }
     // max step or pass or end of game
     Arrays.stream(Square.values()).forEach(sq -> {
-      position1.setMyDisks(sq.getIndex(),
+      position1.setMyDisks(sq.index(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
-      position1.setYourDisks(sq.getIndex(),
+      position1.setYourDisks(sq.index(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
     });
   }

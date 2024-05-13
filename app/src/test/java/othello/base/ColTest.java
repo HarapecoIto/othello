@@ -9,15 +9,15 @@ public class ColTest {
 
   @Test
   @DisplayName("Test col.getIndex();")
-  void testGetIndex() {
-    assertThat(Col.COL_A.getIndex()).isEqualTo(0);
-    assertThat(Col.COL_B.getIndex()).isEqualTo(1);
-    assertThat(Col.COL_C.getIndex()).isEqualTo(2);
-    assertThat(Col.COL_D.getIndex()).isEqualTo(3);
-    assertThat(Col.COL_E.getIndex()).isEqualTo(4);
-    assertThat(Col.COL_F.getIndex()).isEqualTo(5);
-    assertThat(Col.COL_G.getIndex()).isEqualTo(6);
-    assertThat(Col.COL_H.getIndex()).isEqualTo(7);
+  void testIndex() {
+    assertThat(Col.COL_A.index()).isEqualTo(0);
+    assertThat(Col.COL_B.index()).isEqualTo(1);
+    assertThat(Col.COL_C.index()).isEqualTo(2);
+    assertThat(Col.COL_D.index()).isEqualTo(3);
+    assertThat(Col.COL_E.index()).isEqualTo(4);
+    assertThat(Col.COL_F.index()).isEqualTo(5);
+    assertThat(Col.COL_G.index()).isEqualTo(6);
+    assertThat(Col.COL_H.index()).isEqualTo(7);
   }
 
   @Test

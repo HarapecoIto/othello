@@ -21,7 +21,7 @@ public enum Disk {
    *
    * @return {@code WHITE} for {@code BLACK} and {@code BLACK} for {@code WHITE}.
    */
-  public Disk reverse() {
+  public Disk turnOver() {
     return this.equals(Disk.BLACK) ? Disk.WHITE : Disk.BLACK;
   }
 
