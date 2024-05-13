@@ -97,7 +97,7 @@ public class SetokaPlayer extends CitrusPlayer {
   /**
    * Thread pool.
    */
-  private ExecutorService service;
+  private final ExecutorService service;
 
   /**
    * Constructor of Setoka player.
@@ -109,13 +109,12 @@ public class SetokaPlayer extends CitrusPlayer {
   public SetokaPlayer(@NotNull String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
-    this.service = null;
+    this.service = Executors.newFixedThreadPool(16);
   }
 
   @Override
   public void init(@NotNull Disk myDisk) {
     super.init(myDisk);
-    this.service = Executors.newFixedThreadPool(16);
   }
 
   @Override
