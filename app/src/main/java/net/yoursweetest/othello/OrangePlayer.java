@@ -3,6 +3,7 @@ package net.yoursweetest.othello;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import othello.OthelloException;
 import othello.base.Board;
@@ -24,7 +25,8 @@ public class OrangePlayer extends CitrusPlayer {
       throw new OthelloException();
     }
     Score score = Tools.countReversibleDisks(board, this.myDisk.get());
-    int max = score.getMaximum();
+    int max = Arrays.stream(Square.values())
+        .map(score::getScore).max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())
         .filter(sq -> score.getScore(sq) == max)
         .toList();

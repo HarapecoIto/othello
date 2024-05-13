@@ -60,24 +60,4 @@ public class Score implements Cloneable {
     return s;
   }
 
-  /**
-   * Get maximum score on the board.
-   *
-   * @return maximum score on the board.
-   * @deprecated This method is experimental.
-   */
-  public int getMaximum() {
-    return Arrays.stream(this.score).max().orElse(0);
-  }
-
-  /**
-   * Get minimum score on the board.
-   *
-   * @return minimum score on the board.
-   * @deprecated This method is experimental.
-   */
-  public int getMinimum() {
-    return Arrays.stream(this.score).min().orElse(0);
-  }
-
 }
