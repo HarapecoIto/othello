@@ -146,12 +146,6 @@ public class ZabonPlayer extends CitrusPlayer {
   private final ExecutorService service;
 
   /**
-   * {@code true} if running in multi-threaded mode. up to once per turn.
-   * TODO: synchronise on this object.
-   */
-  private boolean onMultiThreadedMode;
-
-  /**
    * Constructor of Zabon player.
    *
    * @param name    Player's name.
@@ -163,7 +157,6 @@ public class ZabonPlayer extends CitrusPlayer {
     this.MAX_STEP = maxStep;
     this.root = Optional.empty();
     this.service = Executors.newFixedThreadPool(16);
-    this.onMultiThreadedMode = false;
   }
 
   /**
@@ -198,7 +191,6 @@ public class ZabonPlayer extends CitrusPlayer {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
-    this.onMultiThreadedMode = false;
     // new root
     Position newRoot = this.searchNewRoot(board);
     this.explore(newRoot, this.root.isPresent() && this.root.get().isLeaf());
@@ -232,10 +224,7 @@ public class ZabonPlayer extends CitrusPlayer {
           p.setStep(position1.getStep() + 1);
           return this.explore(p, position1.isLeaf());
         };
-        if (!this.onMultiThreadedMode
-            && 8 < position1.getChildren().size()
-            && position1.getChildren().size() < 16) {
-          this.onMultiThreadedMode = true;
+        if (position1.getStep() == 0 && position1.getChildren().size() < 16) {
           // multi-thread exec.
           List<Callable<Boolean>> tasks = new ArrayList<>();
           for (Position p : position1.getChildren()) {
@@ -274,10 +263,7 @@ public class ZabonPlayer extends CitrusPlayer {
             position1.getTurn().turnOver());
         List<Square> squares = Arrays.stream(Square.values())
             .filter(sq -> score.getScore(sq) > 0).toList();
-        if (!this.onMultiThreadedMode
-            && 8 < position1.getChildren().size()
-            && position1.getChildren().size() < 16) {
-          this.onMultiThreadedMode = true;
+        if (position1.getStep() == 0 && squares.size() < 16) {
           // multi-thread exec.
           List<Callable<Position>> tasks = new ArrayList<>();
           for (Square sq : squares) {
