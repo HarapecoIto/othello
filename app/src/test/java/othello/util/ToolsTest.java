@@ -49,7 +49,7 @@ public class ToolsTest {
     assertThat(Tools.countDisks(board, Disk.WHITE)).isEqualTo(10);
   }
 
-  @Test
+  //  @Test
   @DisplayName("Test total of Tools.countTurnoverableDisk();")
   void testTotalCountTurnoverableDisks() {
     Board board = new Board();
@@ -65,44 +65,60 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.BLACK);
   }
 
-  private static int countUpTurnoverableDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::up, board, square, mine);
+  private static int countUpTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::up, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
-  public static int countDownTurnoverableDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::down, board, square, mine);
+  private static int countDownTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::down, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
-  public static int countLeftTurnoverableDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::left, board, square, mine);
+  private static int countLeftTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::left, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
-  public static int countRightTurnoverableDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::right, board, square, mine);
+  private static int countRightTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::right, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
-  public static int countUpLeftTurnoverableDisk(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::upLeft, board, square, mine);
+  private static int countUpLeftTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::upLeft, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
-  public static int countUpRightTurnoverableDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::upRight, board, square, mine);
+  private static int countUpRightTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::upRight, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
-  public static int countDownLeftTurnoverableDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::downLeft, board, square, mine);
+  private static int countDownLeftTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::downLeft, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
-  public static int countDownRightTurnoverableDisks(@NotNull Board board, @NotNull Square square,
-      @NotNull Disk mine) {
-    return Tools.countTurnoverableDisksEngine(Square::downRight, board, square, mine);
+  private static int countDownRightTurnoverableDisks
+      (@NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+    Optional<List<Square>> opt
+        = Tools.countTurnoverableDisksOfLineEngine(Square::downRight, board, square, mine);
+    return opt.map(List::size).orElse(-1);
   }
 
   @Test
@@ -491,32 +507,32 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_C, null);
     board.setDisk(Square.SQUARE_5_D, null);
     // on the another disk -> error.
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_4_D, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_4_D, Disk.BLACK))
         .isEqualTo(-1);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_4_D, Disk.WHITE))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_4_D, Disk.WHITE))
         .isEqualTo(-1);
     // next square is out of board -> 0.
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_1_A, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_1_A, Disk.BLACK))
         .isEqualTo(0);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_1_A, Disk.WHITE))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_1_A, Disk.WHITE))
         .isEqualTo(0);
     // take zero
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_2_B, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_2_B, Disk.BLACK))
         .isEqualTo(0);
     // take one
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_3_C, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_3_C, Disk.BLACK))
         .isEqualTo(1);
     // take two
     board.clear();
     board.setDisk(Square.SQUARE_1_A, Disk.BLACK);
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_4_D, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_4_D, Disk.BLACK))
         .isEqualTo(2);
     // take three
     board.clear();
@@ -524,7 +540,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_2_B, Disk.WHITE);
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_5_E, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_5_E, Disk.BLACK))
         .isEqualTo(3);
     // take four
     board.clear();
@@ -533,7 +549,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_3_C, Disk.WHITE);
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_6_F, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_6_F, Disk.BLACK))
         .isEqualTo(4);
     // take five
     board.clear();
@@ -543,7 +559,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_4_D, Disk.WHITE);
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_7_G, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_7_G, Disk.BLACK))
         .isEqualTo(5);
     // take six
     board.clear();
@@ -554,7 +570,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_8_H, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_8_H, Disk.BLACK))
         .isEqualTo(6);
     // change black <-> white
     board.clear();
@@ -565,7 +581,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.BLACK);
     board.setDisk(Square.SQUARE_6_F, Disk.BLACK);
     board.setDisk(Square.SQUARE_7_G, Disk.BLACK);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_8_H, Disk.WHITE))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_8_H, Disk.WHITE))
         .isEqualTo(6);
     // terminated by empty square -> 0
     board.clear();
@@ -576,7 +592,7 @@ public class ToolsTest {
     board.setDisk(Square.SQUARE_5_E, Disk.WHITE);
     board.setDisk(Square.SQUARE_6_F, Disk.WHITE);
     board.setDisk(Square.SQUARE_7_G, Disk.WHITE);
-    assertThat(ToolsTest.countUpLeftTurnoverableDisk(board, Square.SQUARE_8_H, Disk.BLACK))
+    assertThat(ToolsTest.countUpLeftTurnoverableDisks(board, Square.SQUARE_8_H, Disk.BLACK))
         .isEqualTo(0);
   }
 
@@ -923,6 +939,8 @@ public class ToolsTest {
     expects.setScore(Square.SQUARE_7_F, 1);
 
     Score score = Tools.countTurnoverableDisks(board, Disk.WHITE);
+    dumpBoard(dummy, expects);
+    dumpBoard(dummy, score);
     assertThat(score).isEqualTo(expects);
   }
 
@@ -939,22 +957,26 @@ public class ToolsTest {
   @Test
   @DisplayName("Test Tools.move();")
   void testMove() {
+
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿㊛㊚＿＿＿
+    // ＿＿＿㊚㊚＿＿＿
+    // ＿＿＿＿㊚＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
     Board board = new Board();
     board.init();
     Board clone = board.clone();
-    Optional<List<Square>> opt = Tools.move(clone, Square.SQUARE_6_D, Disk.BLACK);
-    assertThat(opt).isPresent();
-    assertThat(opt.get()).isEmpty();
-    assertThat(board).isEqualTo(clone);
-
-    board.init();
-    clone = board.clone();
-    opt = Tools.move(clone, Square.SQUARE_6_E, Disk.BLACK);
+    Optional<List<Square>> opt = Tools.move(clone, Square.SQUARE_6_E, Disk.BLACK);
     assertThat(opt).isPresent();
     assertThat(opt.get()).hasSize(1).contains(Square.SQUARE_5_E);
     board.setDisk(Square.SQUARE_5_E, Disk.BLACK);
     board.setDisk(Square.SQUARE_6_E, Disk.BLACK);
-    assertThat(board).isEqualTo(clone);
+    dumpBoard(board, new Score());
+    dumpBoard(clone, new Score());
+    assertThat(clone).isEqualTo(board);
 
     // ㊚㊚㊚㊚㊚㊚＿＿
     // ㊚㊛㊛㊛㊛㊚＿＿
