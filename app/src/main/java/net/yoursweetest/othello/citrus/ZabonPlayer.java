@@ -28,6 +28,8 @@ import othello.util.Tools;
  */
 public class ZabonPlayer extends CitrusPlayer {
 
+  private static final int THREAD_NUMBER = 16;
+
   /**
    * Position is the state of the disk (BLACK, WHITE, or empty) on the squares at specified time.
    */
@@ -156,7 +158,7 @@ public class ZabonPlayer extends CitrusPlayer {
     super(name, seed);
     this.MAX_STEP = maxStep;
     this.root = Optional.empty();
-    this.service = Executors.newFixedThreadPool(16);
+    this.service = Executors.newFixedThreadPool(THREAD_NUMBER);
   }
 
   /**
@@ -224,7 +226,7 @@ public class ZabonPlayer extends CitrusPlayer {
           p.setStep(position1.getStep() + 1);
           return this.explore(p, position1.isLeaf());
         };
-        if (position1.getStep() == 0 && position1.getChildren().size() < 16) {
+        if (position1.getStep() == 0) {
           // multi-thread exec.
           List<Callable<Boolean>> tasks = new ArrayList<>();
           for (Position p : position1.getChildren()) {
@@ -263,29 +265,8 @@ public class ZabonPlayer extends CitrusPlayer {
             position1.getTurn().turnOver());
         List<Square> squares = Arrays.stream(Square.values())
             .filter(sq -> score.getScore(sq) > 0).toList();
-        if (position1.getStep() == 0 && squares.size() < 16) {
-          // multi-thread exec.
-          List<Callable<Position>> tasks = new ArrayList<>();
-          for (Square sq : squares) {
-            tasks.add(() -> proc.apply(sq));
-          }
-          List<Future<Position>> futures = tasks.stream()
-              .map(this.service::submit)
-              .toList();
-          List<Position> children = new ArrayList<>();
-          futures.forEach(f -> {
-            try {
-              children.add(f.get());
-            } catch (InterruptedException | ExecutionException e) {
-              e.printStackTrace();
-              throw new OthelloException();
-            }
-          });
-          position1.setChildren(children);
-        } else {
-          List<Position> children = squares.stream().map(proc::apply).toList();
-          position1.setChildren(children);
-        }
+        List<Position> children = squares.stream().map(proc::apply).toList();
+        position1.setChildren(children);
       }
       // not (pass -> pass)
       if (!passed || !position1.isLeaf()) {
