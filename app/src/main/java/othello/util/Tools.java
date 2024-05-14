@@ -67,7 +67,7 @@ public class Tools {
    * @return {@code Optional} of List containing turned over disks.
    * @throws OthelloException This square cannot be placed due to the rules.
    */
-  public static Optional<List<Square>> move(
+  public static synchronized Optional<List<Square>> move(
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     Optional<List<Square>> opt = countTurnoverableDisks(board, square, mine);
     if (opt.isEmpty()) {
