@@ -45,6 +45,7 @@ public class Match extends Thread {
 
   @Override
   public void run() {
+    Tools.init();
     this.view.selectPlayers((player1, player2) -> {
 
       Disk disk = rand.nextInt(2) == 0 ? Disk.BLACK : Disk.WHITE;
@@ -142,6 +143,7 @@ public class Match extends Thread {
   private void shutdown() {
     this.whitePlayer.ifPresent(Player::shutdown);
     this.blackPlayer.ifPresent(Player::shutdown);
+    Tools.shutdown();
   }
 
 }

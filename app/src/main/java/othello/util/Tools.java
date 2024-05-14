@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 import othello.OthelloException;
 import othello.base.Board;
@@ -15,6 +19,16 @@ import othello.base.Square;
  * You can use these tools to check the board status. Built-in classes are also use these tools.
  */
 public class Tools {
+
+  private static ExecutorService service;
+
+  public static void init() {
+    service = Executors.newFixedThreadPool(8);
+  }
+
+  public static void shutdown() {
+    service.shutdownNow();
+  }
 
   /**
    * Count disks on the board.
@@ -37,7 +51,9 @@ public class Tools {
    * @return {@code Optional} of List containing turned over disks.
    * @throws OthelloException This square cannot be placed due to the rules.
    */
-  public static Optional<List<Square>> move(@NotNull Board board, @NotNull Square square,
+  public static synchronized Optional<List<Square>> move(
+      @NotNull Board board,
+      @NotNull Square square,
       @NotNull Disk myDisk) {
     Board work = board.clone();
     List<Optional<List<Square>>> listOfList = new ArrayList<>();
@@ -99,28 +115,67 @@ public class Tools {
    * @return Score object containing the number of disks to be turned over corresponding to each
    * square.
    */
-  public static Score countTurnoverableDisks(@NotNull Board board, @NotNull Disk myStone) {
+  public static synchronized Score countTurnoverableDisks(
+      @NotNull Board board, @NotNull Disk myStone) {
     Score score = new Score();
     Arrays.stream(Square.values())
         .forEach(sq -> score.setScore(sq, countTurnoverableDisks(board, sq, myStone)));
     return score;
   }
 
+  private static class TurnoverableCounter implements Callable<Integer> {
+
+    private final Function<Square, Optional<Square>> next;
+    private final Board board;
+    private final Square square;
+    private final Disk mine;
+
+    TurnoverableCounter(
+        @NotNull Function<Square, Optional<Square>> next,
+        @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
+      this.next = next;
+      this.board = board;
+      this.square = square;
+      this.mine = mine;
+    }
+
+    @Override
+    public Integer call() throws Exception {
+      return countTurnoverableDisksEngine(next, board, square, mine);
+    }
+  }
+
   static int countTurnoverableDisks(
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
-    int[] count = new int[8];
-    count[0] = countTurnoverableDisksEngine(Square::up, board, square, mine);
-    count[1] = countTurnoverableDisksEngine(Square::down, board, square, mine);
-    count[2] = countTurnoverableDisksEngine(Square::left, board, square, mine);
-    count[3] = countTurnoverableDisksEngine(Square::right, board, square, mine);
-    count[4] = countTurnoverableDisksEngine(Square::upLeft, board, square, mine);
-    count[5] = countTurnoverableDisksEngine(Square::upRight, board, square, mine);
-    count[6] = countTurnoverableDisksEngine(Square::downLeft, board, square, mine);
-    count[7] = countTurnoverableDisksEngine(Square::downRight, board, square, mine);
-    if (Arrays.stream(count).anyMatch(c -> c < 0)) {
+    List<Function<Square, Optional<Square>>> nexts = new ArrayList<>();
+    nexts.add(Square::up);
+    nexts.add(Square::down);
+    nexts.add(Square::left);
+    nexts.add(Square::right);
+    nexts.add(Square::upLeft);
+    nexts.add(Square::upRight);
+    nexts.add(Square::downLeft);
+    nexts.add(Square::downRight);
+    List<Integer> result =
+        nexts.stream().map(
+            next -> new TurnoverableCounter(next, board, square, mine)
+        ).map(
+            task -> service.submit(task)
+        ).map(
+            future -> {
+              int i = -1;
+              try {
+                i = future.get();
+              } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+              }
+              return i;
+            }
+        ).toList();
+    if (result.stream().anyMatch(i -> i < 0)) {
       return -1;
     }
-    return Arrays.stream(count).sum();
+    return result.stream().mapToInt(Integer::intValue).sum();
   }
 
   static int countTurnoverableDisksEngine(

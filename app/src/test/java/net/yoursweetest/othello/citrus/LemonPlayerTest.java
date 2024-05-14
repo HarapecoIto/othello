@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
@@ -13,10 +15,21 @@ import othello.base.Disk;
 import othello.base.Row;
 import othello.base.Square;
 import othello.player.Player;
+import othello.util.Tools;
 
 public class LemonPlayerTest {
 
   static final int MAX_STEP = 4;
+
+  @BeforeAll
+  public static void setUp() {
+    Tools.init();
+  }
+
+  @AfterAll
+  public static void shutdown() {
+    Tools.shutdown();
+  }
 
   @Test
   @DisplayName("Test 1 of lemonPlayer.move();")

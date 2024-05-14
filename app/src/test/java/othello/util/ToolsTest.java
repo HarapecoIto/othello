@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.OthelloException;
@@ -17,6 +19,16 @@ import othello.base.Row;
 import othello.base.Square;
 
 public class ToolsTest {
+
+  @BeforeAll
+  public static void setUp() {
+    Tools.init();
+  }
+
+  @AfterAll
+  public static void shutdown() {
+    Tools.shutdown();
+  }
 
   @Test
   @DisplayName("Test Tools.countDisk();")
