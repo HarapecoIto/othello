@@ -61,7 +61,7 @@ public enum Col {
    * @return {@code 0} for {@code COL_A}, {@code 1} for {@code COL_B}, ..., {@code 7} for
    * {@code COL_H}.
    */
-  public int getIndex() {
+  public int index() {
     return this.index;
   }
 

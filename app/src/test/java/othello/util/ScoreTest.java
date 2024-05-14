@@ -19,10 +19,10 @@ public class ScoreTest {
         sq -> assertEquals(0, s.getScore(sq))
     );
     Arrays.stream(Square.values()).forEach(
-        sq -> s.setScore(sq, 100 + sq.getIndex())
+        sq -> s.setScore(sq, 100 + sq.index())
     );
     Arrays.stream(Square.values()).forEach(
-        sq -> assertEquals(100 + sq.getIndex(), s.getScore(sq))
+        sq -> assertEquals(100 + sq.index(), s.getScore(sq))
     );
   }
 
@@ -32,7 +32,7 @@ public class ScoreTest {
     Function<Boolean, Score> f = (b) -> {
       Score s = new Score();
       Arrays.stream(Square.values()).forEach(
-          sq -> s.setScore(sq, 100 + sq.getIndex()));
+          sq -> s.setScore(sq, 100 + sq.index()));
       return s;
     };
     Score score = f.apply(true);
@@ -43,7 +43,7 @@ public class ScoreTest {
     }
 
     Arrays.stream(Square.values()).forEach(
-        sq -> scores[sq.getIndex()].setScore(sq, 1000));
+        sq -> scores[sq.index()].setScore(sq, 1000));
     for (int i = 0; i < 63; i++) {
       assertNotEquals(score, scores[i]);
     }
@@ -55,7 +55,7 @@ public class ScoreTest {
     Function<Boolean, Score> f = (b) -> {
       Score s = new Score();
       Arrays.stream(Square.values()).forEach(
-          sq -> s.setScore(sq, 100 + sq.getIndex()));
+          sq -> s.setScore(sq, 100 + sq.index()));
       return s;
     };
     Score score = f.apply(true);
@@ -72,7 +72,7 @@ public class ScoreTest {
     Function<Boolean, Score> f = (b) -> {
       Score s = new Score();
       Arrays.stream(Square.values()).forEach(
-          sq -> s.setScore(sq, 100 + sq.getIndex()));
+          sq -> s.setScore(sq, 100 + sq.index()));
       return s;
     };
     Score score = f.apply(true);

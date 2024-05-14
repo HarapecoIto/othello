@@ -72,7 +72,7 @@ public class Tools {
   private static Optional<List<Square>> moveEngine(
       @NotNull Function<Square, Optional<Square>> next,
       @NotNull Board board, @NotNull Square square, @NotNull Disk myDisk) {
-    int count = countReversibleDisksEngine(next, board, square, myDisk);
+    int count = countTurnoverableDisksEngine(next, board, square, myDisk);
     if (count < 0) {
       return Optional.empty();
     }
@@ -99,38 +99,38 @@ public class Tools {
    * @return Score object containing the number of disks to be turned over corresponding to each
    * square.
    */
-  public static Score countReversibleDisks(@NotNull Board board, @NotNull Disk myStone) {
+  public static Score countTurnoverableDisks(@NotNull Board board, @NotNull Disk myStone) {
     Score score = new Score();
     Arrays.stream(Square.values())
-        .forEach(sq -> score.setScore(sq, countReversibleDisks(board, sq, myStone)));
+        .forEach(sq -> score.setScore(sq, countTurnoverableDisks(board, sq, myStone)));
     return score;
   }
 
-  static int countReversibleDisks(
+  static int countTurnoverableDisks(
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     int[] count = new int[8];
-    count[0] = countReversibleDisksEngine(Square::up, board, square, mine);
-    count[1] = countReversibleDisksEngine(Square::down, board, square, mine);
-    count[2] = countReversibleDisksEngine(Square::left, board, square, mine);
-    count[3] = countReversibleDisksEngine(Square::right, board, square, mine);
-    count[4] = countReversibleDisksEngine(Square::upLeft, board, square, mine);
-    count[5] = countReversibleDisksEngine(Square::upRight, board, square, mine);
-    count[6] = countReversibleDisksEngine(Square::downLeft, board, square, mine);
-    count[7] = countReversibleDisksEngine(Square::downRight, board, square, mine);
+    count[0] = countTurnoverableDisksEngine(Square::up, board, square, mine);
+    count[1] = countTurnoverableDisksEngine(Square::down, board, square, mine);
+    count[2] = countTurnoverableDisksEngine(Square::left, board, square, mine);
+    count[3] = countTurnoverableDisksEngine(Square::right, board, square, mine);
+    count[4] = countTurnoverableDisksEngine(Square::upLeft, board, square, mine);
+    count[5] = countTurnoverableDisksEngine(Square::upRight, board, square, mine);
+    count[6] = countTurnoverableDisksEngine(Square::downLeft, board, square, mine);
+    count[7] = countTurnoverableDisksEngine(Square::downRight, board, square, mine);
     if (Arrays.stream(count).anyMatch(c -> c < 0)) {
       return -1;
     }
     return Arrays.stream(count).sum();
   }
 
-  static int countReversibleDisksEngine(
+  static int countTurnoverableDisksEngine(
       @NotNull Function<Square, Optional<Square>> next,
       @NotNull Board board, @NotNull Square square, @NotNull Disk mine) {
     // make sure that the square is empty.
     if (board.getDisk(square).isPresent()) {
       return -1;
     }
-    final Disk yours = mine.reverse();
+    final Disk yours = mine.turnOver();
     int count = 0;
     Optional<Square> opt = next.apply(square);
     do {

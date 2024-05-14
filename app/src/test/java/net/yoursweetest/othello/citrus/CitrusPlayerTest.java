@@ -1,4 +1,4 @@
-package net.yoursweetest.othello;
+package net.yoursweetest.othello.citrus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,7 +64,7 @@ public class CitrusPlayerTest {
       System.err.println("    A  B  C  D  E  F  G  H");
       System.err.println("  ┌──┬──┬──┬──┬──┬──┬──┬──┐");
       for (Row row : Row.values()) {
-        StringBuilder builder = new StringBuilder(String.format("%d |", row.getIndex() + 1));
+        StringBuilder builder = new StringBuilder(String.format("%d |", row.index() + 1));
         Arrays.stream(Square.values()).filter(sq -> sq.row().equals(row))
             .map(square -> diskCharacter(board.getDisk(square).orElse(null)))
             .forEach(string -> {
@@ -131,16 +131,16 @@ public class CitrusPlayerTest {
     }
 
     @Override
-    public Optional<Square> moveDisk(Board board, Square moved) {
+    public Optional<Square> move(Board board, Square moved) {
       Board board1 = board.clone();
       Board board2 = board.clone();
-      List<Square> candidates1 = this.player1.allCandidates(board1, moved);
-      List<Square> candidates2 = this.player2.allCandidates(board2, moved);
+      List<Square> candidates1 = this.player1.sortCandidates(board1, moved);
+      List<Square> candidates2 = this.player2.sortCandidates(board2, moved);
       assertThat(candidates1).hasSameSizeAs(candidates2).isNotEmpty();
       System.err.printf("Candidates: %d %d%n", candidates1.size(), candidates2.size());
       assertThat(candidates1).containsExactlyElementsOf(candidates2);
-      Square moved1 = this.player1.moveDisk(board1, moved).orElse(null);
-      Square moved2 = this.player2.moveDisk(board2, moved).orElse(null);
+      Square moved1 = this.player1.move(board1, moved).orElse(null);
+      Square moved2 = this.player2.move(board2, moved).orElse(null);
       assertThat(moved1).isEqualTo(moved2);
       return Optional.ofNullable(moved1);
     }

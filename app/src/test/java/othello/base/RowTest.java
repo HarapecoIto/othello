@@ -9,15 +9,15 @@ public class RowTest {
 
   @Test
   @DisplayName("Test row.getIndex();")
-  void testGetIndex() {
-    assertThat(Row.ROW_1.getIndex()).isEqualTo(0);
-    assertThat(Row.ROW_2.getIndex()).isEqualTo(1);
-    assertThat(Row.ROW_3.getIndex()).isEqualTo(2);
-    assertThat(Row.ROW_4.getIndex()).isEqualTo(3);
-    assertThat(Row.ROW_5.getIndex()).isEqualTo(4);
-    assertThat(Row.ROW_6.getIndex()).isEqualTo(5);
-    assertThat(Row.ROW_7.getIndex()).isEqualTo(6);
-    assertThat(Row.ROW_8.getIndex()).isEqualTo(7);
+  void testIndex() {
+    assertThat(Row.ROW_1.index()).isEqualTo(0);
+    assertThat(Row.ROW_2.index()).isEqualTo(1);
+    assertThat(Row.ROW_3.index()).isEqualTo(2);
+    assertThat(Row.ROW_4.index()).isEqualTo(3);
+    assertThat(Row.ROW_5.index()).isEqualTo(4);
+    assertThat(Row.ROW_6.index()).isEqualTo(5);
+    assertThat(Row.ROW_7.index()).isEqualTo(6);
+    assertThat(Row.ROW_8.index()).isEqualTo(7);
   }
 
   @Test

@@ -85,8 +85,8 @@ public enum Square {
    * @return For example, {@code 0} for {@code SQUARE_1_A},...,{@code 7} for {@code SQUARE_1_H},
    * {@code 8} for {@code SQUARE_2_A},...,{@code 63} for {@code SQUARE_8_H}.
    */
-  public int getIndex() {
-    return row.getIndex() * 8 + col.getIndex();
+  public int index() {
+    return row.index() * 8 + col.index();
   }
 
   /**
@@ -99,7 +99,7 @@ public enum Square {
   public Optional<Square> up() {
     Optional<Row> row = this.row.up();
     Optional<Col> col = Optional.of(this.col);
-    return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
+    return row.map(value -> Square.values()[value.index() * 8 + col.get().index()]);
   }
 
   /**
@@ -112,7 +112,7 @@ public enum Square {
   public Optional<Square> down() {
     Optional<Row> row = this.row.down();
     Optional<Col> col = Optional.of(this.col);
-    return row.map(value -> Square.values()[value.getIndex() * 8 + col.get().getIndex()]);
+    return row.map(value -> Square.values()[value.index() * 8 + col.get().index()]);
   }
 
   /**
@@ -125,7 +125,7 @@ public enum Square {
   public Optional<Square> left() {
     Optional<Row> row = Optional.of(this.row);
     Optional<Col> col = this.col.left();
-    return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
+    return col.map(value -> Square.values()[row.get().index() * 8 + value.index()]);
   }
 
   /**
@@ -138,7 +138,7 @@ public enum Square {
   public Optional<Square> right() {
     Optional<Row> row = Optional.of(this.row);
     Optional<Col> col = this.col.right();
-    return col.map(value -> Square.values()[row.get().getIndex() * 8 + value.getIndex()]);
+    return col.map(value -> Square.values()[row.get().index() * 8 + value.index()]);
   }
 
   /**
@@ -152,7 +152,7 @@ public enum Square {
     Optional<Row> row = this.row.up();
     Optional<Col> col = this.col.left();
     if (row.isPresent() && col.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+      return Optional.of(Square.values()[row.get().index() * 8 + col.get().index()]);
     }
     return Optional.empty();
   }
@@ -168,7 +168,7 @@ public enum Square {
     Optional<Row> row = this.row.up();
     Optional<Col> col = this.col.right();
     if (row.isPresent() && col.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+      return Optional.of(Square.values()[row.get().index() * 8 + col.get().index()]);
     }
     return Optional.empty();
   }
@@ -184,7 +184,7 @@ public enum Square {
     Optional<Row> row = this.row.down();
     Optional<Col> col = this.col.left();
     if (row.isPresent() && col.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+      return Optional.of(Square.values()[row.get().index() * 8 + col.get().index()]);
     }
     return Optional.empty();
   }
@@ -201,7 +201,7 @@ public enum Square {
     Optional<Row> row = this.row.down();
     Optional<Col> col = this.col.right();
     if (row.isPresent() && col.isPresent()) {
-      return Optional.of(Square.values()[row.get().getIndex() * 8 + col.get().getIndex()]);
+      return Optional.of(Square.values()[row.get().index() * 8 + col.get().index()]);
     }
     return Optional.empty();
   }
@@ -215,7 +215,7 @@ public enum Square {
    */
   public
   static Optional<Square> getSquare(@NotNull Row row, @NotNull Col col) {
-    return Optional.of(Square.values()[row.getIndex() * 8 + col.getIndex()]);
+    return Optional.of(Square.values()[row.index() * 8 + col.index()]);
   }
 
 }

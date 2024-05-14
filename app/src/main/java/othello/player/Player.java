@@ -28,7 +28,7 @@ public interface Player {
   /**
    * Get player's disk.
    *
-   * @return Player's disk.
+   * @return Player's disk. If not initialized, return {@code Optional.empty()}.
    */
   Optional<Disk> getMyDisk();
 
@@ -40,7 +40,7 @@ public interface Player {
    * @return {@code Optional} of square which to be moved a new disk. Anything other than the
    * squares allowed by the rules is a foul. {@code Optional.empty()} will foul.
    */
-  Optional<Square> moveDisk(@NotNull Board board, Square moved);
+  Optional<Square> move(@NotNull Board board, Square moved);
 
   /**
    * Terminate the player. You can release any resource used by the player.

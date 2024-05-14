@@ -22,7 +22,7 @@ public class Score implements Cloneable {
    * @param score  Score to be set
    */
   public void setScore(Square square, int score) {
-    this.score[square.getIndex()] = score;
+    this.score[square.index()] = score;
   }
 
   /**
@@ -32,7 +32,7 @@ public class Score implements Cloneable {
    * @return Score of the target square.
    */
   public int getScore(Square square) {
-    return this.score[square.getIndex()];
+    return this.score[square.index()];
   }
 
   @Override
@@ -48,7 +48,7 @@ public class Score implements Cloneable {
   public int hashCode() {
     return String.join(",",
             Arrays.stream(Square.values())
-                .map(sq -> String.format("Score[%d]: %d", sq.getIndex(), this.getScore(sq)))
+                .map(sq -> String.format("Score[%d]: %d", sq.index(), this.getScore(sq)))
                 .toList())
         .hashCode();
   }
@@ -58,26 +58,6 @@ public class Score implements Cloneable {
     Score s = new Score();
     Arrays.stream(Square.values()).forEach(sq -> s.setScore(sq, this.getScore(sq)));
     return s;
-  }
-
-  /**
-   * Get maximum score on the board.
-   *
-   * @return maximum score on the board.
-   * @deprecated This method is experimental.
-   */
-  public int getMaximum() {
-    return Arrays.stream(this.score).max().orElse(0);
-  }
-
-  /**
-   * Get minimum score on the board.
-   *
-   * @return minimum score on the board.
-   * @deprecated This method is experimental.
-   */
-  public int getMinimum() {
-    return Arrays.stream(this.score).min().orElse(0);
   }
 
 }

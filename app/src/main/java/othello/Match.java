@@ -112,7 +112,7 @@ public class Match extends Thread {
   }
 
   private List<Square> getMoveableSquares() {
-    Score score = Tools.countReversibleDisks(this.board.clone(), this.turn);
+    Score score = Tools.countTurnoverableDisks(this.board.clone(), this.turn);
     return Arrays.stream(Square.values())
         .filter(sq -> score.getScore(sq) > 0)
         .toList();
@@ -130,7 +130,7 @@ public class Match extends Thread {
       }
       return Optional.of(new ArrayList<>());
     }
-    this.moved = player.moveDisk(this.board.clone(), this.moved.orElse(null));
+    this.moved = player.move(this.board.clone(), this.moved.orElse(null));
     // foul
     if (this.moved.isEmpty()) {
       return Optional.empty();

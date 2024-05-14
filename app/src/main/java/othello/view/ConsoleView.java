@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import net.yoursweetest.othello.MikanPlayer;
+import net.yoursweetest.othello.citrus.MikanPlayer;
 import othello.base.Board;
 import othello.base.Disk;
 import othello.base.Row;

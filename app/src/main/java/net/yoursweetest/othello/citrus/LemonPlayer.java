@@ -1,4 +1,4 @@
-package net.yoursweetest.othello;
+package net.yoursweetest.othello.citrus;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -13,8 +13,18 @@ import othello.base.Square;
 import othello.util.Score;
 import othello.util.Tools;
 
+/**
+ * Lemon player explores until {@code n} moves later and then makes a move to the square with the
+ * largest number of disks for himself after {@code n} moves. {@code n} is denoted as
+ * {@code MAX_STEP}. This player is the reference class for verifying the behavior of each player
+ * that inherits from {@code CitrusPlayer}. The behavior of these player is verified by matching the
+ * behavior of this player.
+ */
 public class LemonPlayer extends CitrusPlayer {
 
+  /**
+   * Position is the state of the disk (BLACK, WHITE, or empty) on the squares at specified time.
+   */
   private static final class Position {
 
     private final Board board;
@@ -23,6 +33,13 @@ public class LemonPlayer extends CitrusPlayer {
     private final List<Integer> myDisks;
     private final List<Integer> yourDisks;
 
+    /**
+     * Constructor of Position.
+     *
+     * @param board The board that Position issues.
+     * @param turn  The disk represent who's turn is this.
+     * @param step  {@code MAX_STEP} what this player explores.
+     */
     Position(@NotNull Board board, @NotNull Disk turn, int step) {
       this.board = board;
       this.turn = turn;
@@ -36,7 +53,7 @@ public class LemonPlayer extends CitrusPlayer {
     }
 
     public Board getBoard() {
-      return this.board.clone();
+      return this.board;
     }
 
     public Disk getTurn() {
@@ -68,16 +85,33 @@ public class LemonPlayer extends CitrusPlayer {
     }
   }
 
-
+  /**
+   * Maximum step what this player explores to move.
+   */
   private final int MAX_STEP;
 
-  public LemonPlayer(String name, long seed, int maxStep) {
+  /**
+   * Constructor of Lemon player.
+   *
+   * @param name    Player's name.
+   * @param seed    Random seed.
+   * @param maxStep Maximum step what this player explores to move.
+   */
+  public LemonPlayer(@NotNull String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
   }
 
+  /**
+   * Returns list of candidate squares to be moved the disk.
+   *
+   * @param board The board that Position issues. This method should not edit this board.
+   * @param moved The square what another player move his disk at previous turn.
+   * @return List of candidate squares to be moved the disk.
+   * @throws OthelloException If this player is not initialized.
+   */
   @Override
-  List<Square> moveCandidates(@NotNull Board board, Square moved) {
+  List<Square> calculateCandidates(@NotNull Board board, Square moved) {
     // assert
     if (this.myDisk.isEmpty()) {
       // not initialized
@@ -87,14 +121,14 @@ public class LemonPlayer extends CitrusPlayer {
     this.explore(position);
     int max = position.getMyDisks().stream().max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())
-        .filter(sq -> position.getMyDisks().get(sq.getIndex()) == max)
+        .filter(sq -> position.getMyDisks().get(sq.index()) == max)
         .toList();
     return max > 0 ? squares : new ArrayList<>();
   }
 
   private void explore(@NotNull Position position1) {
     if (position1.getStep() <= MAX_STEP) {
-      Score score = Tools.countReversibleDisks(position1.getBoard(), position1.getTurn());
+      Score score = Tools.countTurnoverableDisks(position1.getBoard(), position1.getTurn());
       List<Square> movable = Arrays.stream(Square.values())
           .filter(
               sq -> score.getScore(sq) > 0
@@ -108,7 +142,7 @@ public class LemonPlayer extends CitrusPlayer {
               Tools.move(work, sq, position1.getTurn());
               // next position
               Position position2 =
-                  new Position(work, position1.getTurn().reverse(), position1.getStep() + 1);
+                  new Position(work, position1.getTurn().turnOver(), position1.getStep() + 1);
               // exec explore
               this.explore(position2);
               // count max
@@ -116,17 +150,17 @@ public class LemonPlayer extends CitrusPlayer {
                   .max(Comparator.naturalOrder()).orElse(0);
               int yourMax = position2.getYourDisks().stream()
                   .max(Comparator.naturalOrder()).orElse(0);
-              position1.setMyDisks(sq.getIndex(), myMax);
-              position1.setYourDisks(sq.getIndex(), yourMax);
+              position1.setMyDisks(sq.index(), myMax);
+              position1.setYourDisks(sq.index(), yourMax);
             });
         return;
       }
     }
     // max step or pass or end of game
     Arrays.stream(Square.values()).forEach(sq -> {
-      position1.setMyDisks(sq.getIndex(),
+      position1.setMyDisks(sq.index(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
-      position1.setYourDisks(sq.getIndex(),
+      position1.setYourDisks(sq.index(),
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
     });
   }
