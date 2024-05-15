@@ -99,6 +99,12 @@ public class MikanPlayerTest {
     Optional<Board> opt = MikanPlayer.deserializeBoard(BOARD_STRING_1);
     assertThat(opt).isPresent();
     assertThat(opt.get()).isEqualTo(board);
+    opt = MikanPlayer.deserializeBoard(BOARD_STRING_1.substring(0, 63));
+    assertThat(opt).isEmpty();
+    opt = MikanPlayer.deserializeBoard(BOARD_STRING_1.substring(0, 63) + "A");
+    assertThat(opt).isEmpty();
+    opt = MikanPlayer.deserializeBoard(BOARD_STRING_1 + "E");
+    assertThat(opt).isEmpty();
   }
 
   static final int MAX_STEP = 4;
