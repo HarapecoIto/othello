@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
@@ -24,7 +23,7 @@ import othello.util.Tools;
  */
 public class MikanPlayer extends CitrusPlayer {
 
-  private static String serializeSquare(Square square) {
+  static String serializeSquare(Square square) {
     if (square == null) {
       return "@@";
     }
@@ -33,57 +32,22 @@ public class MikanPlayer extends CitrusPlayer {
     return new String(new char[]{row, col});
   }
 
-  private static String serializeQueue(@NotNull Square[] queue) {
-    return Arrays.stream(queue)
-        .map(MikanPlayer::serializeSquare)
-        .collect(Collectors.joining(""));
-  }
-
-  private static Optional<Square> toSquare(@NotNull String symbol) {
-    // TODO: refactor.
-    if (symbol.length() != 2) {
-      return Optional.empty();
-    }
-    char[] chars = symbol.toCharArray();
-    int row = chars[0];
-    int col = chars[1];
-    if ('1' <= row && row <= '8' && 'A' <= col && col <= 'H') {
-      return Optional.of(Square.values()[(row - 1) * 8 + col - 1]);
-    }
-    return Optional.empty();
-  }
-
-  private static Optional<Square[]> deserializeQueue(@NotNull String queue) {
-    if (queue.isEmpty()) {
-      return Optional.empty();
-    }
-    Square[] squares = new Square[queue.length() / 2];
-    char[] chars = queue.toCharArray();
-    for (int i = 0; i < squares.length; i++) {
-      int row = chars[i * 2];
-      int col = chars[i * 2 + 1];
-      if ('1' <= row && row <= '8' && 'A' <= col && col <= 'H') {
-        squares[i] = Square.values()[(row - 1) * 8 + col - 1];
-      } else {
-        return Optional.empty();
-      }
-    }
-    return Optional.of(squares);
-  }
-
-  private static String serializeBoard(@NotNull Board board) {
+  static String serializeBoard(@NotNull Board board) {
     StringBuilder builder = new StringBuilder();
     Arrays.stream(Square.values()).forEach(sq -> {
-      Optional<Disk> disk = board.getDisk(sq);
-      disk.ifPresent(
-          value -> builder.append(value == Disk.BLACK ? 'B' : value == Disk.WHITE ? 'W' : 'E'));
+      Optional<Disk> opt = board.getDisk(sq);
+      if (opt.isPresent()) {
+        builder.append(opt.get().equals(Disk.BLACK) ? 'B' : 'W');
+      } else {
+        builder.append('E');
+      }
     });
     return builder.toString();
   }
 
   private static final Pattern statusPattern = Pattern.compile("^[BWE]{64}$");
 
-  private static Optional<Board> deserializeBoard(@NotNull String status) {
+  static Optional<Board> deserializeBoard(@NotNull String status) {
     if (statusPattern.matcher(status).matches()) {
       Board board = new Board();
       char[] chars = status.toCharArray();
@@ -105,14 +69,6 @@ public class MikanPlayer extends CitrusPlayer {
     );
     return result;
   }
-
-
-  private static Board toBoard(@NotNull Disk[] disks) {
-    Board board = new Board();
-    Arrays.stream(Square.values()).forEach(sq -> board.setDisk(sq, disks[sq.index()]));
-    return board;
-  }
-
 
   private final int MAX_STEP;
   private String targetQueue;
@@ -163,7 +119,7 @@ public class MikanPlayer extends CitrusPlayer {
       throw new OthelloException();
     }
     int step = queue.length() / 2;
-    int targetStep = Math.max(this.targetQueue.length() / 2 + MAX_STEP, 64);
+    int targetStep = Math.max(this.targetQueue.length() / 2 + MAX_STEP, 60);
     Optional<Board> board = deserializeBoard(this.boardState.get(queue));
     Disk turn = queue.length() % 4 == 0 ? Disk.WHITE : Disk.BLACK;
     if (board.isEmpty()) {
