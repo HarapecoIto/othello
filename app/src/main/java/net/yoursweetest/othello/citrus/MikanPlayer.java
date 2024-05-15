@@ -3,7 +3,6 @@ package net.yoursweetest.othello.citrus;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -107,8 +106,7 @@ public class MikanPlayer extends CitrusPlayer {
      * @return List of child position of this position.
      */
     public List<Position> getChildren() {
-      List<Position> list = this.isExplored() ? this.children : new ArrayList<>();
-      return Collections.unmodifiableList(list);
+      return this.isExplored() ? this.children : new ArrayList<>();
     }
 
     /**
