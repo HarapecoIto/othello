@@ -214,17 +214,20 @@ public class MikanPlayer extends CitrusPlayer {
     this.data.keySet().stream()
         .filter(key -> key.startsWith(this.prefix))
         .forEach(key -> work.put(key, this.data.get(key)));
+    // release memory
+    this.data = null;
     int firstStep = work.keySet().stream()
         .map(key -> key.length() / 2)
         .distinct()
-        .toList().get(0);
+        .max(Comparator.naturalOrder()).orElse(0);
     int lastStep = Math.min(this.prefix.length() / 2 + MAX_STEP, 60);
     for (int step = firstStep; step < lastStep; step++) {
       Disk turn = step % 2 == 0 ? Disk.WHITE : Disk.BLACK;
       Map<String, String> temp = new HashMap<>();
+      Board dummy = new Board();
       work.keySet().forEach(
           key -> {
-            Board board = deserializeBoard(work.get(key)).orElse(new Board());
+            Board board = deserializeBoard(work.get(key)).orElse(dummy);
             Score score = Tools.countTurnoverableDisks(board, turn);
             Arrays.stream(Square.values())
                 .filter(sq -> score.getScore(sq) > 0)
@@ -240,8 +243,7 @@ public class MikanPlayer extends CitrusPlayer {
       work.clear();
       temp.keySet().forEach(key -> work.put(key, temp.get(key)));
     }
-    this.data.clear();
-    work.keySet().forEach(key -> this.data.put(key, work.get(key)));
+    this.data = work;
   }
 
 }

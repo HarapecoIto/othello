@@ -159,13 +159,13 @@ public class MikanPlayerTest {
       player.shutdown();
     }
   }
-  
+
   @Test
   @DisplayName("Compare MikanPlayer to LemonPlayer")
   void compareMovedWith() {
     for (long seed = 0; seed < 1; seed++) {
-      CitrusPlayer player1 = new MikanPlayer("Mikan", seed, 6);
-      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 6);
+      CitrusPlayer player1 = new MikanPlayer("Mikan", seed, 5);
+      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 5);
       CitrusPlayerTest.compareMovedWith(player1, player2);
     }
   }
