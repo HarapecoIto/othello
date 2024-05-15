@@ -1,11 +1,14 @@
 package net.yoursweetest.othello.citrus;
 
 import jakarta.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import othello.OthelloException;
 import othello.base.Board;
 import othello.base.Disk;
@@ -21,116 +24,103 @@ import othello.util.Tools;
  */
 public class MikanPlayer extends CitrusPlayer {
 
-  /**
-   * Position is the state of the disk (BLACK, WHITE, or empty) on the squares at specified time.
-   */
-  private static final class Position {
-
-    private final Board board;
-    private final Optional<Square> moved;
-    private final Disk turn;
-    private int step;
-    private int myDiskCount;
-    private int yourDiskCount;
-    private List<Position> children;
-
-    /**
-     * Constructor of Position.
-     *
-     * @param board The board that Position issues.
-     * @param moved {@code Optional} of the square object that another player move disk at previous
-     *              turn. If this is the first move, or another player passed at previous turn, it
-     *              is empty.
-     * @param turn  The disk represent who's turn is this.
-     * @param step  {@code MAX_STEP} what this player explores.
-     */
-    Position(@NotNull Board board, @NotNull Optional<Square> moved, @NotNull Disk turn, int step) {
-      this.board = board;
-      this.moved = moved;
-      this.turn = turn;
-      this.step = step;
-      this.myDiskCount = 0;
-      this.yourDiskCount = 0;
-      this.children = null;
+  private static String serializeSquare(Square square) {
+    if (square == null) {
+      return "@@";
     }
-
-    public Board getBoard() {
-      return this.board;
-    }
-
-    public Disk getTurn() {
-      return this.turn;
-    }
-
-    public void setStep(int step) {
-      this.step = step;
-    }
-
-    public int getStep() {
-      return this.step;
-    }
-
-    public Optional<Square> getMoved() {
-      return this.moved;
-    }
-
-    public void setMyDiskCount(int count) {
-      this.myDiskCount = count;
-    }
-
-    public int getMyDiskCount() {
-      return this.myDiskCount;
-    }
-
-    public void setYourDiskCount(int count) {
-      this.yourDiskCount = count;
-    }
-
-    public int getYourDiskCount() {
-      return this.yourDiskCount;
-    }
-
-    /**
-     * Set list of child Positions. These child positions are explored on the step following this
-     * position.
-     *
-     * @param children List of child of this position. Un-modifiable-list is recommended.
-     */
-    public void setChildren(@NotNull List<Position> children) {
-      this.children = children;
-    }
-
-    /**
-     * Get list of child positions.
-     *
-     * @return List of child position of this position.
-     */
-    public List<Position> getChildren() {
-      return this.isExplored() ? this.children : new ArrayList<>();
-    }
-
-    /**
-     * Get whether this position already explored or not.
-     *
-     * @return {@code true} if this position id already explored at previous step or this step.
-     */
-    public boolean isExplored() {
-      return this.children != null;
-    }
-
-    /**
-     * Get whether this position is the last to be explored at this step or not.
-     *
-     * @return {@code true} if reached the max step, passed twice, or end of game.
-     */
-    public boolean isLeaf() {
-      return this.children != null && this.children.isEmpty();
-    }
-
+    char row = (char) ((int) '1' + square.row().index());
+    char col = (char) ((int) 'A' + square.col().index());
+    return new String(new char[]{row, col});
   }
 
+  private static String serializeQueue(@NotNull Square[] queue) {
+    return Arrays.stream(queue)
+        .map(MikanPlayer::serializeSquare)
+        .collect(Collectors.joining(""));
+  }
+
+  private static Optional<Square> toSquare(@NotNull String symbol) {
+    // TODO: refactor.
+    if (symbol.length() != 2) {
+      return Optional.empty();
+    }
+    char[] chars = symbol.toCharArray();
+    int row = chars[0];
+    int col = chars[1];
+    if ('1' <= row && row <= '8' && 'A' <= col && col <= 'H') {
+      return Optional.of(Square.values()[(row - 1) * 8 + col - 1]);
+    }
+    return Optional.empty();
+  }
+
+  private static Optional<Square[]> deserializeQueue(@NotNull String queue) {
+    if (queue.isEmpty()) {
+      return Optional.empty();
+    }
+    Square[] squares = new Square[queue.length() / 2];
+    char[] chars = queue.toCharArray();
+    for (int i = 0; i < squares.length; i++) {
+      int row = chars[i * 2];
+      int col = chars[i * 2 + 1];
+      if ('1' <= row && row <= '8' && 'A' <= col && col <= 'H') {
+        squares[i] = Square.values()[(row - 1) * 8 + col - 1];
+      } else {
+        return Optional.empty();
+      }
+    }
+    return Optional.of(squares);
+  }
+
+  private static String serializeBoard(@NotNull Board board) {
+    StringBuilder builder = new StringBuilder();
+    Arrays.stream(Square.values()).forEach(sq -> {
+      Optional<Disk> disk = board.getDisk(sq);
+      disk.ifPresent(
+          value -> builder.append(value == Disk.BLACK ? 'B' : value == Disk.WHITE ? 'W' : 'E'));
+    });
+    return builder.toString();
+  }
+
+  private static final Pattern statusPattern = Pattern.compile("^[BWE]{64}$");
+
+  private static Optional<Board> deserializeBoard(@NotNull String status) {
+    if (statusPattern.matcher(status).matches()) {
+      Board board = new Board();
+      char[] chars = status.toCharArray();
+      Arrays.stream(Square.values()).forEach(
+          sq -> {
+            char c = chars[sq.index()];
+            board.setDisk(sq, c == 'B' ? Disk.BLACK : c == 'W' ? Disk.WHITE : null);
+          }
+      );
+      return Optional.of(board);
+    }
+    return Optional.empty();
+  }
+
+  private static Score plus(Score s1, Score s2) {
+    Score result = new Score();
+    Arrays.stream(Square.values()).forEach(
+        sq -> result.setScore(sq, s1.getScore(sq) + s2.getScore(sq))
+    );
+    return result;
+  }
+
+
+  private static Board toBoard(@NotNull Disk[] disks) {
+    Board board = new Board();
+    Arrays.stream(Square.values()).forEach(sq -> board.setDisk(sq, disks[sq.index()]));
+    return board;
+  }
+
+
   private final int MAX_STEP;
-  private Optional<Position> root;
+  private String targetQueue;
+
+  /**
+   * key: moving queue. value: board status.
+   */
+  private Map<String, String> boardState;
 
   /**
    * Constructor of Mikan player.
@@ -142,33 +132,8 @@ public class MikanPlayer extends CitrusPlayer {
   public MikanPlayer(@NotNull String name, long seed, int maxStep) {
     super(name, seed);
     this.MAX_STEP = maxStep;
-    this.root = Optional.empty();
-  }
-
-  /**
-   * Search root position to explore at this turn.
-   *
-   * @param board The board that Position issues. This method should not edit this board.
-   * @return Root position to explore at this turn.
-   * @throws OthelloException if this player is not initialized.
-   */
-  private Position searchNewRoot(@NotNull Board board) {
-    // assert
-    if (this.myDisk.isEmpty()) {
-      throw new OthelloException();
-    }
-    // root is already explored -> search children
-    if (this.root.isPresent()) {
-      for (Position p1 : this.root.get().getChildren()) {
-        for (Position p2 : p1.getChildren()) {
-          if (p2.getBoard().equals(board)) {
-            p2.setStep(0);
-            return p2;
-          }
-        }
-      }
-    }
-    return new Position(board, Optional.empty(), this.myDisk.get().turnOver(), 0);
+    this.targetQueue = "";
+    this.boardState = new HashMap<>();
   }
 
   @Override
@@ -178,98 +143,78 @@ public class MikanPlayer extends CitrusPlayer {
       throw new OthelloException();
     }
     // new root
-    Position newRoot = this.searchNewRoot(board);
-    this.explore(newRoot, this.root.isPresent() && this.root.get().isLeaf());
-    this.root = Optional.of(newRoot);
-    // best move
-    if (newRoot.isExplored()) {
-      int max = newRoot.getChildren().stream()
-          .map(Position::getMyDiskCount)
-          .max(Comparator.naturalOrder()).orElse(0);
-      List<Square> squares = newRoot.getChildren().stream()
-          .filter(p -> p.getMyDiskCount() == max)
-          .filter(p -> p.getMoved().isPresent())
-          .map(p -> p.getMoved().get()).toList();
-      if (max >= 0) {
-        return squares;
-      }
-    }
-    return new ArrayList<>();
+    int totalDisks = 64 - Tools.countDisks(board, null);
+    String prefix = totalDisks > 4 ? this.targetQueue + serializeSquare(moved) : "";
+    this.boardState.keySet().stream()
+        .filter(queue -> !queue.startsWith(prefix))
+        .forEach(queue -> this.boardState.remove(queue));
+    Optional<Score> score = explore(prefix);
+    int max = Arrays.stream(Square.values())
+        .map(sq -> score.orElse(new Score()).getScore(sq))
+        .max(Comparator.naturalOrder())
+        .orElse(0);
+    return Arrays.stream(Square.values())
+        .filter(sq -> score.orElse(new Score()).getScore(sq) == max)
+        .toList();
   }
 
-  private void explore(@NotNull Position position1, boolean passed) {
+  private Optional<Score> explore(String queue) {
     if (this.myDisk.isEmpty()) {
       throw new OthelloException();
     }
-    position1.setMyDiskCount(0);
-    position1.setYourDiskCount(0);
-    if (!stopExploration(position1)) {
-      // there exists data of previous turn
-      if (position1.isExplored()) {
-        // just update step
-        position1.getChildren().forEach(
-            p -> {
-              p.setStep(position1.getStep() + 1);
-              this.explore(p, position1.isLeaf());
-            }
-        );
-      } else {
-        // unexplored -> (normal move)
-        Score score = Tools.countTurnoverableDisks(position1.getBoard(),
-            position1.getTurn().turnOver());
-        List<Position> children = Arrays.stream(Square.values())
-            .filter(
-                sq -> score.getScore(sq) > 0
-            ).map(
-                sq -> {
-                  // move
-                  Board work = position1.getBoard().clone();
-                  Tools.move(work, sq, position1.getTurn().turnOver());
-                  // next position
-                  Position position2 =
-                      new Position(
-                          work, Optional.of(sq), position1.getTurn().turnOver(),
-                          position1.getStep() + 1);
-                  // exec explore
-                  this.explore(position2, position1.getChildren().isEmpty());
-                  return position2;
-                }).toList();
-        position1.setChildren(children);
-      }
-      // not (pass -> pass)
-      if (!passed || !position1.isLeaf()) {
-        mergeMaxDisksOfChildren(position1);
-        return;
+    int step = queue.length() / 2;
+    int targetStep = Math.max(this.targetQueue.length() / 2 + MAX_STEP, 64);
+    Optional<Board> board = deserializeBoard(this.boardState.get(queue));
+    Disk turn = queue.length() % 4 == 0 ? Disk.WHITE : Disk.BLACK;
+    if (board.isEmpty()) {
+      return Optional.empty();
+    }
+    // leaf: max step or (pass-> pass)
+    String pass = serializeSquare(null);
+    if (step >= targetStep || queue.endsWith(pass + pass)) {
+      Score score = Tools.countTurnoverableDisks(board.get(), turn);
+      Score result = new Score();
+      Arrays.stream(Square.values())
+          .filter(sq -> score.getScore(sq) > 0)
+          .forEach(sq -> {
+            Board work = board.get().clone();
+            Tools.move(work, sq, turn.turnOver());
+            result.setScore(sq, Tools.countDisks(work, this.myDisk.get()));
+            String queueString = queue + serializeSquare(sq);
+            String boardString = serializeBoard(work);
+            this.boardState.put(queueString, boardString);
+          });
+      return Optional.of(result);
+    }
+
+    // branch
+    Score score = Tools.countTurnoverableDisks(board.get(), turn);
+    // pass
+    if (Arrays.stream(Square.values()).allMatch(sq -> score.getScore(sq) < 1)) {
+      String queueString = queue + serializeSquare(null);
+      String boardString = this.boardState.get(queue);
+      this.boardState.put(queueString, boardString);
+      return Optional.of(new Score());
+    }
+    // explore
+    List<Optional<Score>> list = Arrays.stream(Square.values())
+        .filter(sq -> score.getScore(sq) > 0)
+        .map(sq -> {
+          Board work = board.get().clone();
+          Tools.move(work, sq, turn.turnOver());
+          String newQueue = queue + serializeSquare(sq);
+          this.boardState.put(newQueue, serializeBoard(work));
+          return explore(newQueue);
+        }).toList();
+    if (list.stream().anyMatch(Optional::isEmpty)) {
+      return Optional.empty();
+    }
+    Score result = new Score();
+    for (Optional<Score> s : list) {
+      if (s.isPresent()) {
+        result = plus(result, s.get());
       }
     }
-    // (max step) or (pass -> pass) or (end of game)
-    countDisksOfLeaf(position1);
+    return Optional.of(result);
   }
-
-  private boolean stopExploration(@NotNull Position position) {
-    // asset
-    if (this.myDisk.isEmpty()) {
-      throw new OthelloException();
-    }
-    int blackDisks = Tools.countDisks(position.getBoard(), Disk.BLACK);
-    int whiteDisks = Tools.countDisks(position.getBoard(), Disk.WHITE);
-    return position.getStep() > this.MAX_STEP || blackDisks + whiteDisks >= 64;
-  }
-
-  private void mergeMaxDisksOfChildren(Position position) {
-    int myMax = position.getChildren().stream().map(Position::getMyDiskCount)
-        .max(Comparator.naturalOrder()).orElse(0);
-    int yourMax = position.getChildren().stream().map(Position::getYourDiskCount)
-        .max(Comparator.naturalOrder()).orElse(0);
-    position.setMyDiskCount(myMax);
-    position.setYourDiskCount(yourMax);
-  }
-
-  private void countDisksOfLeaf(Position position) {
-    position.setMyDiskCount(
-        Tools.countDisks(position.getBoard(), position.getTurn().turnOver()));
-    position.setYourDiskCount(
-        Tools.countDisks(position.getBoard(), position.getTurn()));
-  }
-
 }
