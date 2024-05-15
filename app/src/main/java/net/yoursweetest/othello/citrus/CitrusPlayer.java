@@ -44,7 +44,7 @@ public abstract class CitrusPlayer implements Player {
   }
 
   @Override
-  public final Optional<Square> move(@NotNull Board board, Square moved) {
+  public Optional<Square> move(@NotNull Board board, Square moved) {
     List<Square> candidates = sortCandidates(board, moved);
     if (candidates.isEmpty()) {
       return Optional.empty();

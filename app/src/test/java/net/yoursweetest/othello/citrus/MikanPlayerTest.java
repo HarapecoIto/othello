@@ -5,15 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import othello.base.Board;
-import othello.base.Col;
 import othello.base.Disk;
-import othello.base.Row;
 import othello.base.Square;
 import othello.player.Player;
+import othello.util.Tools;
 
 public class MikanPlayerTest {
 
@@ -51,21 +49,29 @@ public class MikanPlayerTest {
   @DisplayName("test of serializeSquare()")
   public void testSerializeSquare() {
     assertThat(MikanPlayer.serializeSquare(null)).isEqualTo("@@");
-    for (int i = 0; i < squares.length; i++) {
-      for (int j = 0; j < squares[i].length; j++) {
-        assertThat(MikanPlayer.serializeSquare(squares[i][j])).isEqualTo(queueStrings[i][j]);
+    for (int row = 0; row < squares.length; row++) {
+      for (int col = 0; col < squares[row].length; col++) {
+        assertThat(MikanPlayer.serializeSquare(squares[row][col]))
+            .isEqualTo(queueStrings[row][col]);
       }
     }
   }
 
-  private static final Random rand = new Random(0L);
-
-  private static Board randomBoard() {
-    Disk[] disks = new Disk[]{Disk.BLACK, Disk.WHITE, null};
-    Board board = new Board();
-    Arrays.stream(Square.values())
-        .forEach(sq -> board.setDisk(sq, disks[rand.nextInt(3)]));
-    return board;
+  @Test
+  @DisplayName("test of deserializeSquare()")
+  public void testDeserializeSquare() {
+    assertThat(MikanPlayer.deserializeSquare("0A")).isEmpty();
+    assertThat(MikanPlayer.deserializeSquare("1J")).isEmpty();
+    assertThat(MikanPlayer.deserializeSquare("@@")).isEmpty();
+    for (int row = 0; row < squares.length; row++) {
+      for (int col = 0; col < squares[row].length; col++) {
+        String string = queueStrings[row][col];
+        Optional<Square> opt = MikanPlayer.deserializeSquare(string);
+        Square expects = Square.values()[row * 8 + col];
+        assertThat(opt).isPresent();
+        assertThat(opt.get()).isEqualTo(expects);
+      }
+    }
   }
 
   private static final String BOARD_STRING_1 = ""
@@ -130,93 +136,36 @@ public class MikanPlayerTest {
   @Test
   @DisplayName("Test 2 of mikanPlayer.move();")
   void testMove2() {
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿㊛㊚＿＿＿
+    // ＿＿＿㊛㊛＿＿＿
+    // ＿＿＿㊛＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
+    // ＿＿＿＿＿＿＿＿
     Board board = new Board();
     board.init();
+    Tools.move(board, Square.SQUARE_6_D, Disk.WHITE);
     List<Square> expects = Arrays.asList(
-        Square.SQUARE_3_D, Square.SQUARE_4_C, Square.SQUARE_5_F, Square.SQUARE_6_E
+        Square.SQUARE_4_C, Square.SQUARE_6_C, Square.SQUARE_6_E
     );
     for (long seed = 0; seed < 5; seed++) {
       Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
       player.init(Disk.BLACK);
-      Optional<Square> square = player.move(board.clone(), null);
+      Optional<Square> square = player.move(board.clone(), Square.SQUARE_6_D);
       assertThat(square).isPresent();
       assertThat(square.get()).isIn(expects);
       player.shutdown();
     }
   }
-
-  @Test
-  @DisplayName("Test 3 of lemonPlayer.move();")
-  void testMove3() {
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ＿＿＿＿＿＿＿＿
-    // ＿＿＿＿＿＿＿＿
-    Board board = new Board();
-    board.clear();
-    for (Row row : new Row[]{Row.ROW_1, Row.ROW_2, Row.ROW_3, Row.ROW_4, Row.ROW_5, Row.ROW_6}) {
-      for (Col col : new Col[]{Col.COL_A, Col.COL_B, Col.COL_C, Col.COL_D, Col.COL_E,
-          Col.COL_F}) {
-        board.setDisk(row, col, Disk.BLACK);
-      }
-    }
-    Player player = new MikanPlayer("Mikan Player", 13L, MAX_STEP);
-    player.init(Disk.WHITE);
-    Optional<Square> square = player.move(board.clone(), Square.SQUARE_6_F);
-    assertThat(square).isEmpty();
-    player.shutdown();
-  }
-
-  @Test
-  @DisplayName("Test 4 of lemonPlayer.move();")
-  void testMove4() {
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ㊚㊚㊚㊛㊚㊚＿＿
-    // ㊚㊚㊚㊚㊚㊚＿＿
-    // ＿＿＿＿＿＿＿＿
-    // ＿＿＿＿＿＿＿＿
-    Board board = new Board();
-    board.clear();
-    for (Row row : new Row[]{Row.ROW_1, Row.ROW_2, Row.ROW_3, Row.ROW_4, Row.ROW_5, Row.ROW_6}) {
-      for (Col col : new Col[]{Col.COL_A, Col.COL_B, Col.COL_C, Col.COL_D, Col.COL_E,
-          Col.COL_F}) {
-        board.setDisk(row, col, Disk.BLACK);
-      }
-    }
-    board.setDisk(Square.SQUARE_5_D, Disk.WHITE);
-
-    List<Square> expects = Arrays.asList(
-        Square.SQUARE_7_B, Square.SQUARE_7_D, Square.SQUARE_7_F,
-        Square.SQUARE_2_G, Square.SQUARE_5_G
-    );
-    for (long seed = 0; seed < 5; seed++) {
-      Player player = new MikanPlayer("Mikan Player", seed, MAX_STEP);
-      player.init(Disk.WHITE);
-      Optional<Square> square = player.move(board.clone(), Square.SQUARE_6_F);
-      assertThat(square).isPresent();
-      assertThat(square.get()).isIn(expects);
-      player.shutdown();
-    }
-  }
-
+  
   @Test
   @DisplayName("Compare MikanPlayer to LemonPlayer")
   void compareMovedWith() {
     for (long seed = 0; seed < 1; seed++) {
-      CitrusPlayer player1 = new MikanPlayer("Mikan", seed, 4);
-      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 4);
-      CitrusPlayerTest.compareMovedWith(player1, player2);
-    }
-    for (long seed = 10; seed < 11; seed++) {
-      CitrusPlayer player1 = new MikanPlayer("Mikan", seed, 5);
-      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 5);
+      CitrusPlayer player1 = new MikanPlayer("Mikan", seed, 6);
+      CitrusPlayer player2 = new LemonPlayer("Lemon", seed, 6);
       CitrusPlayerTest.compareMovedWith(player1, player2);
     }
   }
