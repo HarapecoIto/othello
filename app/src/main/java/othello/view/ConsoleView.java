@@ -79,7 +79,7 @@ public class ConsoleView implements OthelloView {
     System.out.println("    A  B  C  D  E  F  G  H");
     System.out.println("  ┌──┬──┬──┬──┬──┬──┬──┬──┐");
     for (Row row : Row.values()) {
-      StringBuilder builder = new StringBuilder(String.format("%d |", row.getIndex() + 1));
+      StringBuilder builder = new StringBuilder(String.format("%d |", row.index() + 1));
       Arrays.stream(Square.values()).filter(sq -> sq.row().equals(row))
           .map(square -> diskCharacter(board.getDisk(square).orElse(null)))
           .forEach(string -> {

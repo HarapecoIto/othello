@@ -3,7 +3,6 @@ package net.yoursweetest.othello.citrus;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import othello.OthelloException;
@@ -30,8 +29,8 @@ public class LemonPlayer extends CitrusPlayer {
     private final Board board;
     private final Disk turn;
     private final int step;
-    private final List<Integer> myDisks;
-    private final List<Integer> yourDisks;
+    private final Score myDisks;
+    private final Score yourDisks;
 
     /**
      * Constructor of Position.
@@ -44,12 +43,8 @@ public class LemonPlayer extends CitrusPlayer {
       this.board = board;
       this.turn = turn;
       this.step = step;
-      this.myDisks = new ArrayList<>();
-      this.yourDisks = new ArrayList<>();
-      Arrays.stream(Square.values()).forEach(sq -> {
-        this.myDisks.add(0);
-        this.yourDisks.add(0);
-      });
+      this.myDisks = new Score();
+      this.yourDisks = new Score();
     }
 
     public Board getBoard() {
@@ -64,24 +59,20 @@ public class LemonPlayer extends CitrusPlayer {
       return this.step;
     }
 
-    public void setMyDisks(int idx, int disks) {
-      if (this.myDisks.size() > idx) {
-        this.myDisks.set(idx, disks);
-      }
+    public void setMyDisks(Square square, int disks) {
+      this.myDisks.setScore(square, disks);
     }
 
-    public void setYourDisks(int idx, int disks) {
-      if (this.yourDisks.size() > idx) {
-        this.yourDisks.set(idx, disks);
-      }
+    public void setYourDisks(Square square, int disks) {
+      this.yourDisks.setScore(square, disks);
     }
 
-    public List<Integer> getMyDisks() {
-      return Collections.unmodifiableList(this.myDisks);
+    public Score getMyDisks() {
+      return this.myDisks.clone();
     }
 
-    public List<Integer> getYourDisks() {
-      return Collections.unmodifiableList(this.yourDisks);
+    public Score getYourDisks() {
+      return this.yourDisks.clone();
     }
   }
 
@@ -119,9 +110,12 @@ public class LemonPlayer extends CitrusPlayer {
     }
     Position position = new Position(board, this.myDisk.get(), 0);
     this.explore(position);
-    int max = position.getMyDisks().stream().max(Comparator.naturalOrder()).orElse(0);
+    Score score = position.getMyDisks();
+    int max = Arrays.stream(Square.values())
+        .map(score::getScore)
+        .max(Comparator.naturalOrder()).orElse(0);
     List<Square> squares = Arrays.stream(Square.values())
-        .filter(sq -> position.getMyDisks().get(sq.index()) == max)
+        .filter(sq -> score.getScore(sq) == max)
         .toList();
     return max > 0 ? squares : new ArrayList<>();
   }
@@ -145,22 +139,23 @@ public class LemonPlayer extends CitrusPlayer {
                   new Position(work, position1.getTurn().turnOver(), position1.getStep() + 1);
               // exec explore
               this.explore(position2);
-              // count max
-              int myMax = position2.getMyDisks().stream()
+              int myMax = Arrays.stream(Square.values())
+                  .map(position2.getMyDisks()::getScore)
                   .max(Comparator.naturalOrder()).orElse(0);
-              int yourMax = position2.getYourDisks().stream()
+              int yourMax = Arrays.stream(Square.values())
+                  .map(position2.getYourDisks()::getScore)
                   .max(Comparator.naturalOrder()).orElse(0);
-              position1.setMyDisks(sq.index(), myMax);
-              position1.setYourDisks(sq.index(), yourMax);
+              position1.myDisks.setScore(sq, myMax);
+              position1.yourDisks.setScore(sq, yourMax);
             });
         return;
       }
     }
     // max step or pass or end of game
     Arrays.stream(Square.values()).forEach(sq -> {
-      position1.setMyDisks(sq.index(),
+      position1.setMyDisks(sq,
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
-      position1.setYourDisks(sq.index(),
+      position1.setYourDisks(sq,
           Tools.countDisks(position1.getBoard(), position1.getTurn()));
     });
   }
